@@ -17,9 +17,9 @@ export default class Account
 
     static async login(nickname, password, sessionID)
     {
-        var db = database.getDatabase()
+        const db = database.getDatabase()
 
-        const acc = await db.collection('accounts').findOne({ "nickname": nickname })
+        const acc = await db.collection('accounts').findOne({ 'nickname': nickname })
 
         if (acc) {
             const status = await this.checkPasswordHash(password, acc.password)
