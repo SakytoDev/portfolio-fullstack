@@ -14,4 +14,7 @@ async function Setup() {
     .catch()
 }
 
-export default { Setup, client, database }
+const getClient = () => client
+const getDatabase = () => database
+
+export default { Setup, getClient, getDatabase }
