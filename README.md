@@ -5,5 +5,5 @@
   <li>Vite as React Frontend</li>
   <li>Express as Backend</li>
   <li>MongoDB as Primary Database</li>
-  <li>Axios and Socket.io fro API Requests</li>
+  <li>Axios and Socket.io for API Requests</li>
 </ul>
