@@ -22,8 +22,14 @@ import Input from '../../components/input/input.jsx'
 import Spinner from 'react-bootstrap/Spinner'
 
 function MainMenu() {
+  const [account, setAccount] = useState(null)
+
   const [modalShow, setModalShow] = useState(false)
-  const [authForm, setForm] = useState({email: '', nickname: '', password: ''})
+  const [authForm, setForm] = useState({ nickname: '', password: '' })
+  const [authMode, setAuthMode] = useState('login')
+  const [authLoading, setAuthLoading] = useState(false)
+
+  const handleTabChange = (tab) => { setAuthMode(tab) }
 
   const handleFormChange = (e) => {
     setForm({
@@ -32,9 +38,36 @@ function MainMenu() {
     })
   }
 
+  async function AuthToAccount() {
+    setAuthLoading(true)
+
+    let requestType
+
+    if (authMode == 'login') {
+      requestType = 'accLogin'
+    } 
+    else if (authMode == 'reg') {
+      requestType = 'accReg'
+    }
+
+    const result = await axios({
+      url: '/request',
+      method: 'GET',
+      params: { type: requestType, form: authForm }
+    })
+    
+    if (result.data.code == 'success') {
+      setAccount(result)
+
+      setModalShow(false)
+    }
+
+    setAuthLoading(false)
+  }
+
   return (
     <>
-      <Header showModal={() => setModalShow(true)}/>
+      <Header showModal={() => setModalShow(true)} account={account}/>
 
       <div className="rounded-4 ms-16 me-16 bg-gray mt-10 p-10">
         <h1 className="display-5 fw-bold">MultiChat</h1>
@@ -66,23 +99,25 @@ function MainMenu() {
           <Modal.Title>Авторизация</Modal.Title>
         </Modal.Header>
         <Modal.Body className="pt-1">
-          <Tabs variant="underline" className="mt-1 justify-center">
-            <Tab eventKey="loginTab" title="Логин">
+          <Tabs variant="underline" className="mt-1 justify-center" onSelect={handleTabChange}>
+            <Tab eventKey="login" title="Логин">
               <div className="mt-3">
                 <Input type="text" name="nickname" placeholder="Никнейм" onChange={handleFormChange}/>
                 <Input className="mt-2" type="password" name="password" placeholder="Пароль" onChange={handleFormChange}/>
               </div>
-              <Button variant="outline-primary" className="flex justify-center items-center w-100 mt-3">Войти</Button>
             </Tab>
-            <Tab eventKey="regTab" title="Регистрация">
+            <Tab eventKey="reg" title="Регистрация">
               <div className="mt-3">
                 <Input type="text" name="email" placeholder="Почта" onChange={handleFormChange}/>
                 <Input className="mt-2" type="text" name="nickname" placeholder="Никнейм" onChange={handleFormChange}/>
                 <Input className="mt-2" type="password" name="password" placeholder="Пароль" onChange={handleFormChange}/>
               </div>
-              <Button variant="outline-primary" className="w-100 mt-3">Регистрация</Button>
             </Tab>
           </Tabs>
+          <Button variant="outline-primary" className="flex justify-center items-center w-100 mt-3" onClick={() => AuthToAccount()} disabled={authLoading}>
+            { authLoading ? <Spinner className='me-2' animation="border" size="sm" /> : null }
+            { authMode == 'login' ? 'Войти' : 'Регистрация' }
+          </Button>
         </Modal.Body>
         <Modal.Footer>
           <Button className="w-100" variant="secondary" onClick={() => setModalShow(false)}>Закрыть</Button>
