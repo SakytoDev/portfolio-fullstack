@@ -8,7 +8,7 @@ function Setup() {
     {
         const requestType = req.query.type
         
-        if (requestType == "getAcc") {
+        if (requestType == 'getAcc') {
             if (req.session.account) {
                 res.send( { "code": "success", "account": req.session.account } )
             }
@@ -17,7 +17,7 @@ function Setup() {
             }
         }
 
-        if (requestType == "getNickname") {
+        if (requestType == 'getNickname') {
             if (req.session.account) {
                 const nickname = await Account.getNicknameByID(req.session.account.id)
 
@@ -28,7 +28,7 @@ function Setup() {
             }
         }
 
-        if (requestType == "accLogin") {
+        if (requestType == 'accLogin') {
             const getForm = req.query.form
             const account = await Account.login(getForm[0].value, getForm[1].value, req.session.id)
 
