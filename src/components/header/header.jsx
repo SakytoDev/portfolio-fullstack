@@ -1,6 +1,7 @@
 import './header.css'
 
-export default function Header({ showModal }) {
+import React from 'react'
+import Dropdown from 'react-bootstrap/Dropdown'
   return (
     <header className='headerPadding py-2 px-4 sticky-top text-white'>
       <div className='flex items-center justify-between'>
