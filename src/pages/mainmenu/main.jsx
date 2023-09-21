@@ -1,5 +1,7 @@
 import { useState, useEffect } from 'react';
 
+import axios from 'axios';
+
 import './main.css';
 import 'bootstrap/dist/css/bootstrap.min.css';
 
@@ -16,6 +18,8 @@ import Tab from 'react-bootstrap/Tab';
 import Tabs from 'react-bootstrap/Tabs';
 
 import Input from '../../components/input/input.jsx'
+
+import Spinner from 'react-bootstrap/Spinner'
 
 function MainMenu() {
   const [modalShow, setModalShow] = useState(false)
