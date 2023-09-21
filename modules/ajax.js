@@ -30,7 +30,7 @@ function Setup() {
 
         if (requestType == 'accLogin') {
             const getForm = req.query.form
-            const account = await Account.login(getForm[0].value, getForm[1].value, req.session.id)
+            const account = await Account.login(getForm.nickname, getForm.password, req.session.id)
 
             if (account) {
                 req.session.account = account
@@ -43,7 +43,7 @@ function Setup() {
 
         if (requestType == 'accReg') {
             const form = req.query.form
-            const regResult = await Account.register(form[0].value, form[1].value, form[2].value)
+            const regResult = await Account.register(form.email, form.nickname, form.password)
 
             if (regResult.code == "success") {
                 const loginResult = await Account.login(form[1].value, form[2].value, req.session.id)
