@@ -1,0 +1,120 @@
+a {
+	text-decoration: none;
+}
+
+p {
+	margin-bottom: 0;
+}
+
+::-webkit-scrollbar {
+  	width: 10px;
+}
+
+::-webkit-scrollbar-track {
+  	background: #f1f1f1; 
+  	border-radius: 30px;
+}
+ 
+::-webkit-scrollbar-thumb {
+  	background: #888;
+  	border-radius: 30px;
+}
+
+::-webkit-scrollbar-thumb:hover {
+  	background: #555; 
+}
+
+#klownsLogo {
+	transition: all 0.8s ease-in-out
+}
+
+#klownsLogo:hover {
+	transform: rotate(1080deg);
+}
+
+.hide {
+	display: none!important;
+}
+
+.p-container {
+	padding-left: 5%;
+	padding-right: 5%;
+}
+
+.headerPadding {
+	padding-left: 15px;
+	padding-right: 10px;
+}
+
+.form-signin {
+	max-width: 400px;
+}
+
+.chatGrid {
+	display: grid;
+	grid-template-columns: 1fr 4fr;
+	grid-template-rows: 90vh;
+	grid-gap: 10px;
+	padding: 10px;
+}
+
+.chatListItem {
+	grid-column: 2;
+  	grid-row: 1 / span 2;
+}
+
+#optionList {
+	display: grid;
+	grid-template-rows: 1fr 0.05fr;
+	height: 100%;
+}
+
+#onlineList {
+	display: grid;
+	grid-auto-rows: min-content;
+	gap: 7px;
+	overflow: auto;
+	margin-bottom: 10px;
+}
+
+.onlineMember {
+	display: flex;
+	align-items: center;
+	border-radius: 1rem;
+	padding: 0.25rem;
+}
+
+#chatList {
+	display: grid;
+	grid-template-rows: 1fr 0.05fr;
+	height: 100%;
+}
+
+#messagesList {
+	display: grid;
+	grid-auto-rows: min-content;
+	gap: 1%;
+	overflow: auto;
+}
+
+#messageObj {
+	display: flex;
+	align-items: center;
+	padding-bottom: 5px;
+}
+
+#sendPanel {
+	display: flex;
+	position: relative;
+}
+
+#authToSendBlur {
+	position: absolute; 
+	left: 0;
+	right: 0;
+	top: 0;
+	bottom: 0;
+	backdrop-filter: blur(5px);
+	background-color: rgba(0,0,0,0.3);
+	border-radius: 0 0 1rem 1rem;
+}
