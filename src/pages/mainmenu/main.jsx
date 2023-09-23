@@ -9,6 +9,7 @@ import io from 'socket.io-client'
 let socket = io()
 
 import Header from '../../components/header/header.jsx';
+import Input from '../../components/input/input.jsx'
 
 import Button from 'react-bootstrap/Button';
 import ButtonGroup from 'react-bootstrap/ButtonGroup';
