@@ -34,10 +34,10 @@ async function Setup() {
 
     server.listen(config.port, config.hostname, () => {
         io.on('connection', (socket) => {
-            console.log('Подключён пользователь')
+            //console.log('Подключён пользователь')
             
             socket.on('disconnect', () => {
-                console.log('Пользователь отключён')
+                //console.log('Пользователь отключён')
             })
         })
 
