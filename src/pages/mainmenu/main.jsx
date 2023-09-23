@@ -18,8 +18,6 @@ import Modal from 'react-bootstrap/Modal';
 import Tab from 'react-bootstrap/Tab';
 import Tabs from 'react-bootstrap/Tabs';
 
-import Input from '../../components/input/input.jsx'
-
 import Spinner from 'react-bootstrap/Spinner'
 
 function MainMenu() {
@@ -38,6 +36,10 @@ function MainMenu() {
       [e.target.name]: e.target.value
     })
   }
+
+  useEffect(() => {
+    getAccount()
+  }, [])
 
   async function AuthToAccount() {
     setAuthLoading(true)
@@ -58,12 +60,24 @@ function MainMenu() {
     })
     
     if (result.data.code == 'success') {
-      setAccount(result)
+      await getAccount()
 
       setModalShow(false)
     }
 
     setAuthLoading(false)
+  }
+
+  async function getAccount() {
+    const result = await axios({
+      url: '/request',
+      method: 'GET',
+      params: { type: 'getAcc' }
+    })
+
+    if (result.data.code == 'success') {
+      setAccount(result.data.account)
+    }
   }
 
   return (
