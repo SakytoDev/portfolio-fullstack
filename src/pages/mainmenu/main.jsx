@@ -24,8 +24,8 @@ function MainMenu() {
   const [account, setAccount] = useState(null)
 
   const [modalShow, setModalShow] = useState(false)
-  const [authForm, setForm] = useState({ nickname: '', password: '' })
-  const [authMode, setAuthMode] = useState('login')
+  const [authForm, setForm] = useState({})
+  const [authMode, setAuthMode] = useState('accLogin')
   const [authLoading, setAuthLoading] = useState(false)
 
   const handleTabChange = (tab) => { setAuthMode(tab) }
@@ -43,20 +43,11 @@ function MainMenu() {
 
   async function AuthToAccount() {
     setAuthLoading(true)
-
-    let requestType
-
-    if (authMode == 'login') {
-      requestType = 'accLogin'
-    } 
-    else if (authMode == 'reg') {
-      requestType = 'accReg'
-    }
-
+    
     const result = await axios({
       url: '/request',
       method: 'GET',
-      params: { type: requestType, form: authForm }
+      params: { type: authMode, form: authForm }
     })
     
     if (result.data.code == 'success') {
@@ -115,13 +106,13 @@ function MainMenu() {
         </Modal.Header>
         <Modal.Body className="pt-1">
           <Tabs variant="underline" className="mt-1 justify-center" onSelect={handleTabChange}>
-            <Tab eventKey="login" title="Логин">
+            <Tab eventKey="accLogin" title="Логин">
               <div className="mt-3">
                 <Input type="text" name="nickname" placeholder="Никнейм" onChange={handleFormChange}/>
                 <Input className="mt-2" type="password" name="password" placeholder="Пароль" onChange={handleFormChange}/>
               </div>
             </Tab>
-            <Tab eventKey="reg" title="Регистрация">
+            <Tab eventKey="accReg" title="Регистрация">
               <div className="mt-3">
                 <Input type="text" name="email" placeholder="Почта" onChange={handleFormChange}/>
                 <Input className="mt-2" type="text" name="nickname" placeholder="Никнейм" onChange={handleFormChange}/>
