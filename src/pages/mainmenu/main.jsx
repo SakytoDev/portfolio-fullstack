@@ -122,7 +122,7 @@ function MainMenu() {
           </Tabs>
           <Button variant="outline-primary" className="flex justify-center items-center w-100 mt-3" onClick={() => AuthToAccount()} disabled={authLoading}>
             { authLoading ? <Spinner className='me-2' animation="border" size="sm" /> : null }
-            { authMode == 'login' ? 'Войти' : 'Регистрация' }
+            { authMode == 'accLogin' ? 'Войти' : 'Регистрация' }
           </Button>
         </Modal.Body>
         <Modal.Footer>

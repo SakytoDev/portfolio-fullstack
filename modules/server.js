@@ -14,7 +14,7 @@ const io = new Server(server)
 import session from 'express-session'
 import cookieParser from 'cookie-parser'
 
-import config from './config.js'
+import config from './config'
 
 async function Setup() {
     app.set('view engine', 'html');
@@ -27,20 +27,8 @@ async function Setup() {
         resave: true,
         cookie: { httpOnly: false, sameSite: 'none', secure: true }
     }))
-        
-    /* app.get('/', (req, res) => {
-        res.render('main', { title: config.title })
-    }) */
 
     server.listen(config.port, config.hostname, () => {
-        io.on('connection', (socket) => {
-            //console.log('Подключён пользователь')
-            
-            socket.on('disconnect', () => {
-                //console.log('Пользователь отключён')
-            })
-        })
-
         console.log(`Сервер запущен: https://${config.hostname}:${config.port}`)
     })
     viteExpress.bind(app, server)

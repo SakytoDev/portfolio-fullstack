@@ -4,7 +4,7 @@ const passwordSalt = "hg3HgLi826gfvd)jsh"
 const hostname = '192.168.10.8'
 const port = 3000
 
-const title = "КЛОWNS"
+const title = "Portfolio"
 
 export default {
     sessionSecret,
