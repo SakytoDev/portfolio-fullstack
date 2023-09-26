@@ -14,7 +14,7 @@ const io = new Server(server)
 import session from 'express-session'
 import cookieParser from 'cookie-parser'
 
-import config from './config'
+import config from './config.js'
 
 async function Setup() {
     app.set('view engine', 'html');
