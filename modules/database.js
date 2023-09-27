@@ -1,6 +1,6 @@
 import { MongoClient } from 'mongodb'
 
-const URI = "mongodb://Sakyto:22dns228KLOWNS@localhost:27017/chat"
+const URI = process.env.MONGODB_URL
 const client = new MongoClient(URI)
 
 let database
