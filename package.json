@@ -6,8 +6,8 @@
   "scripts": {
     "mongo": "mongod --config mongod.cfg",
     "nodejs": "node app.js",
-    "start": "node app.js",
-    "dev": "npm-run-all --parallel mongo nodejs",
+    "start": "npm-run-all --parallel mongo nodejs",
+    "dev": "vite",
     "build": "vite build",
     "preview": "vite preview"
   },
