@@ -1,9 +1,9 @@
-import https from 'https'
+import http from 'http'
 import express from 'express'
 import viteExpress from 'vite-express'
 
 const app = express()
-const server = https.createServer(app)
+const server = http.createServer(app)
 
 import { Server } from 'socket.io'
 const io = new Server(server)
