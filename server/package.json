@@ -4,9 +4,7 @@
   "description": "Website Backend",
   "main": "index.js",
   "scripts": {
-    "mongo": "mongod --config mongod.cfg",
-    "nodejs": "node app.js",
-    "start": "npm-run-all --parallel mongo nodejs"
+    "start": "node app.js"
   },
   "author": "Sakyto",
   "license": "ISC",
