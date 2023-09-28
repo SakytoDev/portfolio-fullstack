@@ -1,5 +1,6 @@
 import http from 'http'
 import express from 'express'
+import viteExpress from 'vite-express'
 
 const app = express()
 const server = http.createServer(app)
@@ -25,8 +26,9 @@ async function Setup() {
     }))
 
     server.listen(10000, "0.0.0.0", () => {
-        console.log('Сервер запущен') 
+        console.log('Сервер запущен')
     })
+    viteExpress.bind(app, server)
 }
 
 export default { Setup, app, io }

@@ -1,6 +1,6 @@
 import server from './server.js'
 
-import Message from '../models/message.js'
+import Message from './../models/message.js'
 import Account from '../models/account.js'
 
 function Setup()
