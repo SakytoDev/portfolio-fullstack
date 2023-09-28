@@ -1,8 +1,8 @@
-import https from 'https'
+import http from 'http'
 import express from 'express'
 
 const app = express()
-const server = https.createServer(app)
+const server = http.createServer(app)
 
 import { Server } from 'socket.io'
 const io = new Server(server)
@@ -24,7 +24,7 @@ async function Setup() {
         cookie: { httpOnly: false, sameSite: 'none', secure: true }
     }))
 
-    server.listen(4000, "0.0.0.0", () => {
+    server.listen(10000, "0.0.0.0", () => {
         console.log('Сервер запущен') 
     })
 }
