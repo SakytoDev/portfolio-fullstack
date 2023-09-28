@@ -1,4 +1,4 @@
-import database from './../modules/database.js'
+import database from '../modules/database.js'
 import config from '../modules/config.js'
 import bcrypt from 'bcrypt'
 

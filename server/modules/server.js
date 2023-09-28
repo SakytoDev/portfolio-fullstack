@@ -1,12 +1,8 @@
-import fs from 'fs'
-import https from 'https'
+import http from 'http'
 import express from 'express'
-import viteExpress from 'vite-express'
 
 const app = express()
-
-const certOptions = { key: fs.readFileSync('key.pem'), cert: fs.readFileSync('cert.pem') }
-const server = https.createServer(certOptions, app)
+const server = http.createServer(app)
 
 import { Server } from 'socket.io'
 const io = new Server(server)
@@ -29,9 +25,8 @@ async function Setup() {
     }))
 
     server.listen(config.port, config.hostname, () => {
-        console.log(`Сервер запущен: https://${config.hostname}:${config.port}`)
+        console.log(`Сервер запущен: http://${config.hostname}:${config.port}`)
     })
-    viteExpress.bind(app, server)
 }
 
-export default { Setup, app, io}
+export default { Setup, app, io }
