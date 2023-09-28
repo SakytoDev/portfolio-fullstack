@@ -25,9 +25,12 @@ async function Setup() {
         cookie: { httpOnly: false, sameSite: 'none', secure: true }
     }))
 
-    server.listen(10000, "0.0.0.0", () => {
-        console.log('Сервер запущен')
-    })
+    if (config.isDev) {
+        server.listen(config.port, config.hostname, () => { console.log(`Сервер запущен http://${config.hostname}:${config.port}`) })
+    } else {
+        server.listen(10000, "0.0.0.0", () => { console.log('Сервер запущен') })
+    }
+
     viteExpress.bind(app, server)
 }
 
