@@ -15,7 +15,6 @@ dist-ssr
 # Editor directories and files
 .vscode/*
 mongo-db/
-modules/config.js
 modules/database.js
 !.vscode/extensions.json
 .idea
@@ -26,3 +25,4 @@ modules/database.js
 *.sln
 *.sw?
 *.pem
+*.env

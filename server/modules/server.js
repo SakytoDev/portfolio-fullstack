@@ -24,9 +24,7 @@ async function Setup() {
         cookie: { httpOnly: false, sameSite: 'none', secure: true }
     }))
 
-    server.listen(config.port, config.hostname, () => {
-        console.log(`Сервер запущен: http://${config.hostname}:${config.port}`)
-    })
+    server.listen(() => { console.log('Сервер запущен') })
 }
 
 export default { Setup, app, io }
