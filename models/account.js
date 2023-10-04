@@ -1,12 +1,11 @@
-import database from './../modules/database.js'
-import config from '../modules/config.js'
-import bcrypt from 'bcrypt'
+const database = require('./../modules/database.js');
+const config = require('../modules/config.js');
+const bcrypt = require('bcrypt');
 
-import { DateTime } from 'luxon'
-import { ObjectId } from 'mongodb'
+const { DateTime } = require('luxon');
+const { ObjectId } = require('mongodb');
 
-export default class Account 
-{
+module.exports = class Account {
     static async getNicknameByID(id)
     {
         var db = database.getDatabase()

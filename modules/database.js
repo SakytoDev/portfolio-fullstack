@@ -1,21 +1,21 @@
-import { MongoClient } from 'mongodb'
-import 'dotenv/config'
+const { MongoClient } = require('mongodb');
+require('dotenv/config');
 
-const URI = process.env.MONGODB_URI
-const client = new MongoClient(URI)
+const URI = process.env.MONGODB_URI;
+const client = new MongoClient(URI);
 
-let database
+let database;
 
-async function Setup() {
-    await client.connect()
-    .then(() => {
-        database = client.db()
-        console.log("MongoDB подключен")
-    })
-    .catch()
+module.exports = 
+{
+    Setup : async function() {
+        await client.connect()
+        .then(() => {
+            database = client.db()
+            console.log("MongoDB подключен")
+        })
+        .catch()
+    },
+    getClient : () => client,
+    getDatabase : () => database
 }
-
-const getClient = () => client
-const getDatabase = () => database
-
-export default { Setup, getClient, getDatabase }

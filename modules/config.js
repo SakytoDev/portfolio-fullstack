@@ -1,19 +1,16 @@
-import 'dotenv/config'
+require('dotenv/config');
 
 const sessionSecret = process.env.SESSION_SECRET
 const passwordSalt = process.env.PASSWORD_SALT
 
-const isDev = false
+const isDev = true
 const hostname = "192.168.10.8"
 const port = 3000
 
-const title = "Portfolio"
-
-export default {
+module.exports = {
     sessionSecret,
     passwordSalt,
     isDev,
     hostname,
-    port,
-    title
+    port
 }

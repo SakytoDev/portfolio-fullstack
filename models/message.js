@@ -1,10 +1,10 @@
-import database from './../modules/database.js'
+const database = require('./../modules/database.js');
 
-import Account from './account.js'
+const Account = require('./account.js');
 
-import { DateTime } from 'luxon'
+const { DateTime } = require('luxon');
 
-export default class Message 
+module.exports = class Message 
 {
     static async SaveChatMessage(id, message)
     {

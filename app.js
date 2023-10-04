@@ -1,20 +1,16 @@
-import database from './modules/database.js'
-import server from './modules/server.js'
-import ajax from './modules/ajax.js'
-import sockets from './modules/sockets.js'
+const database = require('./modules/database.js');
+const server = require('./modules/server.js');
+const ajax = require('./modules/ajax.js');
+const sockets = require('./modules/sockets.js');
 
-async function InitServer() {
-    // Запуск базы данных
-    await database.Setup()
+// Подключение к базе данных
+database.Setup()
 
-    // Запуск сервера
-    await server.Setup()
+// Запуск сервера
+server.Setup()
 
-    // Запуск AJAX
-    ajax.Setup()
+// Настройка AJAX
+ajax.Setup()
 
-    // Запуск запросов по сокету
-    sockets.Setup()
-}
-
-await InitServer()
+ // Настройка веб-сокетов
+sockets.Setup()
