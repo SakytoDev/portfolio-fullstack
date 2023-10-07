@@ -102,10 +102,12 @@ export default function MultiChat({ sockets }) {
 
           <div className='bg-[#2d3034] grid grid-rows-[0.05fr,1fr]'>
             <div className='bg-[#212529] flex items-center justify-center h-16 p-2'>
-              <p className='ms-2 text-xl'>Список участников: 0</p>
+              <p className='ms-2 text-xl'>Список участников: {membersList.length}</p>
             </div>
             <div className='gap-2 p-3'>
-              <MemberObj nickname='Sakyto'/>
+              { membersList.map((name, index) => {
+                return ( <MemberObj key={index} nickname={name}/> )
+              }) }
             </div>
           </div>
         </div>
