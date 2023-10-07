@@ -5,6 +5,8 @@
   "main": "app.js",
   "scripts": {
     "build": "npm install && npm install --prefix client && npm run build --prefix client",
+    "mongo": "mongod --config mongod.cfg",
+    "dev": "npm-run-all --parallel mongo start",
     "start": "node app.js"
   },
   "author": "Sakyto",

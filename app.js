@@ -1,3 +1,5 @@
+require('dotenv').config();
+
 const database = require('./modules/database.js');
 const server = require('./modules/server.js');
 const ajax = require('./modules/ajax.js');
