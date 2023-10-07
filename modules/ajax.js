@@ -7,7 +7,7 @@ const server = require('./server.js')
 module.exports = 
 {
     Setup: function() {
-        server.app.get('*/request', async (req, res) => 
+        server.app.get('*/api', async (req, res) => 
         {
             const requestType = req.query.type
             

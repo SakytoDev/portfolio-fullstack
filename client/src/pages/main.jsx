@@ -39,7 +39,7 @@ export default function MainMenu({ sockets }) {
     setAuthLoading(true)
     
     const result = await axios({
-      url: '/request',
+      url: '/api',
       method: 'GET',
       params: { type: authMode, form: authForm }
     })
@@ -55,7 +55,7 @@ export default function MainMenu({ sockets }) {
 
   async function getAccount() {
     const result = await axios({
-      url: '/request',
+      url: '/api',
       method: 'GET',
       params: { type: 'getAcc' }
     })

@@ -29,7 +29,7 @@ export default function MultiChat({ sockets }) {
   useEffect(() => {
     async function getAccount() {
       const result = await axios({
-        url: '/request',
+        url: '/api',
         method: 'GET',
         params: { type: 'getAcc' }
       })
@@ -48,7 +48,7 @@ export default function MultiChat({ sockets }) {
   useEffect(() => {
     async function getNickname() {
       const result = await axios({
-        url: '/request',
+        url: '/api',
         method: 'GET',
         params: { type: 'getNickname' }
       })
