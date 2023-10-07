@@ -1,13 +1,7 @@
 const { MongoClient } = require('mongodb');
 const config = require('./config.js');
 
-let URI = process.env.MONGODB_URI;
-
-if (config.isDev) {
-    URI = process.env.MONGODB_URI_DEV
-}
-
-const client = new MongoClient(URI);
+const client = new MongoClient(config.isDev ? process.env.MONGODB_URI_DEV : process.env.MONGODB_URI );
 
 let database;
 
