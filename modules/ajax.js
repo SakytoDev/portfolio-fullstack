@@ -61,7 +61,7 @@ module.exports =
             
             if (requestType == 'accLogout') {
                 if (req.query.token === req.session.account.logoutToken) {
-                    req.session.destroy()
+                    req.session = null
         
                     res.send( { "code": "success" } )
                 }
