@@ -3,10 +3,11 @@ import axios from 'axios';
 
 import './multichat.css';
 
-import accIcon from '../assets/images/defaultAcc.png';
-import sendIcon from '../assets/images/send.png'
 import MemberObj from '../components/member/member.jsx';
 import MessageObj from '../components/message/message.jsx';
+
+import accIcon from '../assets/images/defaultAcc.png';
+import sendIcon from '../assets/images/send.png';
 
 export default function MultiChat({ sockets }) {
   const [account, setAccount] = useState(null)
