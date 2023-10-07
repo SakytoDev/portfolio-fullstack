@@ -75,32 +75,38 @@ export default function MultiChat({ sockets }) {
     <>
       <title>MultiChat</title>
       <div className='bg-black'>
-        <div className='grid grid-cols-[1fr,2fr,1fr] grid-rows-[97vh] p-3'>
-          <div className='border-2 border-gray-500 rounded-s-xl'>
-            <div className='flex items-center bg-profile p-2 rounded-tl-xl'>
+        <div className='grid grid-cols-[1fr,2fr,1fr] grid-rows-[100vh]'>
+          
+          <div className='bg-[#2d3034] grid grid-rows-[0.05fr,1fr]'>
+            <div className='bg-[#212529] flex items-center bg-profile p-2'>
               <img className='w-12 h-12' src={accIcon}/>
               <p className='ms-2 text-xl font-semibold'>{nickname}</p>
             </div>
           </div>
 
-          <div className='border-t-2 grid grid-rows-[1fr,0.05fr] border-gray-500 border-b-2'>
+          <div className='bg-[#1d2024] grid grid-rows-[1fr,0.05fr]'>
             <div className='grid auto-rows-min overflow-auto'>
               { messagesList.map((message, index) => {
                 return ( <MessageObj key={index} message={message}/> )
               }) }
             </div>
-            <div className='border-t-2 border-gray-500'>
-              <div className='flex items-center p-3'>
-                <input className='flex-fill me-2 p-2' placeholder='Сообщение...' onChange={handleInputChange} value={messageInput}/>
-                <button onClick={() => SendMessage()}><img className='w-8 h-8' src={sendIcon}/></button>
+            <div className='border-t-2 border-[#8f8f8f]'>
+              <div className='flex p-3'>
+                <input className='flex-fill me-1 p-2 border-2 border-[#8f8f8f] rounded-s-lg' placeholder='Сообщение...' onChange={handleInputChange} value={messageInput}/>
+                <div className='flex border-2 border-[#8f8f8f] rounded-e-lg'>
+                  <button onClick={() => SendMessage()}><img className='w-8 h-8 mx-2' src={sendIcon}/></button>
+                </div>
               </div>
             </div>
           </div>
 
-          <div className='border-2 border-gray-500 rounded-e-xl gap-2 p-3'>
-            { membersList.map((name, index) => {
-              return ( <MemberObj key={index} nickname={name}/> )
-            }) }
+          <div className='bg-[#2d3034] grid grid-rows-[0.05fr,1fr]'>
+            <div className='bg-[#212529] flex items-center justify-center h-16 p-2'>
+              <p className='ms-2 text-xl'>Список участников: 0</p>
+            </div>
+            <div className='gap-2 p-3'>
+              <MemberObj nickname='Sakyto'/>
+            </div>
           </div>
         </div>
       </div>
