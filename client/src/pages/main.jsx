@@ -107,7 +107,7 @@ export default function MainMenu({ sockets }) {
             { isMobile ? <div className='grid border-gray-300 col p-7'>
               <h2 className='text-3xl text-center font-bold'>Android</h2>
               <ButtonGroup className='mt-3'>
-                <Button variant="outline-light" href="/download/android">В разработке</Button>
+                <Button variant="outline-light" href="/download/android">Установить</Button>
               </ButtonGroup>
             </div> : null }
           </div>
