@@ -1,4 +1,5 @@
 import React, { useState, useEffect } from 'react';
+import { isMobile } from 'react-device-detect';
 
 import 'bootstrap/dist/css/bootstrap.min.css';
 
