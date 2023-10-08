@@ -79,89 +79,101 @@ export default function MainMenu({ sockets }) {
 
       <Header showModal={() => setModalShow(true)} account={account}/>
 
-      <h1 className='mt-5 text-center font-bold text-5xl'>Проекты:</h1>
+      <h1 className='mt-5 text-center font-bold text-4xl md:text-5xl'>Проекты:</h1>
 
-      <div className='rounded-3xl border-3 border-gray-300 ms-16 me-16 mt-10'>
-        <div className='flex items-center border-b-2 border-gray-300 p-10'>
-          <img className='self-baseline w-24 h-24 rounded-2xl' src={chatLogo}/>
+      <div className='rounded-3xl border-2 md:border-3 border-gray-300 mx-8 md:mx-16 mt-10'>
+        <div className='flex items-center border-b-2 border-gray-300 p-5 md:p-10'>
+          <img className='self-baseline w-16 h-16 md:w-24 md:h-24 rounded-2xl' src={chatLogo}/>
           <div className='ms-5'>
-            <p className='text-5xl font-bold'>MultiChat</p>
-            <p className='text-3xl mt-2'>Общайтесь с друзьями или находите новых</p>
+            <p className='text-3xl md:text-5xl font-bold'>MultiChat</p>
+            <p className='text-xl md:text-3xl mt-2'>Общайтесь с друзьями или находите новых</p>
           </div>
         </div>
 
         <div className='border-gray-300'>
           <div className='flex'>
-            <div className='border-r border-gray-300 col p-7'>
-              <h2 className='text-3xl font-bold'>Веб-версия</h2>
+            { !isMobile ? <div className='grid border-r border-gray-300 col p-7'>
+              <h2 className='text-3xl text-center font-bold'>Веб-версия</h2>
               <ButtonGroup className="mt-3">
                 <Button variant="outline-light" href="/multichat">Войти</Button>
               </ButtonGroup>
-            </div>
-            <div className='border-r border-gray-300 col p-7'>
-              <h2 className='text-3xl font-bold'>Windows</h2>
+            </div> : null }
+            { !isMobile ? <div className='grid border-gray-300 col p-7'>
+              <h2 className='text-3xl text-center font-bold'>Windows</h2>
               <ButtonGroup className="mt-3">
                 <Button variant="outline-light" disabled>В разработке</Button>
               </ButtonGroup>
-            </div>
-            <div className='border-gray-300 col p-7'>
-              <h2 className='text-3xl font-bold'>Android</h2>
+            </div> : null }
+            { isMobile ? <div className='grid border-gray-300 col p-7'>
+              <h2 className='text-3xl text-center font-bold'>Android</h2>
               <ButtonGroup className='mt-3'>
-                <Button variant="outline-light" disabled>В разработке</Button>
+                <Button variant="outline-light" href="/download/android">В разработке</Button>
               </ButtonGroup>
-            </div>
+            </div> : null }
           </div>
         </div>
       </div> 
 
-      <div className='rounded-3xl border-3 border-gray-300 ms-16 me-16 mt-10'>
+      <div className='rounded-3xl border-2 md:border-3 border-gray-300 mx-8 md:mx-16 mt-10'>
         <div className='flex items-center border-b-2 border-gray-300 p-10'>
           <div className='ms-5'>
-            <p className='text-5xl font-bold'>EvaPost</p>
-            <p className='text-3xl mt-2'>Поделитесь вашими мыслями о сегодняшнем дне, или расскажите, сколько кофе Вы сегодня выпили</p>
+            <p className='text-3xl md:text-5xl font-bold'>EvaPost</p>
+            <p className='text-xl md:text-3xl mt-2'>Поделитесь вашими мыслями о сегодняшнем дне, или расскажите, сколько кофе Вы сегодня выпили</p>
           </div>
         </div>
 
         <div className='border-gray-300'>
           <div className='flex'>
-            <div className='border-r border-gray-300 col p-7'>
-              <h2 className='text-3xl font-bold'>Windows</h2>
+            { !isMobile ? <div className='grid border-r border-gray-300 col p-7'>
+              <h2 className='text-3xl text-center font-bold'>Веб-версия</h2>
               <ButtonGroup className="mt-3">
                 <Button variant="outline-light" disabled>В разработке</Button>
               </ButtonGroup>
-            </div>
-            <div className='border-gray-300 col p-7'>
-              <h2 className='text-3xl font-bold'>Android</h2>
+            </div> : null }
+            { !isMobile ? <div className='grid border-gray-300 col p-7'>
+              <h2 className='text-3xl text-center font-bold'>Windows</h2>
+              <ButtonGroup className="mt-3">
+                <Button variant="outline-light" disabled>В разработке</Button>
+              </ButtonGroup>
+            </div> : null }
+            { isMobile ? <div className='grid border-gray-300 col p-7'>
+              <h2 className='text-3xl text-center font-bold'>Android</h2>
               <ButtonGroup className='mt-3'>
                 <Button variant="outline-light" disabled>В разработке</Button>
               </ButtonGroup>
-            </div>
+            </div> : null }
           </div>
         </div>
       </div>
 
-      <div className='rounded-3xl border-3 border-gray-300 ms-16 me-16 mt-10 mb-32'>
+      <div className='rounded-3xl border-2 md:border-3 border-gray-300 mx-8 md:mx-16 mt-10 mb-32'>
         <div className='flex items-center border-b-2 border-gray-300 p-10'>
           <div className='ms-5'>
-            <p className='text-5xl font-bold'>Trackify</p>
-            <p className='text-3xl mt-2'>Слушайте, делитесь или опубликуйте музыку</p>
+            <p className='text-3xl md:text-5xl font-bold'>Trackify</p>
+            <p className='text-xl md:text-3xl mt-2'>Слушайте, делитесь или опубликуйте музыку</p>
           </div>
         </div>
 
         <div className='border-gray-300'>
           <div className='flex'>
-            <div className='border-r border-gray-300 col p-7'>
-              <h2 className='text-3xl font-bold'>Windows</h2>
+            { !isMobile ? <div className='grid border-r border-gray-300 col p-7'>
+              <h2 className='text-3xl text-center font-bold'>Веб-версия</h2>
               <ButtonGroup className="mt-3">
                 <Button variant="outline-light" disabled>В разработке</Button>
               </ButtonGroup>
-            </div>
-            <div className='border-gray-300 col p-7'>
-              <h2 className='text-3xl font-bold'>Android</h2>
+            </div> : null }
+            { !isMobile ? <div className='grid border-gray-300 col p-7'>
+              <h2 className='text-3xl text-center font-bold'>Windows</h2>
+              <ButtonGroup className="mt-3">
+                <Button variant="outline-light" disabled>В разработке</Button>
+              </ButtonGroup>
+            </div> : null }
+            { isMobile ? <div className='grid border-gray-300 col p-7'>
+              <h2 className='text-3xl text-center font-bold'>Android</h2>
               <ButtonGroup className='mt-3'>
                 <Button variant="outline-light" disabled>В разработке</Button>
               </ButtonGroup>
-            </div>
+            </div> : null }
           </div>
         </div>
       </div>
