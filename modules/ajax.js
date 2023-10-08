@@ -85,5 +85,15 @@ module.exports =
             const file = './packages/windows/build.zip'
             res.download(file)
         })
+
+        server.app.get('/version/android', (req, res) => {
+            const version = fs.readFileSync('./packages/android/version.json')
+            res.send(version)
+        })
+    
+        server.app.get('/download/android', (req, res) => {
+            const file = './packages/android/multichat.apk'
+            res.download(file)
+        })
     }
 }
