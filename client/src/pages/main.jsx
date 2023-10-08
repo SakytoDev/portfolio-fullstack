@@ -1,4 +1,6 @@
 import React, { useState, useEffect } from 'react';
+import { useDispatch } from 'react-redux'
+import { login } from '../redux/accountSlice'
 import { isMobile } from 'react-device-detect';
 
 import 'bootstrap/dist/css/bootstrap.min.css';
@@ -21,11 +23,12 @@ import Spinner from 'react-bootstrap/Spinner';
 import chatLogo from '../assets/images/chatLogo.png'
 
 export default function MainMenu({ sockets }) {
-  const [account, setAccount] = useState(null)
   const [modalShow, setModalShow] = useState(false)
   const [authForm, setForm] = useState({})
   const [authMode, setAuthMode] = useState('accLogin')
   const [authLoading, setAuthLoading] = useState(false)
+
+  const dispatch = useDispatch()
 
   const handleTabChange = (tab) => { setAuthMode(tab) }
 
@@ -44,8 +47,10 @@ export default function MainMenu({ sockets }) {
       method: 'GET',
       params: { type: authMode, form: authForm }
     })
+    .then(res => { return res.data })
+    .catch(err => { console.log(err) })
     
-    if (result.data.code == 'success') {
+    if (result.code == 'success') {
       await getAccount()
 
       setModalShow(false)
@@ -65,7 +70,7 @@ export default function MainMenu({ sockets }) {
 
     if (result.code == 'success') {
       sockets.emit('authUpdate', { "id": result.account.id })
-      setAccount(result.account)
+      dispatch(login({ "account": result.account }))
     }
   }
 
@@ -77,7 +82,7 @@ export default function MainMenu({ sockets }) {
     <>
       <title>Portfolio</title>
 
-      <Header showModal={() => setModalShow(true)} account={account}/>
+      <Header showModal={() => setModalShow(true)}/>
 
       <h1 className='mt-5 text-center font-bold text-4xl md:text-5xl'>Проекты:</h1>
 

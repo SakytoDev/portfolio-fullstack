@@ -1,11 +1,16 @@
-import './header.css'
+import React from 'react';
+import { useDispatch, useSelector } from 'react-redux';
+import { logout } from '../../redux/accountSlice';
 
-import logo from '../../assets/logo.png'
-import accIcon from '../../assets/images/defaultAcc.png'
-import githubLogo from '../../assets/images/github.png'
+import Dropdown from 'react-bootstrap/Dropdown';
 
-import React from 'react'
-import Dropdown from 'react-bootstrap/Dropdown'
+import logo from '../../assets/logo.png';
+import accIcon from '../../assets/images/defaultAcc.png';
+import githubLogo from '../../assets/images/github.png';
+
+import './header.css';
+
+import axios from 'axios';
 
 const avatarToggle = React.forwardRef(({ children, onClick }, ref) => (
   <a
@@ -22,7 +27,25 @@ const avatarToggle = React.forwardRef(({ children, onClick }, ref) => (
   </a>
 ));
 
-export default function Header({ showModal, account }) {
+export default function Header({ showModal }) {
+  const account = useSelector((state) => state.auth.account)
+
+  const dispatch = useDispatch()
+
+  async function logoutAccount() {
+    const result = await axios({
+      url: '/api',
+      method: 'GET',
+      params: { type: 'accLogout', token: account.logoutToken }
+    })
+    .then(res => { return res.data })
+    .catch(err => { console.log(err) })
+  
+    if (result.code == 'success') {
+      dispatch(logout())
+    }
+  }
+
   return (
     <header className='border-b-2 border-gray-600 p-4 sticky-top text-white backdrop-blur'>
       <div className='flex items-center justify-between'>
@@ -41,7 +64,7 @@ export default function Header({ showModal, account }) {
             <Dropdown.Menu>
               <Dropdown.Item eventKey="profile" disabled>Профиль</Dropdown.Item>
               <Dropdown.Divider />
-              <Dropdown.Item eventKey="logout"><p className='text-red-700'>Выйти из аккаунта</p></Dropdown.Item>
+              <Dropdown.Item eventKey="logout"><p className='text-red-700' onClick={() => logoutAccount()}>Выйти из аккаунта</p></Dropdown.Item>
             </Dropdown.Menu>
           </Dropdown>
           }
