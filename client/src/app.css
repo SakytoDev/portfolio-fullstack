@@ -20,13 +20,13 @@
   	background: #555; 
 }
 
-h2 {
-    font-size: 10rem;
-}
-
 html, body {
 	height: 100%;
 	margin: 0;
 	background-repeat: no-repeat;
 	background-attachment: fixed;
+}
+
+h2 {
+    font-size: 10rem;
 }
