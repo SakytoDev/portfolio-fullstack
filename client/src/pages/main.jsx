@@ -10,6 +10,7 @@ import axios from 'axios';
 import Header from '../components/header/header.jsx';
 import Footer from '../components/footer/footer.jsx';
 import Input from '../components/input/input.jsx'
+import Typewriter from '../components/typewriter/typewriter';
 
 import Button from 'react-bootstrap/Button';
 import ButtonGroup from 'react-bootstrap/ButtonGroup';
