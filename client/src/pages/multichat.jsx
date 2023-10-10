@@ -10,7 +10,6 @@ import accIcon from '../assets/images/defaultAcc.png';
 import sendIcon from '../assets/images/send.png';
 
 export default function MultiChat({ sockets }) {
-  const [account, setAccount] = useState(null)
   const [nickname, setNickname] = useState('')
   const [messageInput, setMessageInput] = useState('')
   const [messagesList, setMessagesList] = useState([])
