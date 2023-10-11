@@ -47,9 +47,8 @@ export default function MainMenu({ sockets }) {
   async function AuthToAccount() {
     setAuthLoading(true)
     
-    const result = await axios({
+    const result = await axios.get({
       url: '/api',
-      method: 'GET',
       params: { type: authMode, form: authForm }
     })
     .then(res => { return res.data })
@@ -65,9 +64,8 @@ export default function MainMenu({ sockets }) {
   }
 
   async function getAccount() {
-    const result = await axios({
+    const result = await axios.get({
       url: '/api',
-      method: 'GET',
       params: { type: 'getAcc' }
     })
     .then(res => { return res.data })
