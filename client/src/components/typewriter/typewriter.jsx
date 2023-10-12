@@ -54,8 +54,6 @@ export default function Typewriter({ className, text, startDelay = 0, delay = 20
   }, [])
 
   return (
-    <>
-      <p className={className}>{typewriter}</p>
-    </>
+    <p className={className}>{typewriter}</p>
   )
 }
