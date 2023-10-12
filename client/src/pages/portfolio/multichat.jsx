@@ -1,13 +1,11 @@
 import React, {useState, useEffect} from 'react';
 import axios from 'axios';
 
-import './multichat.css';
+import MemberObj from '../../components/member/member.jsx';
+import MessageObj from '../../components/message/message.jsx';
 
-import MemberObj from '../components/member/member.jsx';
-import MessageObj from '../components/message/message.jsx';
-
-import accIcon from '../assets/images/defaultAcc.png';
-import sendIcon from '../assets/images/send.png';
+import accIcon from '../../assets/images/defaultAcc.png';
+import sendIcon from '../../assets/images/send.png';
 
 export default function MultiChat({ sockets }) {
   const [nickname, setNickname] = useState('')
@@ -77,7 +75,7 @@ export default function MultiChat({ sockets }) {
         <div className='grid grid-cols-[1fr,2fr,1fr] grid-rows-[100vh]'>
           
           <div className='bg-[#2d3034] grid grid-rows-[0.05fr,1fr]'>
-            <div className='bg-[#212529] flex items-center bg-profile p-2'>
+            <div className='bg-[#212529] flex items-center p-2'>
               <img className='w-12 h-12' src={accIcon}/>
               <p className='ms-2 text-xl font-semibold'>{nickname}</p>
             </div>
