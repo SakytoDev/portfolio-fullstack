@@ -8,7 +8,7 @@ import { Provider } from 'react-redux';
 import store from './redux/store';
 
 import Main from './pages/main.jsx';
-import MultiChat from './pages/portfolio/multichat.jsx';
+import MultiChat from './pages/projects/multichat.jsx';
 
 import io from 'socket.io-client';
 const socket = io();
