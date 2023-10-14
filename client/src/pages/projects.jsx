@@ -1,5 +1,6 @@
 import { Link } from 'react-router-dom';
 import { isMobile } from 'react-device-detect';
+import { motion } from 'framer-motion';
 
 import Button from 'react-bootstrap/Button';
 
@@ -9,16 +10,28 @@ import websitelogo from '../assets/images/website.png';
 import androidlogo from '../assets/images/android.png';
 import windowslogo from '../assets/images/windows.png';
 
+const block = {
+  hidden: {
+    x: -200,
+    opacity: 0
+  },
+  visible: {
+    x: 0,
+    opacity: 1,
+    transition: { ease: 'easeInOut', duration: 1 }
+  }
+}
+
 export default function Projects() {
   return (
     <>
-      <div className='rounded-3xl border-2 md:border-3 border-gray-300 mx-8 md:mx-16 mb-10 animate-card-appear'>
+      <motion.div initial='hidden' whileInView='visible' variants={block} className='rounded-3xl border-2 md:border-3 border-gray-300 mx-8 md:mx-16 mb-10'>
         <div className='flex items-center border-b-2 border-gray-300 p-5 md:p-10'>
           <img className='self-baseline w-16 h-16 md:w-24 md:h-24 rounded-2xl' src={chatLogo}/>
           <div className='ms-3 md:ms-5'>
-            <div className='flex gap-3'>
+            <div className='flex gap-2 md:gap-3'>
               <p className='text-3xl md:text-5xl font-bold'>MultiChat</p>
-              <div className='border-2 rounded-lg px-2 flex gap-2 items-center'>
+              <div className='md:border-2 rounded-lg flex items-center md:px-2 gap-2'>
                 <img className='w-4 md:w-6' src={websitelogo}/>
                 <img className='w-4 md:w-6' src={windowslogo}/>
                 <img className='w-4 md:w-6' src={androidlogo}/>
@@ -44,7 +57,7 @@ export default function Projects() {
             </div> : null }
           </div>
         </div>
-      </div> 
+      </motion.div> 
     </>
   )
 }

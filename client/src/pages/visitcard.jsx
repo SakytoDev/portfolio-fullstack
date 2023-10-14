@@ -10,8 +10,7 @@ import backend from '../assets/images/backend.png';
 const block = {
   hidden: {
     x: -200,
-    opacity: 0,
-    transition: { ease: 'easeInOut', duration: 1 }
+    opacity: 0
   },
   visible: {
     x: 0,
@@ -21,21 +20,21 @@ const block = {
 }
 
 const skillCard = {
-  hidden: { x: -200, opacity: 0 },
-  show: (custom) => ({ x: 0, opacity: 1, transition: { duration: 0.7, delay: custom * 0.2 } })
+  hidden: { y: -100, opacity: 0 },
+  show: (custom) => ({ y: 0, opacity: 1, transition: { duration: 0.7, delay: custom * 0.2 } })
 }
 
 const skillLine = {
   hidden: { width: '0%' },
-  show: { width: '50%', transition: { delay: 1.5, duration: 0.9 } }
+  show: { width: '50%', transition: { delay: 1.7, duration: 0.9 } }
 }
 
 export default function VisitCard() {
   return (
     <>
-      <div className='grid grid-rows-2 md:gap-40 pb-48 mx-8 md:mx-16'>
+      <div className='grid grid-rows-2 md:gap-20 pb-48 mx-8 md:mx-16'>
         
-        <motion.div initial='hidden' whileInView='visible' viewport={isMobile ? { amount: 0.3, once: true } : { amount: 0.1, once: true }} variants={block} className='mb-10'>
+        <motion.div initial='hidden' whileInView='visible' viewport={isMobile ? { amount: 0.3, once: true } : { amount: 0.1, once: true }} variants={block}>
           <div className='bg-gradient-to-br from-indigo-600 to-violet-900 flex flex-col md:grid md:grid-cols-[1fr,0.3fr] items-center rounded-3xl p-5'>
             <div className='grid md:grid-rows-[1.1fr,1fr] md:p-5'>
               <div className='flex justify-center md:justify-start gap-1 md:gap-3 overflow-hidden text-[1.7rem] md:text-[4rem] font-black'>
@@ -43,7 +42,7 @@ export default function VisitCard() {
                 <Typewriter delay={70} startDelay={1000} infinite={true} text={['Frontend', 'Backend', 'Fullstack']}/>
                 <p>developer</p>
               </div>
-              <div className='whitespace-pre-line'>
+              <div className='whitespace-pre-line h-auto md:h-0'>
                 <Typewriter className='md:text-xl text-center md:text-left' startDelay={1500} text={['I develop a variety of websites, as well as integrating various APIs and databases.', '\nProgramming is my hobby. I am constantly looking for ways to improve my skills.']}/>
               </div>
             </div>
@@ -59,7 +58,7 @@ export default function VisitCard() {
           </div>
         </motion.div>
 
-        <motion.div initial='hidden' whileInView='visible' viewport={{ amount: 0.1, once: true }} variants={block}>
+        <motion.div initial='hidden' whileInView='visible' variants={block} viewport={{ amount: 0.1, once: true }}>
           <h1 className='text-6xl font-black text-center'>My skills:</h1>
 
           <div className='relative'>
