@@ -51,15 +51,15 @@ export default function VisitCard() {
               </div>
               <div className='flex self-center md:self-start mt-5'>
                 <ToolTip position={isMobile ? 'top' : 'right'} parent={<button className='border-2 border-white rounded-lg p-2 md:text-xl'>Contact Me</button>}>
-                  <div className='bg-black rounded-lg px-3 py-2 grid relative'>
-                    <div className='flex items-center gap-2'>
-                      <img className='w-4 h-4' src={Telegram}/>
-                      <a className='text-lg font-medium me-4' href="https://telegram.me/Sakyto" target="_blank">Telegram</a>
-                    </div>
-                    <div className='flex items-center gap-2'>
-                      <img className='w-4 h-4' src={Email}/>
-                      <a className='text-lg font-medium me-4' href="mailto:procsssrus@mail.ru" target="_blank">Email</a>
-                    </div>
+                  <div className='bg-black rounded-lg px-3 py-2 grid gap-1 relative'>
+                    <a className='flex items-center gap-2' href="https://telegram.me/Sakyto" target="_blank">
+                      <img className='w-5 h-5' src={Telegram}/>
+                      <p className='text-lg font-medium me-5'>Telegram</p>
+                    </a>
+                    <a className='flex items-center gap-2' href="mailto:procsssrus@mail.ru" target="_blank">
+                      <img className='w-5 h-5' src={Email}/>
+                      <p className='text-lg font-medium me-5'>Email</p>
+                    </a>
                   </div>
                 </ToolTip>
               </div>
