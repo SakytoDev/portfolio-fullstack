@@ -58,7 +58,7 @@ export default function VisitCard() {
                     </div>
                     <div className='flex items-center gap-2'>
                       <img className='w-4 h-4' src={Email}/>
-                      <a className='text-lg font-medium me-4' href="mailto:procsssrus@mail.ru" target="_blank">procsssrus@mail.ru</a>
+                      <a className='text-lg font-medium me-4' href="mailto:procsssrus@mail.ru" target="_blank">Email</a>
                     </div>
                   </div>
                 </ToolTip>
