@@ -2,6 +2,10 @@ import { isMobile } from 'react-device-detect';
 import { motion } from 'framer-motion';
 
 import Typewriter from '../components/typewriter/typewriter';
+import ToolTip from '../components/tooltip/tooltip';
+
+import Telegram from '../assets/images/telegram.png';
+import Email from '../assets/images/email.png';
 
 import multipage from '../assets/images/multipage.png';
 import crossplatform from '../assets/images/crossplatform.png';
@@ -34,16 +38,30 @@ export default function VisitCard() {
     <>
       <div className='grid grid-rows-2 md:gap-20 pb-48 mx-8 md:mx-16'>
         
-        <motion.div initial='hidden' whileInView='visible' viewport={isMobile ? { amount: 0.3, once: true } : { amount: 0.1, once: true }} variants={block}>
-          <div className='bg-gradient-to-br from-indigo-600 to-violet-900 flex flex-col md:grid md:grid-cols-[1fr,0.3fr] items-center rounded-3xl p-5'>
-            <div className='grid md:grid-rows-[1.1fr,1fr] md:p-5'>
+        <motion.div initial='hidden' whileInView='visible' viewport={{ once: true }} variants={block}>
+          <div className='bg-gradient-to-br from-blue-600 to-violet-900 flex flex-col items-center md:grid md:grid-cols-[1fr,auto] rounded-3xl p-5'>
+            <div className='flex flex-col md:p-5'>
               <div className='flex justify-center md:justify-start gap-1 md:gap-3 overflow-hidden text-[1.7rem] md:text-[4rem] font-black'>
                 <p>I'm</p>
                 <Typewriter delay={70} startDelay={1000} infinite={true} text={['Frontend', 'Backend', 'Fullstack']}/>
                 <p>developer</p>
               </div>
-              <div className='whitespace-pre-line h-auto md:h-0'>
-                <Typewriter className='md:text-xl text-center md:text-left' startDelay={1500} text={['I develop a variety of websites, as well as integrating various APIs and databases.', '\nProgramming is my hobby. I am constantly looking for ways to improve my skills.']}/>
+              <div className='whitespace-pre-line text-center md:text-left'>
+                <Typewriter className='md:text-xl' startDelay={1500} text={['I develop a variety of websites, as well as integrating various APIs and databases.', '\nProgramming is my hobby. I am constantly looking for ways to improve my skills.']}/>
+              </div>
+              <div className='flex self-center md:self-start mt-5'>
+                <ToolTip position={isMobile ? 'top' : 'right'} parent={<button className='border-2 border-white rounded-lg p-2 md:text-xl'>Contact Me</button>}>
+                  <div className='bg-black rounded-lg px-3 py-2 grid relative'>
+                    <div className='flex items-center gap-2'>
+                      <img className='w-4 h-4' src={Telegram}/>
+                      <a className='text-lg font-medium me-4' href="https://telegram.me/Sakyto" target="_blank">Telegram</a>
+                    </div>
+                    <div className='flex items-center gap-2'>
+                      <img className='w-4 h-4' src={Email}/>
+                      <a className='text-lg font-medium me-4' href="mailto:procsssrus@mail.ru" target="_blank">procsssrus@mail.ru</a>
+                    </div>
+                  </div>
+                </ToolTip>
               </div>
             </div>
             <div>
@@ -72,7 +90,7 @@ export default function VisitCard() {
                 <img className='h-16' src={crossplatform}/>
                 <p className='text-center font-medium'>Adaptation and cross-platforming for any device and screen size.</p>
               </motion.div>
-              <motion.div initial='hidden' whileInView='show' custom={3} variants={skillCard} viewport={{ amount: 0.35, once: true }} className='bg-zinc-950 border-2 border-gray-400 rounded-xl p-5 flex flex-col items-center gap-3'>
+              <motion.div initial='hidden' whileInView='show' custom={3} variants={skillCard} viewport={{ amount: 0.35, once: true }} className='relative bg-zinc-950 border-2 border-gray-400 rounded-xl p-5 flex flex-col items-center gap-3'>
                 <img className='h-16' src={backend}/>
                 <p className='text-center font-medium'>In addition to website design, I develop server code and also connect databases.</p>
               </motion.div>
