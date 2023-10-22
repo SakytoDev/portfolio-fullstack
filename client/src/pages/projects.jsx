@@ -2,8 +2,6 @@ import { Link } from 'react-router-dom';
 import { isMobile } from 'react-device-detect';
 import { motion } from 'framer-motion';
 
-import Button from 'react-bootstrap/Button';
-
 import chatLogo from '../assets/images/chatLogo.png';
 
 import websitelogo from '../assets/images/website.png';
@@ -42,18 +40,21 @@ export default function Projects() {
         </div>
 
         <div className='border-gray-300'>
-          <div className='flex'>
-            { !isMobile ? <div className='grid border-r border-gray-300 col p-7'>
+          <div className={`grid ${isMobile ? 'grid-cols-1' : 'grid-cols-2'}`}>
+            { !isMobile ? 
+            <div className='grid border-r border-gray-300 col p-7'>
               <h2 className='text-3xl text-center font-bold'>Web-version</h2>
-              <Link className='rounded-md border border-white flex items-center justify-center transition ease-in-out hover:bg-gray-300 hover:text-black' to='/multichat'>Enter</Link>
+              <Link className='mt-3 p-2 text-white rounded-md border-2 border-white flex items-center justify-center transition ease-in-out hover:bg-gray-300 hover:text-black' to='/multichat'>Enter</Link>
             </div> : null }
-            { !isMobile ? <div className='grid border-gray-300 col p-7'>
+            { !isMobile ? 
+            <div className='grid border-gray-300 col p-7'>
               <h2 className='text-3xl text-center font-bold'>Windows</h2>
-              <Button className='mt-3' variant="outline-light" disabled>Coming soon</Button>
+              <button className='mt-3 p-2 text-white rounded-md border-2 border-white disabled:text-gray-400 disabled:border-gray-500' disabled>Coming soon</button>
             </div> : null }
-            { isMobile ? <div className='grid border-gray-300 col p-7'>
+            { isMobile ? 
+            <div className='grid border-gray-300 col p-7'>
               <h2 className='text-3xl text-center font-bold'>Android</h2>
-              <Button className='mt-3' variant="outline-light" href="/download/android">Download</Button>
+              <button className='mt-3 p-2 text-white rounded-md border-2 border-white' href="/download/android">Download</button>
             </div> : null }
           </div>
         </div>
