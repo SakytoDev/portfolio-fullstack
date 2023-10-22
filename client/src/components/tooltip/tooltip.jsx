@@ -2,7 +2,7 @@ export default function ToolTip({ position, children, parent }) {
   return (
     <div className='group relative flex items-center justify-center'>
       <div>{parent}</div>
-      <div className={`absolute p-2 transition-all ease-in-out duration-500
+      <div className={`absolute p-2 transition-all ease-in-out duration-300
         ${position === 'top' ? 'bottom-[calc(90%)] group-hover:bottom-[calc(100%)]' : ''}
         ${position === 'bottom' ? 'top-[calc(90%)] group-hover:top-[calc(100%)]' : ''}
         ${position === 'left' ? 'right-[calc(95%)] group-hover:right-[calc(100%)]' : ''}
