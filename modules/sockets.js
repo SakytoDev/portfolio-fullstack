@@ -5,45 +5,34 @@ const Account = require('../models/account.js');
 
 module.exports = 
 {
-    Setup: function () {
+    Setup: function () 
+    {
         server.io.on('connection', (socket) => 
         {
-            socket.on('authUpdate', async (reqData) => {
-                socket.account = reqData
-    
-                let nicknames = []
-                const allClients = await server.io.fetchSockets()
-    
-                for (const client of allClients) {
-                    if (!client.account) continue
-    
-                    const nickname = await Account.getNicknameByID(client.account.id)
-                    nicknames.push(nickname)
-                }
-    
-                server.io.emit('onlineList', nicknames)
+            socket.accData = { id: '' }
+
+            socket.on('authUpdate', (data) => { 
+                socket.accData = data
             })
-    
-            socket.on('chatMessage', async (reqData) => {
-                if (!reqData.id) return
-    
-                const messageObj = await Message.SaveChatMessage(reqData.id, reqData.message)
-    
-                server.io.emit('chatMessage', messageObj)
-            })
-    
-            socket.on('disconnect', async () => {
-                let nicknames = []
+
+            socket.on('isOnline', async (data) => {
                 const allClients = await server.io.fetchSockets()
-    
+                let isOnline = false
+
                 for (const client of allClients) {
-                    if (!client.account) continue
-    
-                    const nickname = await Account.getNicknameByID(client.account.id)
-                    nicknames.push(nickname)
+                    if (client.accData.id != data.id) continue
+
+                    isOnline = true
+                    break
                 }
 
-                server.io.emit('onlineList', nicknames)
+                socket.emit('isOnline', isOnline)
+            })
+
+            socket.on('disconnect', () => {
+                Account.updateLastLogin(socket.accData.id)
+
+                console.log('Клиент отключился')
             })
         })
     }
