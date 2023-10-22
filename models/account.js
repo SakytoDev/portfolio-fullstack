@@ -47,15 +47,15 @@ module.exports = class Account {
             "dateCreated": currentDate 
         }
 
-        const accExists = await db.collection('accounts').findOne({ $or: [ { "email": email }, {"nickname": nickname} ] })
+        const accExists = await db.collection('accounts').findOne({ $or: [ { email: email }, { nickname: nickname } ] })
 
         if (accExists == null) {
-            await db.collection("accounts").insertOne(accountObj)
+            await db.collection('accounts').insertOne(accountObj)
             
-            return { "code": "success" }
+            return { code: 'success' }
         }
         else {
-            return { "code": "failure", "reason": "Почта или никнейм заняты" }
+            return { code: 'failure', reason: 'Почта или никнейм заняты' }
         }
     }
 
@@ -110,9 +110,9 @@ module.exports = class Account {
 
         var db = database.getDatabase()
 
-        db.collection("accounts").updateOne(
-            { "_id" : id }, 
-            { "$set" : { "lastLogin" : currentDate } }
+        db.collection('accounts').updateOne(
+            { _id : new ObjectId(id) }, 
+            { $set : { lastLogin : currentDate } }
         )
     }
 }

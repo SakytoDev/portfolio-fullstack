@@ -13,21 +13,19 @@ module.exports =
             
             if (requestType == 'getAcc') {
                 if (req.session.account) {
-                    res.send( { "code": "success", "account": req.session.account } )
-                }
-                else {
-                    res.send( { "code": "failure", "reason": "Аккаунт не авторизован" } )
+                    res.send( { code: 'success', account: req.session.account } )
+                } else {
+                    res.send( { code: 'failure', reason: 'Аккаунт не авторизован' } )
                 }
             }
-    
-            if (requestType == 'getNickname') {
-                if (req.session.account) {
-                    const nickname = await Account.getNicknameByID(req.session.account.id)
-    
-                    res.send( { "code": "success", "nickname": nickname } )
-                }
-                else {
-                    res.send( { "code": "failure", "reason": "Аккаунт не авторизован" } )
+
+            if (requestType == 'getAccInfo') {
+                const account = await Account.getAccount(req.query.id)
+
+                if (account) {
+                    res.send( { code: 'success', account: account } )
+                } else {
+                    res.send( { code: 'failure' } )
                 }
             }
     
@@ -37,10 +35,9 @@ module.exports =
     
                 if (account) {
                     req.session.account = account
-                    res.send( { "code": "success" } )
-                }
-                else {
-                    res.send( { "code": "failure" } )
+                    res.send( { code: 'success', account: account } )
+                } else {
+                    res.send( { code: 'failure' } )
                 }
             }
     
@@ -48,14 +45,13 @@ module.exports =
                 const form = req.query.form
                 const regResult = await Account.register(form.email, form.nickname, form.password)
     
-                if (regResult.code == "success") {
+                if (regResult.code == 'success') {
                     const loginResult = await Account.login(form[1].value, form[2].value, req.session.id)
     
                     req.session.account = loginResult
-                    res.send( { "code": "success" } )
-                }
-                else if (regResult.code == "failure") {
-                    res.send( { "code": "failure", "reason": regResult.reason } )
+                    res.send( { code: 'success', loginResult } )
+                } else if (regResult.code == 'failure') {
+                    res.send( { code: 'failure', reason: regResult.reason } )
                 }
             }
             
@@ -63,10 +59,9 @@ module.exports =
                 if (req.query.token === req.session.account.logoutToken) {
                     req.session = null
         
-                    res.send( { "code": "success" } )
-                }
-                else {
-                    res.send( { "code": "failure", "reason": "Неверный токен" } )
+                    res.send( { code: 'success' } )
+                } else {
+                    res.send( { code: 'failure', reason: 'Неверный токен' } )
                 }
             }
         })
