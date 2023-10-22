@@ -14,7 +14,7 @@ export default function MainMenu() {
     <>
       <title>Portfolio</title>
       
-      <div className='bg-gradient-to-t from-zinc-950 from-90% to-indigo-950 to-100% text-white'>
+      <div className='min-h-screen bg-gradient-to-t from-zinc-950 from-90% to-indigo-950 to-100% text-white'>
         <Header/>
         <Tabs className='flex justify-center gap-6 p-8' components={[<VisitCard title='About'/>, <Projects title='Projects'/>]}/>
         <Footer/>
