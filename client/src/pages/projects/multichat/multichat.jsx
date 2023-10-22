@@ -141,7 +141,7 @@ export default function MultiChat() {
     <>
       <title>MultiChat</title>
       { account != null ?
-      <div className='bg-black h-[100vh] grid grid-cols-[1fr,4fr] grid-rows-[auto,1fr] gap-x-[1px]'>
+      <div className='bg-black text-white h-[100vh] grid grid-cols-[1fr,4fr] grid-rows-[auto,1fr] gap-x-[1px]'>
         <div className='bg-[#212529] min-w-0 flex items-center p-2'>
           <img className='bg-black rounded-full w-14 h-14' src={accIcon}/>
           <div className='flex flex-col items-start mx-2 gap-1 max-w-[75%]'>
@@ -173,7 +173,7 @@ export default function MultiChat() {
         </div>
       </div> 
       :
-      <div className='bg-[#2d3034] h-[100vh] flex flex-col items-center pt-16'>
+      <div className='bg-[#2d3034] text-white h-[100vh] flex flex-col items-center pt-16'>
         <img className='w-48 h-48 rounded-xl' src={chatLogo}/>
         <p className='font-bold text-5xl mt-6'>MultiChat</p>
         <Tabs className='flex justify-center gap-5 p-5 mt-6' components={[<LoginTab title='Sign in'/>, <RegTab title='Sign up'/>]}/>
