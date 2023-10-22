@@ -31,8 +31,6 @@ module.exports =
 
             socket.on('disconnect', () => {
                 Account.updateLastLogin(socket.accData.id)
-
-                console.log('Клиент отключился')
             })
         })
     }
