@@ -10,13 +10,12 @@ module.exports = class Message
     {
         const nickname = await Account.getNicknameByID(id)
         const sendDate = DateTime.local().toISO();
-        const formattedDate = DateTime.fromISO(sendDate).toFormat('MMM dd, HH:mm')
         
         const messageObj = { "senderID": id, "message": message, "sendDate": sendDate }
 
         var db = database.getDatabase()
         await db.collection('messages').insertOne(messageObj)
 
-        return { "id": id, "nickname": nickname, "message": message, "sendDate": formattedDate }
+        return { "id": id, "nickname": nickname, "message": message, "sendDate": sendDate }
     }
 }
