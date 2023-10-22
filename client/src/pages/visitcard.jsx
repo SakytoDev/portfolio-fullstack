@@ -37,11 +37,10 @@ export default function VisitCard() {
   return (
     <>
       <div className='grid grid-rows-2 md:gap-20 pb-48 mx-8 md:mx-16'>
-        
         <motion.div initial='hidden' whileInView='visible' viewport={{ once: true }} variants={block}>
           <div className='bg-gradient-to-br from-blue-600 to-violet-900 flex flex-col items-center md:grid md:grid-cols-[1fr,auto] rounded-3xl p-5'>
             <div className='flex flex-col md:p-5'>
-              <div className='flex justify-center md:justify-start gap-1 md:gap-3 overflow-hidden text-[1.7rem] md:text-[4rem] font-black'>
+              <div className='font-black flex justify-center md:justify-start gap-1 md:gap-3 overflow-hidden text-[1.7rem] md:text-[4rem]'>
                 <p>I'm</p>
                 <Typewriter delay={70} startDelay={1000} infinite={true} text={['Frontend', 'Backend', 'Fullstack']}/>
                 <p>developer</p>
@@ -77,7 +76,7 @@ export default function VisitCard() {
         </motion.div>
 
         <motion.div initial='hidden' whileInView='visible' variants={block} viewport={{ amount: 0.1, once: true }}>
-          <h1 className='text-6xl font-black text-center'>My skills:</h1>
+          <h1 className='text-6xl text-center font-black'>My skills:</h1>
 
           <div className='relative'>
             { !isMobile ? <motion.hr initial='hidden' whileInView='show' variants={skillLine} viewport={{ amount: 0.35, once: true }} className='border-5 absolute -z-[1] top-[50%] left-[25%]'/> : null }
