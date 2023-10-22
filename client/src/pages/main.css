@@ -1,0 +1,8 @@
+@tailwind base;
+@tailwind components;
+@tailwind utilities;
+
+html {
+    background-repeat: no-repeat;
+	background-attachment: fixed;
+}
