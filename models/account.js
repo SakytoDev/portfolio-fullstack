@@ -6,29 +6,30 @@ const { DateTime } = require('luxon');
 const { ObjectId } = require('mongodb');
 
 module.exports = class Account {
-    static async getNicknameByID(id)
+    static async getAccount(id) 
     {
-        var db = database.getDatabase()
-        const acc = await db.collection('accounts').findOne({ _id: new ObjectId(id) })
+        if (id == null || id == 0) { return { code: 'failure' } }
 
-        return acc.nickname
+        const db = database.getDatabase()
+
+        const account = await db.collection('accounts').findOne({ _id: new ObjectId(id) }, { projection: { _id: 0, email: 0, password: 0 }})
+
+        return account
     }
 
     static async login(nickname, password, sessionID)
     {
         const db = database.getDatabase()
 
-        const acc = await db.collection('accounts').findOne({ 'nickname': nickname })
+        const accData = await db.collection('accounts').findOne({ nickname: nickname })
 
-        if (acc) {
-            const status = await this.checkPasswordHash(password, acc.password)
+        if (accData) {
+            const status = await this.checkPasswordHash(password, accData.password)
 
             if (status) {
-                Account.updateLastLogin(acc._id)
+                const logoutToken = await Account.getLogoutToken(accData._id.toString(), sessionID)
 
-                const logoutToken = await Account.getLogoutToken(acc._id.toString(), sessionID)
-
-                return { "id": acc._id.toString(), "logoutToken": logoutToken }
+                return { id: accData._id, nickname: nickname, logoutToken: logoutToken }
             }
         }
     }
