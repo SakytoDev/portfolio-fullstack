@@ -8,17 +8,16 @@ import { Provider } from 'react-redux';
 import store from './redux/store';
 
 import Main from './pages/main.jsx';
-import MultiChat from './pages/projects/multichat.jsx';
-
-import io from 'socket.io-client';
-const socket = io();
+import MultiChat from './pages/projects/multichat/multichat.jsx';
+import NoizeMC from './pages/projects/noizemc/src/noizemc.jsx';
 
 ReactDOM.createRoot(document.getElementById('root')).render(
   <Provider store={store}>
     <BrowserRouter>
       <Routes>
-        <Route path='/' element={<Main sockets={socket}/>}/>
-        <Route path='/multichat' element={<MultiChat sockets={socket}/>}/>
+        <Route path='/' element={<Main/>}/>
+        <Route path='/multichat' element={<MultiChat/>}/>
+        <Route path='/noizemc' element={<NoizeMC/>}/>
       </Routes>
     </BrowserRouter>
   </Provider>
