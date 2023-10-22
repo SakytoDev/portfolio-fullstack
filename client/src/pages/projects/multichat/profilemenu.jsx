@@ -3,8 +3,6 @@ import axios from 'axios';
 
 import { DateTime } from 'luxon';
 
-import Spinner from 'react-bootstrap/Spinner';
-
 import accIcon from '../../../assets/images/defaultAcc.png';
 
 export default function ProfileMenu({ _id, socket }) {
@@ -56,8 +54,6 @@ export default function ProfileMenu({ _id, socket }) {
       </div>
     </div> 
     : 
-    <div className='grid grid-rows-1 grid-cols-1'>
-      <Spinner/>
-    </div>
+    null
   )
 }
