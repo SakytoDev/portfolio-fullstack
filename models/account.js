@@ -62,8 +62,9 @@ module.exports = class Account {
         const passwordHash = await this.getPasswordHash(password)
         const accountObj = { 
             "email": email, 
-            "nickname": nickname, 
-            "password": passwordHash, 
+            "nickname": nickname,
+            "password": passwordHash,
+            "friends": {},
             "lastLogin": currentDate,
             "dateCreated": currentDate 
         }
