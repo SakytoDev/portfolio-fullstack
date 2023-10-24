@@ -4,6 +4,7 @@
   "description": "<p>Primary website and data storage for my portfolio projects using:<p>\r <ul>\r   <li>Vite as React Frontend</li>\r   <li>Express as Backend</li>\r   <li>MongoDB as Primary Database</li>\r   <li>Axios and Socket.io for API Requests</li>\r </ul>",
   "main": "app.js",
   "scripts": {
+    "buildClient": "npm run build --prefix client",
     "build": "npm install && npm install --prefix client && npm run build --prefix client",
     "mongo": "mongod --config mongod.cfg",
     "dev": "npm-run-all --parallel mongo start",
