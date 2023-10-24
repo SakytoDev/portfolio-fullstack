@@ -12,9 +12,29 @@ module.exports = class Account {
 
         const db = database.getDatabase()
 
-        const account = await db.collection('accounts').findOne({ _id: new ObjectId(id) }, { projection: { _id: 0, email: 0, password: 0 }})
+        const account = await db.collection('accounts').findOne({ _id: new ObjectId(id) }, { projection: { email: 0, password: 0 }})
 
         return account
+    }
+
+    static async getAccounts(id) 
+    {
+        const db = database.getDatabase()
+
+        const accounts = await db.collection('accounts').find({ _id: { $ne: new ObjectId(id) } }, { projection: { email: 0, password: 0 }}).toArray()
+
+        return accounts
+    }
+
+    static async getFriends(id) 
+    {
+        if (id == null || id == 0) { return { code: 'failure' } }
+
+        const db = database.getDatabase()
+
+        const accounts = await db.collection('accounts').findOne({ _id: new ObjectId(id) }, { projection: { _id: 0, friends: 1 }})
+
+        return accounts
     }
 
     static async login(nickname, password, sessionID)
@@ -107,6 +127,8 @@ module.exports = class Account {
 
     static updateLastLogin(id)
     {
+        if (id == null || id == 0) return
+
         const currentDate = DateTime.local().toISO()
 
         var db = database.getDatabase()

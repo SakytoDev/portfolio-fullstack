@@ -28,6 +28,18 @@ module.exports =
                     res.send( { code: 'failure' } )
                 }
             }
+
+            if (requestType == 'getAccs') {
+                const accounts = await Account.getAccounts(req.query.id)
+
+                res.send( { code: 'success', accounts: accounts } )
+            }
+
+            if (requestType == 'getFriends') {
+                const accounts = await Account.getFriends(req.query.id)
+
+                res.send( { code: 'success', accounts: accounts } )
+            }
     
             if (requestType == 'accLogin') {
                 const getForm = req.query.form
