@@ -18,10 +18,6 @@ module.exports =
     Setup : async function() {
         app.set('view engine', 'html')
         app.use(express.static(path.join(__dirname, '../client/dist')))
-    
-        app.get(['/', '/multichat', '/noizemc'], (req, res) => {
-            res.sendFile(path.join(__dirname, '../client/dist/index.html'))
-        })
         
         app.use(cookieParser())
         app.use(session({

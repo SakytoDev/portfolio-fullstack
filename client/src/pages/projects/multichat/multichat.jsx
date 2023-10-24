@@ -1,5 +1,6 @@
 import React, { useEffect, useState } from 'react';
 import { useSelector, useDispatch } from 'react-redux';
+import { Routes, Route, Link } from 'react-router-dom';
 import { login, logout } from '../../../redux/accountSlice';
 
 import axios from 'axios';
@@ -88,7 +89,7 @@ function RegTab() {
   return (
     <div>
       <div className="flex flex-col w-[30vw] gap-2">
-      <Input type="text" name="email" placeholder="Email" onChange={handleFormChange}/>
+        <Input type="text" name="email" placeholder="Email" onChange={handleFormChange}/>
         <Input type="text" name="nickname" placeholder="Nickname" onChange={handleFormChange}/>
         <Input type="password" name="password" placeholder="Password" onChange={handleFormChange}/>
         <button className='border-2 disabled:border-gray-500 disabled:text-gray-500 rounded p-1 transition ease-in-out enabled:hover:text-black enabled:hover:bg-white' disabled={authLoading} onClick={() => regAccount()}>
@@ -100,12 +101,8 @@ function RegTab() {
 }
 
 export default function MultiChat() {
-  const [tabIndex, setTabIndex] = useState(0)
-
   const account = useSelector((state) => state.auth.account)
   const dispatch = useDispatch()
-
-  const tabs = [<ProfileMenu _id={account?.id} socket={socket}/>, <ChatMenu/>]
 
   async function getAccount() {  
     const result = await axios({ url: '/api', method: 'GET', params: { type: 'getAcc' }})
@@ -141,37 +138,34 @@ export default function MultiChat() {
     <>
       <title>MultiChat</title>
       { account != null ?
-      <div className='bg-black text-white h-[100vh] grid grid-cols-[1fr,4fr] grid-rows-[auto,1fr] gap-x-[1px]'>
-        <div className='bg-[#212529] min-w-0 flex items-center p-2'>
+      <div className='bg-black text-white h-screen grid grid-cols-[1fr,4fr] grid-rows-[auto,1fr] gap-x-[1px]'>
+        <div className='bg-[#212529] flex items-center p-2'>
           <img className='bg-black rounded-full w-14 h-14' src={accIcon}/>
           <div className='flex flex-col items-start mx-2 gap-1 max-w-[75%]'>
             <p className='text-xl font-semibold truncate break-words w-full'>{account?.nickname}</p>
-            <button className='border border-blue-500 rounded transition ease-in-out hover:bg-blue-600 px-2' onClick={() => setTabIndex(0)}>Profile</button>
+            <Link className='border border-blue-500 rounded transition ease-in-out hover:bg-blue-600 px-2' to={`profile/${account?.id}`}>Profile</Link>
           </div>
         </div>
-        <div className='bg-[#212529] flex items-center justify-center p-2'>
-          <p className='text-2xl font-bold'>Profile</p>
+        <div className='bg-[#212529] flex items-center justify-center'>
+          <p className='text-2xl font-bold'>Menu</p>
         </div>
         <div className='bg-[#2d3034] min-h-0 grid grid-rows-[1fr,auto]'>
           <div className='flex flex-col overflow-auto gap-2 p-2'>
-            <button className='border border-zinc-500 rounded p-2 text-lg transition ease-in-out hover:bg-zinc-500' onClick={() => setTabIndex(1)}>Chat</button>
-            <button className='border border-zinc-500 rounded p-2 text-lg transition ease-in-out hover:bg-zinc-500'>Posts</button>
-            <button className='border border-zinc-500 rounded p-2 text-lg transition ease-in-out hover:bg-zinc-500'>Music</button>
+            <Link className='border border-zinc-500 rounded p-2 text-lg text-center transition-all ease-in-out' to='chat'>Chat</Link>
+            <button className='border border-zinc-500 rounded p-2 text-lg transition-all ease-in-out'>Posts</button>
+            <button className='border border-zinc-500 rounded p-2 text-lg transition-all ease-in-out'>Music</button>
           </div>
           <div className='flex flex-col border-t-2 border-[#8f8f8f]'>
-            <button className='border border-red-800 rounded p-2 m-2 text-lg transition ease-in-out hover:bg-red-800' onClick={() => logoutAccount()}>Logout</button>
+            <button className='border border-red-500 rounded p-2 m-2 text-lg transition ease-in-out hover:bg-red-800' onClick={() => logoutAccount()}>Logout</button>
           </div>
         </div>
-        <div className='bg-[#1d2024] min-h-0'>
-          { tabs.map((component, index) => {
-            return (
-              <div key={index} className={`transition-all ease-in-out ${index == tabIndex ? 'visible opacity-100' : 'invisible opacity-0'}`}>
-                {component}
-              </div>
-            )
-          }) }
+        <div className='bg-[#1d2024] min-h-0 overflow-auto'>
+          <Routes>
+            <Route path='profile/:userId' element={<ProfileMenu socket={socket}/>}/>
+            <Route path='chat' element={<ChatMenu/>}/>
+          </Routes>
         </div>
-      </div> 
+      </div>
       :
       <div className='bg-[#2d3034] text-white h-[100vh] flex flex-col items-center pt-16'>
         <img className='w-48 h-48 rounded-xl' src={chatLogo}/>

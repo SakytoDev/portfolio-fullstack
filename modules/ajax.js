@@ -102,5 +102,9 @@ module.exports =
             const file = './packages/android/multichat.apk'
             res.download(file)
         })
+
+        server.app.get('/*', (req, res) => {
+            res.sendFile(path.join(__dirname, '../client/dist/index.html'))
+        })
     }
 }

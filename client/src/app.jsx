@@ -16,7 +16,7 @@ ReactDOM.createRoot(document.getElementById('root')).render(
     <BrowserRouter>
       <Routes>
         <Route path='/' element={<Main/>}/>
-        <Route path='/multichat' element={<MultiChat/>}/>
+        <Route path='/multichat/*' element={<MultiChat/>}/>
         <Route path='/noizemc' element={<NoizeMC/>}/>
       </Routes>
     </BrowserRouter>
