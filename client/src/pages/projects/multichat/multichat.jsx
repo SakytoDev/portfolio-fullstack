@@ -72,7 +72,7 @@ function RegTab() {
     .catch(err => { console.log(err) })
   
     if (result.code == 'success') {
-      dispatch(login(result.account))
+      dispatch(login({ 'account': result.account }))
       socket.connect()
     }
   

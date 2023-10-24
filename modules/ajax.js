@@ -58,10 +58,10 @@ module.exports =
                 const regResult = await Account.register(form.email, form.nickname, form.password)
     
                 if (regResult.code == 'success') {
-                    const loginResult = await Account.login(form[1].value, form[2].value, req.session.id)
+                    const loginResult = await Account.login(form.nickname, form.password, req.session.id)
     
                     req.session.account = loginResult
-                    res.send( { code: 'success', loginResult } )
+                    res.send( { code: 'success', account: loginResult } )
                 } else if (regResult.code == 'failure') {
                     res.send( { code: 'failure', reason: regResult.reason } )
                 }
