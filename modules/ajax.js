@@ -2,6 +2,7 @@ const fs = require('fs')
 const path = require('path')
 
 const Account = require('../models/account.js')
+const Message = require('../models/message.js')
 const server = require('./server.js')
 
 module.exports = 
@@ -36,9 +37,15 @@ module.exports =
             }
 
             if (requestType == 'getFriends') {
-                const accounts = await Account.getFriends(req.query.id)
+                const friends = await Account.getFriends(req.query.id)
 
-                res.send( { code: 'success', accounts: accounts } )
+                res.send( { code: 'success', friends: friends } )
+            }
+
+            if (requestType == 'getConversation') {
+                const messages = await Message.GetConversationMessages(req.query.sender, req.query.recipient)
+
+                res.send( { code: 'success', messages: messages } )
             }
     
             if (requestType == 'accLogin') {

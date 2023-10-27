@@ -11,7 +11,6 @@ module.exports = class Account {
         if (id == null || id == 0) { return { code: 'failure' } }
 
         const db = database.getDatabase()
-
         const account = await db.collection('accounts').findOne({ _id: new ObjectId(id) }, { projection: { email: 0, password: 0 }})
 
         return account
@@ -20,10 +19,17 @@ module.exports = class Account {
     static async getAccounts(id) 
     {
         const db = database.getDatabase()
-
         const accounts = await db.collection('accounts').find({ _id: { $ne: new ObjectId(id) } }, { projection: { email: 0, password: 0 }}).toArray()
 
         return accounts
+    }
+
+    static async getAccountInfo(id)
+    {
+        const db = database.getDatabase()
+        const info = await db.collection('accounts').findOne({ _id: new ObjectId(id) }, { projection: { nickname: 1 }})
+
+        return Object.values(info)
     }
 
     static async getFriends(id) 
@@ -31,7 +37,6 @@ module.exports = class Account {
         if (id == null || id == 0) { return { code: 'failure' } }
 
         const db = database.getDatabase()
-
         const accounts = await db.collection('accounts').findOne({ _id: new ObjectId(id) }, { projection: { _id: 0, friends: 1 }})
 
         return accounts
@@ -40,7 +45,6 @@ module.exports = class Account {
     static async login(nickname, password, sessionID)
     {
         const db = database.getDatabase()
-
         const accData = await db.collection('accounts').findOne({ nickname: nickname })
 
         if (accData) {
@@ -56,8 +60,6 @@ module.exports = class Account {
 
     static async register(email, nickname, password) 
     {
-        var db = database.getDatabase()
-        
         const currentDate = DateTime.local().toISO()
         const passwordHash = await this.getPasswordHash(password)
         const accountObj = { 
@@ -69,6 +71,7 @@ module.exports = class Account {
             "dateCreated": currentDate 
         }
 
+        const db = database.getDatabase()
         const accExists = await db.collection('accounts').findOne({ $or: [ { email: email }, { nickname: nickname } ] })
 
         if (accExists == null) {
@@ -132,8 +135,7 @@ module.exports = class Account {
 
         const currentDate = DateTime.local().toISO()
 
-        var db = database.getDatabase()
-
+        const db = database.getDatabase()
         db.collection('accounts').updateOne(
             { _id : new ObjectId(id) }, 
             { $set : { lastLogin : currentDate } }

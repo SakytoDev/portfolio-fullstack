@@ -1,21 +1,34 @@
 const database = require('./../modules/database.js');
 
-const Account = require('./account.js');
+const Account = require('./account.js')
 
 const { DateTime } = require('luxon');
 
 module.exports = class Message 
 {
-    static async SaveChatMessage(id, message)
+    static async GetConversationMessages(sender, recipient) 
     {
-        const nickname = await Account.getNicknameByID(id)
-        const sendDate = DateTime.local().toISO();
-        
-        const messageObj = { "senderID": id, "message": message, "sendDate": sendDate }
+        const db = database.getDatabase()
+        const messages = await db.collection('messages').find({ sender: { $in: [sender, recipient]}, recipient: { $in: [sender, recipient]} }).toArray()
 
-        var db = database.getDatabase()
-        await db.collection('messages').insertOne(messageObj)
+        for (let i = 0; i < messages.length; i++) {
+            messages[i].sender = await Account.getAccountInfo(messages[i].sender)
+            messages[i].recipient = await Account.getAccountInfo(messages[i].recipient)
+        }
 
-        return { "id": id, "nickname": nickname, "message": message, "sendDate": sendDate }
+        return messages
+    }
+
+    static async SaveChatMessage(message)
+    {
+        message.sendDate = DateTime.local().toISO()
+
+        const db = database.getDatabase()
+        await db.collection('messages').insertOne(message)
+
+        message.sender = await Account.getAccountInfo(message.sender)
+        message.recipient = await Account.getAccountInfo(message.recipient)
+
+        return message
     }
 }
