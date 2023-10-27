@@ -4,7 +4,7 @@ import axios from 'axios';
 
 import { DateTime } from 'luxon';
 
-import accIcon from '../../../assets/images/defaultAcc.png';
+import accIcon from './assets/images/defaultAcc.png';
 
 export default function ProfileMenu({ socket }) {
   const [account, setAccount] = useState(null)

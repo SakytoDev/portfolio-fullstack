@@ -5,14 +5,15 @@ import { login, logout } from '../../../redux/accountSlice';
 
 import axios from 'axios';
 
-import ProfileMenu from './profilemenu.jsx';
-import ChatMenu from './chatmenu.jsx';
+import ProfileMenu from './profilemenu';
+import ChatMenu from './chatmenu';
+import MessengerMenu from './messengermenu';
 
-import Input from './../../../components/input/input';
+import Input from './assets/components/input/input';
 import Tabs from './../../../components/tabs/tabs';
 
 import chatLogo from '../../../assets/images/chatLogo.png'
-import accIcon from '../../../assets/images/defaultAcc.png';
+import accIcon from './assets/images/defaultAcc.png';
 
 import { io } from 'socket.io-client';
 const socket = io({ autoConnect: false });
