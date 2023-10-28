@@ -8,12 +8,15 @@ import axios from 'axios';
 import accIcon from './assets/images/defaultAcc.png';
 import sendIcon from './assets/images/send.png';
 
+import Nickname from './components/nickname/nicknametext';
+import OnlineText from './components/online/onlinetext';
+
 function MessageObj({ message }) {
   return (
     <div className='border-b px-2 py-2 flex items-center gap-2'>
       <img className='bg-black rounded-full w-16 h-16' src={accIcon}/>
       <div>
-        <p className='font-bold'>{message.sender[1]}</p>
+        <p className='font-bold'>{message.sender}</p>
         <p>{message.message}</p>
         <p className='text-gray-500'>{DateTime.fromISO(message.sendDate).toFormat('MMM dd, HH:mm')}</p>
       </div>
@@ -70,14 +73,14 @@ export default function MessengerMenu({ socket }) {
       <div className='bg-[#212529] border-b-2 border-gray-500 p-2 flex items-center gap-2'>
         <img className='bg-black rounded-full w-14 h-14' src={accIcon}/>
         <div>
-          <p className='font-bold'>{recipientInfo.nickname}</p>
-          <p className={`font-medium ${recipientInfo.isOnline ? 'text-green-500' : 'text-gray-500'}`}>{recipientInfo.isOnline ? 'Online' : 'Offline'}</p>
+          <Nickname className='font-bold' id={chatId}/>
+          <OnlineText className='font-medium' socket={socket} id={chatId}/>
         </div>
       </div>
       <div className='min-h-0 overflow-auto'>
         <div className='border-b px-2 py-4 flex flex-col items-center justify-center gap-2'>
           <img className='bg-black rounded-full w-20 h-20' src={accIcon}/>
-          <p className='text-4xl font-bold'>{recipientInfo.nickname}</p>
+          <Nickname className='text-4xl font-bold' id={chatId}/>
           <p className='text-2xl'>This is the start of conversation, sir.</p>
         </div>
         { conversation.messages?.map((message, index) => {
