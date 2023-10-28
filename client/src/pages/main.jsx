@@ -1,7 +1,5 @@
 import './main.css';
 
-import React from 'react';
-
 import Header from '../components/header/header.jsx';
 import Footer from '../components/footer/footer.jsx';
 import Tabs from '../components/tabs/tabs.jsx';
