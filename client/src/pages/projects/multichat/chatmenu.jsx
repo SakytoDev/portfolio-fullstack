@@ -28,7 +28,7 @@ export default function ChatMenu() {
   const account = useSelector((state) => state.auth.account)
 
   async function getPeople() {
-    const result = await axios({ url: '/api', method: 'GET', params: { type: 'getAccs', id: account.id }})
+    const result = await axios({ url: '/api', method: 'GET', params: { type: 'getAccs' }})
     .then(res => { return res.data })
     .catch(err => { console.log(err) })
 

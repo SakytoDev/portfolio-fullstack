@@ -31,7 +31,7 @@ module.exports =
             }
 
             if (requestType == 'getAccs') {
-                const accounts = await Account.getAccounts(req.query.id)
+                const accounts = await Account.getAccounts()
 
                 res.send( { code: 'success', accounts: accounts } )
             }

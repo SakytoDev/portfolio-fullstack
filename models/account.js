@@ -16,10 +16,10 @@ module.exports = class Account {
         return account
     }
 
-    static async getAccounts(id) 
+    static async getAccounts() 
     {
         const db = database.getDatabase()
-        const accounts = await db.collection('accounts').find({ _id: { $ne: new ObjectId(id) } }, { projection: { email: 0, password: 0 }}).toArray()
+        const accounts = await db.collection('accounts').find({}, { projection: { _id: 1, nickname: 1 }}).toArray()
 
         return accounts
     }
@@ -63,12 +63,12 @@ module.exports = class Account {
         const currentDate = DateTime.local().toISO()
         const passwordHash = await this.getPasswordHash(password)
         const accountObj = { 
-            "email": email, 
-            "nickname": nickname,
-            "password": passwordHash,
-            "friends": {},
-            "lastLogin": currentDate,
-            "dateCreated": currentDate 
+            email: email, 
+            nickname: nickname,
+            password: passwordHash,
+            friends: [],
+            lastLogin: currentDate,
+            dateCreated: currentDate 
         }
 
         const db = database.getDatabase()
