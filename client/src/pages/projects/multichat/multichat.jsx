@@ -9,7 +9,7 @@ import ProfileMenu from './profilemenu';
 import ChatMenu from './chatmenu';
 import MessengerMenu from './messengermenu';
 
-import Input from './assets/components/input/input';
+import Input from './components/input/input';
 import Tabs from './../../../components/tabs/tabs';
 
 import chatLogo from '../../../assets/images/chatLogo.png'
