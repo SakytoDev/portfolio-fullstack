@@ -22,40 +22,28 @@ function MessageObj({ message }) {
 }
 
 export default function MessengerMenu({ socket }) {
-  const { userId } = useParams()
+  const { chatId } = useParams()
 
-  const [recipientInfo, setRecipientInfo] = useState([])
-  const [messagesList, setMessagesList] = useState([])
+  const [conversation, setConversation] = useState({})
   const [messageInput, setMessageInput] = useState('')
 
   const account = useSelector((state) => state.auth.account)
 
   const location = useLocation()
 
-  async function getRecipient() {
-    const result = await axios({ url: '/api', method: 'GET', params: { type: 'getAccInfo', id: userId }})
+  async function getConversation() {
+    const result = await axios({ url: '/api', method: 'GET', params: { type: 'getConversation', id: chatId }})
     .then(res => { return res.data })
     .catch(err => { console.log(err) })
 
     if (result.code == 'success') {
-      setRecipientInfo(result.account)
-      socket.emit('isOnline', { id: userId })
-    }
-  }
-
-  async function getMessages() {
-    const result = await axios({ url: '/api', method: 'GET', params: { type: 'getConversation', sender: account.id, recipient: userId }})
-    .then(res => { return res.data })
-    .catch(err => { console.log(err) })
-
-    if (result.code == 'success') {
-      setMessagesList(result.messages)
+      setConversation(result.conversation)
     }
   }
 
   function sendMessage() {
     if (messageInput != '') {
-      const message = { sender: account.id, recipient: userId, message: messageInput }
+      const message = { sender: account.id, conversation: chatId, message: messageInput }
       socket.emit('chatMessage', message)
 
       setMessageInput('')
@@ -63,24 +51,19 @@ export default function MessengerMenu({ socket }) {
   }
 
   useEffect(() => {
-    socket.on('chatMessage', (data) => {
-      setMessagesList(messagesList => [...messagesList, data])
-    })
-
-    socket.on('isOnline', (data) => { 
-      setRecipientInfo(recipientInfo => ({...recipientInfo, isOnline: data}))
-    })
-
-    return () => { 
-      socket.off('chatMessage')
-      socket.off('isOnline')
-    }
-  }, [])
+    getConversation()
+  }, [chatId])
 
   useEffect(() => {
-    getRecipient()
-    getMessages()
-  }, [userId])
+    socket.on('chatMessage', (data) => {
+      const newConversation = { ...conversation }
+      newConversation.messages.push(data)
+
+      setConversation(newConversation)
+    })
+
+    return () => { socket.off('chatMessage') }
+  }, [conversation])
 
   return (
     <div className='bg-[#2d3034] grid grid-rows-[auto,1fr,auto]'>
@@ -97,7 +80,7 @@ export default function MessengerMenu({ socket }) {
           <p className='text-4xl font-bold'>{recipientInfo.nickname}</p>
           <p className='text-2xl'>This is the start of conversation, sir.</p>
         </div>
-        { messagesList.map((message, index) => {
+        { conversation.messages?.map((message, index) => {
           return <MessageObj key={index} message={message}/>
         })}
       </div>

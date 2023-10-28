@@ -2,7 +2,7 @@ const fs = require('fs')
 const path = require('path')
 
 const Account = require('../models/account.js')
-const Message = require('../models/message.js')
+const Conversation = require('../models/conversation.js')
 const server = require('./server.js')
 
 module.exports = 
@@ -43,9 +43,9 @@ module.exports =
             }
 
             if (requestType == 'getConversation') {
-                const messages = await Message.GetConversationMessages(req.query.sender, req.query.recipient)
+                const conversation = await Conversation.GetConversation(req.query.id, req.session.account.id)
 
-                res.send( { code: 'success', messages: messages } )
+                res.send( { code: 'success', conversation: conversation } )
             }
     
             if (requestType == 'accLogin') {

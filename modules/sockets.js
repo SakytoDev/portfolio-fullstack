@@ -1,7 +1,7 @@
 const server = require('./server.js');
 
 const Account = require('../models/account.js');
-const Message = require('./../models/message.js');
+const Conversation = require('../models/conversation.js');
 
 module.exports = 
 {
@@ -30,12 +30,12 @@ module.exports =
             })
 
             socket.on('chatMessage', async (data) => {
-                const message = await Message.SaveChatMessage(data)
+                const message = await Conversation.AddMessage(data)
 
                 const allClients = await server.io.fetchSockets()
 
                 for (const client of allClients) {
-                    if (data.sender != client.accData.id && data.recipient != client.accData.id) continue
+                    if (data.sender != client.accData.id && data.conversation != client.accData.id) continue
 
                     client.emit('chatMessage', message)
                 }

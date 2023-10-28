@@ -162,7 +162,7 @@ export default function MultiChat() {
         <Routes>
           <Route path='profile/:userId' element={<ProfileMenu socket={socket}/>}/>
           <Route path='chat' element={<ChatMenu/>}/>
-          <Route path='chat/:userId' element={<MessengerMenu socket={socket}/>}></Route>
+          <Route path='chat/:chatId' element={<MessengerMenu socket={socket}/>}></Route>
         </Routes>
       </div>
       :
