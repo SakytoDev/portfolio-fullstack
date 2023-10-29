@@ -33,7 +33,7 @@ export default function ChatMenu() {
     .catch(err => { console.log(err) })
 
     if (result.code == 'success') {
-      setPeopleList(result.accounts)
+      setPeopleList(result.accounts.filter(x => { return x._id != account.id }))
     }
   }
 
