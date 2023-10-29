@@ -8,7 +8,7 @@ module.exports = class Conversation
     static async GetConversation(id, requester) 
     {
         const db = database.getDatabase()
-        const conversation = await db.collection('conversations').findOne({ _id: new ObjectId(id), participants: { $in: [requester] } })
+        let conversation = await db.collection('conversations').findOne({ _id: new ObjectId(id), participants: { $in: [requester] } })
 
         if (!conversation) {
             const privateConversation = await db.collection('accounts').findOne({ _id: new ObjectId(id) })
