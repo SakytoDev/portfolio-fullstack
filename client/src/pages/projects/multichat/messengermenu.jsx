@@ -45,7 +45,7 @@ export default function MessengerMenu({ socket }) {
 
   function sendMessage() {
     if (messageInput != '') {
-      const message = { sender: account.id, conversation: chatId, message: messageInput }
+      const message = { sender: account.id, conversation: conversation._id, message: messageInput }
       socket.emit('chatMessage', message)
 
       setMessageInput('')
@@ -83,8 +83,12 @@ export default function MessengerMenu({ socket }) {
           <p className='text-xl font-medium text-gray-500'>This is the start of conversation, sir.</p>
         </div>
         { conversation.messages?.map((message, index) => {
-          message.sender = conversation.participants.find(x => x._id == message.sender).nickname
-          return <MessageObj key={index} message={message}/>
+          const newMessage = {
+            sender: conversation.participants.find(x => x._id == message.sender)?.nickname,
+            message: message.message,
+            sendDate: message.sendDate
+          }
+          return <MessageObj key={index} message={newMessage}/>
         })}
       </div>
       <div className='border-t-2 border-gray-500 p-4 grid grid-cols-[1fr,auto]'>

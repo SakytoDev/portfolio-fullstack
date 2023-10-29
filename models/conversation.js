@@ -7,19 +7,31 @@ module.exports = class Conversation
 {
     static async GetConversation(id, requester) 
     {
+        let conversation
+
         const db = database.getDatabase()
-        let conversation = await db.collection('conversations').findOne({ _id: new ObjectId(id), participants: { $in: [requester] } })
+        let isUser = await db.collection('accounts').findOne({ _id: new ObjectId(id) })
 
-        if (!conversation) {
-            const privateConversation = await db.collection('accounts').findOne({ _id: new ObjectId(id) })
-            if (!privateConversation) { return null }
+        if (isUser) {
+            const privateConversation = await db.collection('conversations').findOne({ $or: [{ _id: new ObjectId(id) }, { participants: { $all: [id, requester], $size: 2 } }] })
 
-            const currentDate = DateTime.local().toISO()
-            const conversationObj = { _id: new ObjectId(id), participants: [id, requester], messages: [], dateCreated: currentDate }
+            if (!privateConversation) {
+                const currentDate = DateTime.local().toISO()
+                const conversationObj = { _id: new ObjectId(id), participants: [id, requester], messages: [], dateCreated: currentDate }
 
-            await db.collection('conversations').insertOne(conversationObj)
+                await db.collection('conversations').insertOne(conversationObj)
 
-            conversation = conversationObj
+                conversation = conversationObj
+            } else {
+                conversation = privateConversation
+            }
+        } 
+        else {
+            conversation = await db.collection('conversations').findOne({ _id: new ObjectId(id), participants: { $in: [requester] } })
+
+            if (!conversation) {
+                return null
+            }
         }
 
         const participants = await this.GetParticipantData(conversation.participants)
