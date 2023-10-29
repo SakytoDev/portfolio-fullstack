@@ -8,7 +8,6 @@ import axios from 'axios';
 import accIcon from './assets/images/defaultAcc.png';
 import sendIcon from './assets/images/send.png';
 
-import Nickname from './components/nickname/nicknametext';
 import OnlineText from './components/online/onlinetext';
 
 function MessageObj({ message }) {
@@ -73,15 +72,15 @@ export default function MessengerMenu({ socket }) {
       <div className='bg-[#212529] border-b-2 border-gray-500 p-2 flex items-center gap-2'>
         <img className='bg-black rounded-full w-14 h-14' src={accIcon}/>
         <div>
-          <Nickname className='font-bold' id={chatId}/>
+          <p className='font-bold' id={chatId}>{conversation.participants?.find(x => x._id == chatId).nickname}</p>
           <OnlineText className='font-medium' id={chatId} socket={socket} onlineText='Online' onlineStyle='text-green-500' offlineText='Offline' offlineStyle='text-gray-500'/>
         </div>
       </div>
       <div className='min-h-0 overflow-auto'>
-        <div className='border-b px-2 py-4 flex flex-col items-center justify-center gap-2'>
+        <div className='border-b px-2 py-4 flex flex-col items-center justify-center gap-1'>
           <img className='bg-black rounded-full w-20 h-20' src={accIcon}/>
-          <Nickname className='text-4xl font-bold' id={chatId}/>
-          <p className='text-2xl'>This is the start of conversation, sir.</p>
+          <p className='text-4xl font-bold'>{conversation.participants?.find(x => x._id == chatId).nickname}</p>
+          <p className='text-xl font-medium text-gray-500'>This is the start of conversation, sir.</p>
         </div>
         { conversation.messages?.map((message, index) => {
           message.sender = conversation.participants.find(x => x._id == message.sender).nickname
