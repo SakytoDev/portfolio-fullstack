@@ -7,6 +7,7 @@ import { DateTime } from 'luxon';
 import accIcon from './assets/images/defaultAcc.png';
 
 import OnlineIcon from './components/online/onlineicon';
+import OnlineText from './components/online/onlinetext';
 
 export default function ProfileMenu({ socket }) {
   const [account, setAccount] = useState(null)
@@ -46,7 +47,7 @@ export default function ProfileMenu({ socket }) {
               <OnlineIcon id={account?._id} socket={socket} className='absolute rounded-full w-5 h-5 top-0 right-0 -translate-y-1/2 translate-x-1/2'/>
             </div>
             <div className='ms-1'>
-              <p className={`font-medium ${ !account?.isOnline ? 'block' : 'hidden' }`}>Was online: { account?.lastLogin != null ? DateTime.local().toUTC().plus({ days: -DateTime.local().toUTC().diff(DateTime.fromISO(account.lastLogin), 'days').days}).toRelativeCalendar() : '' }</p>
+              <OnlineText id={account?._id} socket={socket} onlineText='Online' onlineStyle='text-white' offlineText={`Was online: ${ account?.lastLogin ? DateTime.local().toUTC().plus({ days: -DateTime.local().toUTC().diff(DateTime.fromISO(account.lastLogin), 'days').days}).toRelativeCalendar() : ''}`} offlineStyle='text-white'/>
               <p className='font-medium'>Started the journey: { account?.dateCreated != null ? DateTime.fromISO(account?.dateCreated).toFormat('MMM dd, HH:mm') : ''}</p>
             </div>
           </div>

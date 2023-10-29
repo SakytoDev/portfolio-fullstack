@@ -74,7 +74,7 @@ export default function MessengerMenu({ socket }) {
         <img className='bg-black rounded-full w-14 h-14' src={accIcon}/>
         <div>
           <Nickname className='font-bold' id={chatId}/>
-          <OnlineText className='font-medium' socket={socket} id={chatId}/>
+          <OnlineText className='font-medium' id={chatId} socket={socket} onlineText='Online' onlineStyle='text-green-500' offlineText='Offline' offlineStyle='text-gray-500'/>
         </div>
       </div>
       <div className='min-h-0 overflow-auto'>
