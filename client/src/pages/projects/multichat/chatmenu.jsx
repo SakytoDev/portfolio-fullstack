@@ -43,7 +43,7 @@ export default function ChatMenu() {
     .catch(err => { console.log(err) })
 
     if (result.code == 'success') {
-      setPeopleList(Object.values(result.friends.friends))
+      setPeopleList(result.friends.friends)
     }
   }
 
