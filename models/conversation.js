@@ -8,18 +8,29 @@ module.exports = class Conversation
     static async GetConversation(id, requester) 
     {
         const db = database.getDatabase()
-        const findResult = await db.collection('conversations').findOne({ _id: new ObjectId(id), participants: { $in: [requester] } })
+        const conversation = await db.collection('conversations').findOne({ _id: new ObjectId(id), participants: { $in: [requester] } })
 
-        if (!findResult) {
+        if (!conversation) {
             const currentDate = DateTime.local().toISO()
             const conversationObj = { _id: new ObjectId(id), participants: [id, requester], messages: [], dateCreated: currentDate }
 
             await db.collection('conversations').insertOne(conversationObj)
 
-            return conversationObj
+            conversation = conversationObj
         }
 
-        return findResult
+        const participants = await this.GetParticipantData(conversation.participants)
+        conversation.participants = participants
+
+        return conversation
+    }
+
+    static async GetParticipantData(ids)
+    {
+        const db = database.getDatabase()
+        const userData = await db.collection('accounts').find({ _id: { $in: ids.map((id) => new ObjectId(id)) } }, { projection: { _id: 1, nickname: 1 }}).toArray()
+
+        return userData
     }
 
     static async AddMessage(data)
