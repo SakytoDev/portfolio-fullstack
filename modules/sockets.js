@@ -20,13 +20,13 @@ module.exports =
                 let isOnline = false
 
                 for (const client of allClients) {
-                    if (client.accData.id != data.id) continue
+                    if (client.accData.id != data) continue
 
                     isOnline = true
                     break
                 }
 
-                socket.emit('isOnline', isOnline)
+                socket.emit('isOnline', { id: data, isOnline: isOnline })
             })
 
             socket.on('chatMessage', async (data) => {
