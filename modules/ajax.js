@@ -45,7 +45,11 @@ module.exports =
             if (requestType == 'getConversation') {
                 const conversation = await Conversation.GetConversation(req.query.id, req.session.account.id)
 
-                res.send( { code: 'success', conversation: conversation } )
+                if (conversation) {
+                    res.send( { code: 'success', conversation: conversation } )
+                } else {
+                    res.send( { code: 'failure' } )
+                }
             }
     
             if (requestType == 'accLogin') {

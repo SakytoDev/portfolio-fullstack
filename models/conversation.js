@@ -11,6 +11,9 @@ module.exports = class Conversation
         const conversation = await db.collection('conversations').findOne({ _id: new ObjectId(id), participants: { $in: [requester] } })
 
         if (!conversation) {
+            const privateConversation = await db.collection('accounts').findOne({ _id: new ObjectId(id) })
+            if (!privateConversation) { return null }
+
             const currentDate = DateTime.local().toISO()
             const conversationObj = { _id: new ObjectId(id), participants: [id, requester], messages: [], dateCreated: currentDate }
 
