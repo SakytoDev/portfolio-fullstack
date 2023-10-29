@@ -6,6 +6,8 @@ import { DateTime } from 'luxon';
 
 import accIcon from './assets/images/defaultAcc.png';
 
+import OnlineIcon from './components/online/onlineicon';
+
 export default function ProfileMenu({ socket }) {
   const [account, setAccount] = useState(null)
   const [updateLoading, setUpdateLoad] = useState(false)
@@ -21,19 +23,10 @@ export default function ProfileMenu({ socket }) {
   
     if (result.code == 'success') {
       setAccount(result.account)
-      socket.emit('isOnline', { id: userId })
     }
 
     setUpdateLoad(false)
   }
-
-  useEffect(() => {
-    socket.on('isOnline', (data) => { 
-      setAccount(account => ({...account, isOnline: data}))
-    })
-
-    return () => { socket.off('isOnline') }
-  }, [])
 
   useEffect(() => {
     getAccount()
@@ -50,7 +43,7 @@ export default function ProfileMenu({ socket }) {
           <div className='flex flex-col items-start gap-3 p-5'>
             <div className="bg-zinc-800 border-2 border-zinc-500 rounded-lg relative max-w-[80%]">
               <p className='font-black text-5xl truncate break-words p-2 pb-3'>{account?.nickname}</p>
-              <div className={`absolute ${ !account?.isOnline ? 'bg-zinc-600' : 'bg-green-600' } rounded-full w-5 h-5 top-0 right-0 -translate-y-1/2 translate-x-1/2`}/>
+              <OnlineIcon id={account?._id} socket={socket} className='absolute rounded-full w-5 h-5 top-0 right-0 -translate-y-1/2 translate-x-1/2'/>
             </div>
             <div className='ms-1'>
               <p className={`font-medium ${ !account?.isOnline ? 'block' : 'hidden' }`}>Was online: { account?.lastLogin != null ? DateTime.local().toUTC().plus({ days: -DateTime.local().toUTC().diff(DateTime.fromISO(account.lastLogin), 'days').days}).toRelativeCalendar() : '' }</p>
