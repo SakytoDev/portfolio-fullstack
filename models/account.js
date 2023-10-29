@@ -37,9 +37,9 @@ module.exports = class Account {
         if (id == null || id == 0) { return { code: 'failure' } }
 
         const db = database.getDatabase()
-        const accounts = await db.collection('accounts').findOne({ _id: new ObjectId(id) }, { projection: { _id: 0, friends: 1 }})
+        const friends = await db.collection('accounts').findOne({ _id: new ObjectId(id) }, { projection: { _id: 0, friends: 1 }})
 
-        return accounts
+        return friends
     }
 
     static async login(nickname, password, sessionID)
