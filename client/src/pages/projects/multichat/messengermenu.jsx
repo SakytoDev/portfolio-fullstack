@@ -84,6 +84,7 @@ export default function MessengerMenu({ socket }) {
           <p className='text-2xl'>This is the start of conversation, sir.</p>
         </div>
         { conversation.messages?.map((message, index) => {
+          message.sender = conversation.participants.find(x => x._id == message.sender).nickname
           return <MessageObj key={index} message={message}/>
         })}
       </div>
