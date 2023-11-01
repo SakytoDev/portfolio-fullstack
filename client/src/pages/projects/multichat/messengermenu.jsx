@@ -1,11 +1,10 @@
 import { useEffect, useState } from 'react';
 import { useSelector } from 'react-redux';
-import { useParams, useLocation } from 'react-router-dom';
+import { useParams } from 'react-router-dom';
 import { DateTime } from 'luxon';
 
 import axios from 'axios';
 
-import accIcon from './assets/images/defaultAcc.png';
 import sendIcon from './assets/images/send.png';
 
 import Avatar from './components/avatar/avatar';
@@ -32,16 +31,13 @@ export default function MessengerMenu({ socket }) {
 
   const account = useSelector((state) => state.auth.account)
 
-  const location = useLocation()
-
   async function getConversation() {
-    const result = await axios({ url: '/api', method: 'GET', params: { type: 'getConversation', id: chatId }})
-    .then(res => { return res.data })
-    .catch(err => { console.log(err) })
-
-    if (result.code == 'success') {
-      setConversation(result.conversation)
-    }
+    await axios.get('/api', { params: { type: 'getConversation', id: chatId } })
+    .then(res => { 
+      const result = res.data
+      if (result.code == 'success') setConversation(result.conversation)
+    })
+    .catch(err => console.log(err))
   }
 
   function sendMessage() {

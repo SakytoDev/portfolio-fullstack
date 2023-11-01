@@ -28,30 +28,27 @@ export default function ChatMenu() {
   const account = useSelector((state) => state.auth.account)
 
   async function getPeople() {
-    const result = await axios({ url: '/api', method: 'GET', params: { type: 'getAccs' }})
-    .then(res => { return res.data })
-    .catch(err => { console.log(err) })
-
-    if (result.code == 'success') {
-      setPeopleList(result.accounts.filter(x => { return x._id != account.id }))
-    }
+    await axios.get('/api', { params: { type: 'getAccs' } })
+    .then(res => {
+      const result = res.data
+      if (result.code == 'success') setPeopleList(result.accounts.filter(x => { return x._id != account.id }))
+    })
+    .catch(err => console.log(err))
   }
 
   async function getFriends() {
-    const result = await axios({ url: '/api', method: 'GET', params: { type: 'getFriends', id: account.id }})
-    .then(res => { return res.data })
-    .catch(err => { console.log(err) })
-
-    if (result.code == 'success') {
-      setPeopleList(result.friends.friends)
-    }
+    await axios.get('/api', { params: { type: 'getFriends', id: account.id }})
+    .then(res => {
+      const result = res.data
+      if (result.code == 'success') setPeopleList(result.friends.friends)
+    })
+    .catch(err => console.log(err))
   }
 
   useEffect(() => {
     if (tabIndex == 0) {
       getPeople()
-    } 
-    else if (tabIndex == 1) {
+    } else if (tabIndex == 1) {
       getFriends()
     }
   }, [tabIndex])

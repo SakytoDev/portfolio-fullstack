@@ -10,6 +10,8 @@ import OnlineIcon from './components/online/onlineicon';
 import OnlineText from './components/online/onlinetext';
 
 export default function ProfileMenu({ socket }) {
+  const { userId } = useParams()
+
   const [account, setAccount] = useState(null)
   const [updateLoading, setUpdateLoad] = useState(false)
 
@@ -40,15 +42,13 @@ export default function ProfileMenu({ socket }) {
   async function getAccount() {
     setUpdateLoad(true)
 
-    const result = await axios({ url: '/api', method: 'GET', params: { type: 'getAccInfo', id: userId }})
-    .then(res => { return res.data })
-    .catch(err => { console.log(err) })
-  
-    if (result.code == 'success') {
-      setAccount(result.account)
-    }
-
-    setUpdateLoad(false)
+    await axios.get('/api', { params: { type: 'getAccInfo', id: userId } })
+    .then(res => {
+      const result = res.data
+      if (result.code == 'success') setAccount(result.account)
+    })
+    .catch(err => console.log(err))
+    .finally(setUpdateLoad(false))
   }
 
   useEffect(() => {
