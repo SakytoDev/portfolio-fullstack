@@ -19,9 +19,17 @@ module.exports = class Account {
     static async getAccounts() 
     {
         const db = database.getDatabase()
-        const accounts = await db.collection('accounts').find({}, { projection: { _id: 1, nickname: 1 }}).toArray()
+        const accounts = await db.collection('accounts').find({}, { projection: { _id: 1, avatar: 1, nickname: 1 }}).toArray()
 
         return accounts
+    }
+
+    static async getAvatar(id) 
+    {
+        const db = database.getDatabase()
+        const result = await db.collection('accounts').findOne({ _id: new ObjectId(id) }, { projection: { _id: 0, avatar: 1 }})
+
+        return result?.avatar
     }
 
     static async getAccountInfo(id)
@@ -63,7 +71,8 @@ module.exports = class Account {
         const currentDate = DateTime.local().toISO()
         const passwordHash = await this.getPasswordHash(password)
         const accountObj = { 
-            email: email, 
+            email: email,
+            avatar: null,
             nickname: nickname,
             password: passwordHash,
             friends: [],
@@ -140,5 +149,16 @@ module.exports = class Account {
             { _id : new ObjectId(id) }, 
             { $set : { lastLogin : currentDate } }
         )
+    }
+
+    static async updateAvatar(id, image) 
+    {
+        const db = database.getDatabase()
+        await db.collection('accounts').updateOne(
+            { _id : new ObjectId(id) }, 
+            { $set : { avatar : image } }
+        )
+
+        return image
     }
 }

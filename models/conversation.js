@@ -43,7 +43,7 @@ module.exports = class Conversation
     static async GetParticipantData(ids)
     {
         const db = database.getDatabase()
-        const userData = await db.collection('accounts').find({ _id: { $in: ids.map((id) => new ObjectId(id)) } }, { projection: { _id: 1, nickname: 1 }}).toArray()
+        const userData = await db.collection('accounts').find({ _id: { $in: ids.map((id) => new ObjectId(id)) } }, { projection: { _id: 1, avatar: 1, nickname: 1 }}).toArray()
 
         return userData
     }

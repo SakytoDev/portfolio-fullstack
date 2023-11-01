@@ -4,13 +4,13 @@ import { Link } from 'react-router-dom';
 
 import axios from 'axios';
 
-import accIcon from './assets/images/defaultAcc.png';
+import Avatar from './components/avatar/avatar';
 
 function PeopleCard({ data }) {
   return (
     <div className='p-2 border-2 rounded-xl flex flex-col gap-2'>
       <div className='border-b-2 pb-2 flex items-center gap-2'>
-        <img className='bg-black rounded-full w-12 h-12' src={accIcon}/>
+        <Avatar className='w-12 h-12' source={data.avatar}/>
         <p className='text-xl'>{data.nickname}</p>
       </div>
       <div className='grid grid-cols-2 gap-2'>

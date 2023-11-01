@@ -1,11 +1,11 @@
-import { useEffect, useState } from 'react';
+import { useEffect, useState, useRef } from 'react';
+import { useSelector } from 'react-redux';
 import { useParams } from 'react-router-dom';
 import axios from 'axios';
 
 import { DateTime } from 'luxon';
 
-import accIcon from './assets/images/defaultAcc.png';
-
+import Avatar from './components/avatar/avatar';
 import OnlineIcon from './components/online/onlineicon';
 import OnlineText from './components/online/onlinetext';
 
@@ -13,7 +13,29 @@ export default function ProfileMenu({ socket }) {
   const [account, setAccount] = useState(null)
   const [updateLoading, setUpdateLoad] = useState(false)
 
-  const { userId } = useParams()
+  const selfAccount = useSelector((state) => state.auth.account)
+
+  const avatarFile = useRef(null)
+
+  const handleAvatarChange = async (e) => {
+    const file = e.target.files[0]
+    
+    if (file.size < 1048576) {
+      const base64 = await ConvertToBase64(file)
+
+      await axios.get('/api', { params: { type: 'updateAvatar', id: selfAccount.id, image: base64 }}).catch(err => console.log(err))
+    }
+  }
+
+  const ConvertToBase64 = (file) => {
+    return new Promise((resolve, reject) => {
+      const fileReader = new FileReader()
+      fileReader.readAsDataURL(file)
+      
+      fileReader.onload = () => { resolve(fileReader.result) }
+      fileReader.onerror = (error) => { reject(error) }
+    })
+  }
 
   async function getAccount() {
     setUpdateLoad(true)
@@ -36,9 +58,15 @@ export default function ProfileMenu({ socket }) {
   return (
     !updateLoading ?
     <div className='bg-[#2d3034] grid grid-rows-[auto,1fr]'>
-      <div className='grid grid-rows-[1fr,1fr] grid-cols-1 p-12'>
+      <div className='grid grid-rows-[1fr,1fr] p-12'>
         <div className='relative rounded-t-2xl border-2 border-b-[1px] border-white bg-gradient-to-tl from-violet-900 from-40% to-indigo-900 to-90%'>
-          <img className='bg-black w-32 h-32 border-[3px] border-white rounded-full absolute bottom-0 -right-[3%] translate-y-1/2 -translate-x-1/2 z-[1]' src={accIcon}/>
+          { selfAccount?.id == userId ?
+          <button className='absolute left-1/2 top-[100%] -translate-x-1/2 -translate-y-1/2 z-[1]' onClick={() => avatarFile.current.click()}>
+            <Avatar className='w-40 h-40 border-[3px] border-white' id={userId}/>
+            <input ref={avatarFile} onChange={handleAvatarChange} type='file' accept='image/*' className='hidden'></input>
+          </button> 
+          :
+          <Avatar className='w-40 h-40 border-[3px] border-white absolute left-1/2 top-[100%] -translate-x-1/2 -translate-y-1/2 z-[1]' id={userId}/> }
         </div>
         <div className='bg-slate-700 rounded-b-2xl border-2 border-t-[1px] border-white'>
           <div className='flex flex-col items-start gap-3 p-5'>

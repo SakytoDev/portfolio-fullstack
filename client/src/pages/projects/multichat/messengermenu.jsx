@@ -8,12 +8,13 @@ import axios from 'axios';
 import accIcon from './assets/images/defaultAcc.png';
 import sendIcon from './assets/images/send.png';
 
+import Avatar from './components/avatar/avatar';
 import OnlineText from './components/online/onlinetext';
 
 function MessageObj({ message }) {
   return (
     <div className='border-b px-2 py-2 flex items-center gap-2'>
-      <img className='bg-black rounded-full w-16 h-16' src={accIcon}/>
+      <Avatar className='w-16 h-16' source={message.avatar}/>
       <div>
         <p className='font-bold'>{message.sender}</p>
         <p>{message.message}</p>
@@ -70,7 +71,7 @@ export default function MessengerMenu({ socket }) {
   return (
     <div className='bg-[#2d3034] grid grid-rows-[auto,1fr,auto]'>
       <div className='bg-[#212529] border-b-2 border-gray-500 p-2 flex items-center gap-2'>
-        <img className='bg-black rounded-full w-14 h-14' src={accIcon}/>
+        <Avatar className='w-14 h-14' id={chatId}/>
         <div>
           <p className='font-bold' id={chatId}>{conversation.participants?.find(x => x._id == chatId).nickname}</p>
           <OnlineText className='font-medium' id={chatId} socket={socket} onlineText='Online' onlineStyle='text-green-500' offlineText='Offline' offlineStyle='text-gray-500'/>
@@ -78,12 +79,13 @@ export default function MessengerMenu({ socket }) {
       </div>
       <div className='min-h-0 overflow-auto'>
         <div className='border-b px-2 py-4 flex flex-col items-center justify-center gap-1'>
-          <img className='bg-black rounded-full w-20 h-20' src={accIcon}/>
+          <Avatar className='w-20 h-20' id={chatId}/>
           <p className='text-4xl font-bold'>{conversation.participants?.find(x => x._id == chatId).nickname}</p>
           <p className='text-xl font-medium text-gray-500'>This is the start of conversation, sir.</p>
         </div>
         { conversation.messages?.map((message, index) => {
           const newMessage = {
+            avatar: conversation.participants.find(x => x._id == message.sender)?.avatar,
             sender: conversation.participants.find(x => x._id == message.sender)?.nickname,
             message: message.message,
             sendDate: message.sendDate
