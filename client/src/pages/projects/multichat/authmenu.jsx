@@ -1,6 +1,5 @@
 import { useState } from 'react';
 import { useDispatch } from 'react-redux';
-import { useNavigate } from 'react-router-dom';
 import { login } from '../../../redux/accountSlice';
 
 import axios from 'axios';
@@ -23,16 +22,16 @@ function LoginTab() {
     })
   }
 
-  async function loginAccount() {
+  function loginAccount() {
     setAuthLoading(true)
 
-    await axios.get('/api', { params: { type: 'accLogin', form: authForm }})
+    axios.get('/api', { params: { type: 'accLogin', form: authForm }})
     .then(res => {
       const result = res.data
       if (result.code == 'success') dispatch(login({ account: result.account }))
     })
     .catch(err => console.log(err))
-    .finally(setAuthLoading(false))
+    .finally(() => setAuthLoading(false))
   }
 
   return (
@@ -54,18 +53,16 @@ function RegTab() {
 
   const dispatch = useDispatch()
 
-  const navigate = useNavigate()
-
-  async function regAccount() {
+  function regAccount() {
     setAuthLoading(true)
   
-    await axios.get('/api', { params: { type: 'accReg', form: authForm }})
+    axios.get('/api', { params: { type: 'accReg', form: authForm }})
     .then(res => {
       const result = res.data
       if (result.code == 'success') dispatch(login({ account: result.account }))
     })
     .catch(err => console.log(err))
-    .finally(setAuthLoading(false))
+    .finally(() => setAuthLoading(false))
   }
 
   const handleFormChange = (e) => {
