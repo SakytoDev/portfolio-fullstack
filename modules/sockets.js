@@ -11,8 +11,8 @@ module.exports =
         {
             socket.accData = { id: '' }
 
-            socket.on('authUpdate', (data) => { 
-                socket.accData = data
+            socket.on('authUpdate', (data) => {
+                socket.accData = { id: data }
             })
 
             socket.on('isOnline', async (data) => {

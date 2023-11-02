@@ -5,15 +5,13 @@ export default function OnlineText({ onlineText, onlineStyle, offlineText, offli
 
   useEffect(() => {
     socket.on('isOnline', (data) => { 
-      if (data.id == id) {
-        setStatus(data.isOnline)
-      }
+      if (data.id == id) setStatus(data.isOnline)
     })
 
-    socket.emit('isOnline', id)
+    if (id) socket.emit('isOnline', id)
 
     return () => { socket.off('isOnline') }
-  }, [])
+  }, [id])
 
   return <p className={`font-medium ${status ? onlineStyle : offlineStyle} ${className}`}>{status ? onlineText : offlineText}</p>
 }

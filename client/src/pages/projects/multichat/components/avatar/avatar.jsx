@@ -4,7 +4,7 @@ import axios from 'axios';
 
 import accIcon from '../../assets/images/defaultAcc.png';
 
-export default function Avatar({ className, id, source = null }) {
+export default function Avatar({ className, id = null, source = null }) {
   const [avatar, setAvatar] = useState(null)
 
   async function getAvatar() {
@@ -18,12 +18,9 @@ export default function Avatar({ className, id, source = null }) {
   }
 
   useEffect(() => {
-    if (source) {
-      setAvatar(source)
-    } else {
-      getAvatar()
-    }
-  }, [])
+    if (id) getAvatar()
+    if (source) setAvatar(source)
+  }, [id, source])
 
   return (
     <img className={`border-2 border-white bg-black rounded-full object-cover ${className}`} src={avatar ? avatar : accIcon}/>

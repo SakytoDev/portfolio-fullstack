@@ -19,8 +19,8 @@ function MainMenu({ socket }) {
   const account = useSelector((state) => state.auth.account)
   const dispatch = useDispatch()
 
-  async function logoutAccount() {
-    await axios.get('/api', { params: { type: 'accLogout', token: account.logoutToken } })
+  function logoutAccount() {
+    axios.get('/api', { params: { type: 'accLogout', token: account.logoutToken } })
     .then(res => { 
       const result = res.data
       if (result.code == 'success') dispatch(logout())
@@ -65,12 +65,8 @@ export default function MultiChat() {
   const navigate = useNavigate()
   const location = useLocation()
 
-  async function getAccount() {  
-    await axios({ 
-      url: '/api', 
-      method: 'GET', 
-      params: { type: 'getAcc' }
-    })
+  function getAccount() {  
+    axios.get('/api', { params: { type: 'getAcc' }})
     .then(res => { 
       const result = res.data
       if (result.code == 'success') { dispatch(login({ account: result.account })) }
@@ -84,13 +80,13 @@ export default function MultiChat() {
 
   useEffect(() => {
     if (account) {
-      if (!socket.connected) socket.connect()
+      socket.connect()
       socket.emit('authUpdate', account.id)
       
       if (location.pathname == '/multichat/auth') navigate('../multichat')
     }
     else {
-      if (socket.connected) socket.disconnect()
+      socket.disconnect()
       navigate('auth')
     }
   }, [account])

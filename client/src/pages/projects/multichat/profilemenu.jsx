@@ -39,16 +39,16 @@ export default function ProfileMenu({ socket }) {
     })
   }
 
-  async function getAccount() {
+  function getAccount() {
     setUpdateLoad(true)
 
-    await axios.get('/api', { params: { type: 'getAccInfo', id: userId } })
+    axios.get('/api', { params: { type: 'getAccInfo', id: userId } })
     .then(res => {
       const result = res.data
       if (result.code == 'success') setAccount(result.account)
     })
     .catch(err => console.log(err))
-    .finally(setUpdateLoad(false))
+    .finally(() => setUpdateLoad(false))
   }
 
   useEffect(() => {
