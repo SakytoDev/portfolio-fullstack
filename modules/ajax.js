@@ -30,22 +30,17 @@ module.exports =
                 }
             }
 
-            if (requestType == 'getAccs') {
-                const accounts = await Account.getAccounts()
-
-                res.send( { code: 'success', accounts: accounts } )
-            }
-
             if (requestType == 'getAvatar') {
                 const avatar = await Account.getAvatar(req.query.id)
 
                 res.send( { code: 'success', image: avatar } )
             }
 
-            if (requestType == 'getFriends') {
+            if (requestType == 'getContacts') {
+                const accounts = await Account.getAccounts(req.query.id)
                 const friends = await Account.getFriends(req.query.id)
 
-                res.send( { code: 'success', friends: friends } )
+                res.send( { code: 'success', people: [accounts, friends] } )
             }
 
             if (requestType == 'getConversation') {

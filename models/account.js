@@ -16,10 +16,10 @@ module.exports = class Account {
         return account
     }
 
-    static async getAccounts() 
+    static async getAccounts(id) 
     {
         const db = database.getDatabase()
-        const accounts = await db.collection('accounts').find({}, { projection: { _id: 1, avatar: 1, nickname: 1 }}).toArray()
+        const accounts = await db.collection('accounts').find({ _id: { $ne: new ObjectId(id) } }, { projection: { _id: 1, avatar: 1, nickname: 1 }}).toArray()
 
         return accounts
     }
@@ -45,7 +45,8 @@ module.exports = class Account {
         if (id == null || id == 0) { return { code: 'failure' } }
 
         const db = database.getDatabase()
-        const friends = await db.collection('accounts').findOne({ _id: new ObjectId(id) }, { projection: { _id: 0, friends: 1 }})
+        const getFriends = await db.collection('accounts').findOne({ _id: new ObjectId(id) }, { projection: { _id: 0, friends: 1 }})
+        const friends = await db.collection('accounts').find({ _id: { $in: getFriends.friends } }, { projection: { _id: 1, avatar: 1, nickname: 1 }}).toArray()
 
         return friends
     }
