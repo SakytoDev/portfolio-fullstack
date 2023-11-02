@@ -52,6 +52,16 @@ module.exports =
                     res.send( { code: 'failure' } )
                 }
             }
+
+            if (requestType == 'getConversations') {
+                const conversations = await Conversation.GetConversations(req.query.id)
+
+                if (conversations) {
+                    res.send( { code: 'success', conversations: conversations } )
+                } else {
+                    res.send( { code: 'failure' } )
+                }
+            }
     
             if (requestType == 'accLogin') {
                 const getForm = req.query.form

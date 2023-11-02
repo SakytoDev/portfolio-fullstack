@@ -13,11 +13,11 @@ module.exports = class Conversation
         let isUser = await db.collection('accounts').findOne({ _id: new ObjectId(id) })
 
         if (isUser) {
-            const privateConversation = await db.collection('conversations').findOne({ $or: [{ _id: new ObjectId(id) }, { participants: { $all: [id, requester], $size: 2 } }] })
+            const privateConversation = await db.collection('conversations').findOne({ participants: { $all: [id, requester], $size: 2 } })
 
             if (!privateConversation) {
                 const currentDate = DateTime.local().toISO()
-                const conversationObj = { _id: new ObjectId(id), participants: [id, requester], messages: [], dateCreated: currentDate }
+                const conversationObj = { participants: [id, requester], messages: [], dateCreated: currentDate }
 
                 await db.collection('conversations').insertOne(conversationObj)
 
@@ -40,6 +40,19 @@ module.exports = class Conversation
         return conversation
     }
 
+    static async GetConversations(id) 
+    {
+        const db = database.getDatabase()
+        const conversations = await db.collection('conversations').find({ participants: { $in: [id] } }).toArray()
+
+        for (let i = 0; i < conversations.length; i++) {
+            const participants = await this.GetParticipantData(conversations[i].participants)
+            conversations[i].participants = participants
+        }
+
+        return conversations
+    }
+
     static async GetParticipantData(ids)
     {
         const db = database.getDatabase()
@@ -53,8 +66,12 @@ module.exports = class Conversation
         const message = { sender: data.sender, message: data.message, sendDate: DateTime.local().toISO() }
 
         const db = database.getDatabase()
-        await db.collection('conversations').updateOne({ _id: new ObjectId(data.conversation) }, { $push: { messages: message } })
+        const conversation = await db.collection('conversations').findOne({ _id: new ObjectId(data.conversation), participants: { $in: [data.sender] } })
 
-        return message
+        if (conversation) {
+            await db.collection('conversations').updateOne({ _id: new ObjectId(data.conversation) }, { $push: { messages: message } })
+            return { id: conversation._id, participants: conversation.participants, message: message }
+        } 
+        else return null
     }
 }

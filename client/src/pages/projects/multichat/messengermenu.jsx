@@ -31,8 +31,8 @@ export default function MessengerMenu({ socket }) {
 
   const account = useSelector((state) => state.auth.account)
 
-  async function getConversation() {
-    await axios.get('/api', { params: { type: 'getConversation', id: chatId } })
+  function getConversation() {
+    axios.get('/api', { params: { type: 'getConversation', id: chatId } })
     .then(res => { 
       const result = res.data
       if (result.code == 'success') setConversation(result.conversation)
@@ -67,16 +67,16 @@ export default function MessengerMenu({ socket }) {
   return (
     <div className='bg-[#2d3034] grid grid-rows-[auto,1fr,auto]'>
       <div className='bg-[#212529] border-b-2 border-gray-500 p-2 flex items-center gap-2'>
-        <Avatar className='w-14 h-14' id={chatId}/>
+        <Avatar className='w-14 h-14' source={conversation.participants?.find(x => x._id != account.id).avatar}/>
         <div>
-          <p className='font-bold' id={chatId}>{conversation.participants?.find(x => x._id == chatId).nickname}</p>
-          <OnlineText className='font-medium' id={chatId} socket={socket} onlineText='Online' onlineStyle='text-green-500' offlineText='Offline' offlineStyle='text-gray-500'/>
+          <p className='font-bold'>{conversation.participants?.find(x => x._id != account.id).nickname}</p>
+          <OnlineText className='font-medium' id={conversation.participants?.find(x => x._id != account.id)._id} socket={socket} onlineText='Online' onlineStyle='text-green-500' offlineText='Offline' offlineStyle='text-gray-500'/>
         </div>
       </div>
       <div className='min-h-0 overflow-auto'>
         <div className='border-b px-2 py-4 flex flex-col items-center justify-center gap-1'>
-          <Avatar className='w-20 h-20' id={chatId}/>
-          <p className='text-4xl font-bold'>{conversation.participants?.find(x => x._id == chatId).nickname}</p>
+          <Avatar className='w-20 h-20' source={conversation.participants?.find(x => x._id != account.id).avatar}/>
+          <p className='text-4xl font-bold'>{conversation.participants?.find(x => x._id != account.id).nickname}</p>
           <p className='text-xl font-medium text-gray-500'>This is the start of conversation, sir.</p>
         </div>
         { conversation.messages?.map((message, index) => {

@@ -31,13 +31,14 @@ module.exports =
 
             socket.on('chatMessage', async (data) => {
                 const message = await Conversation.AddMessage(data)
+                if (!message) return 
 
                 const allClients = await server.io.fetchSockets()
 
                 for (const client of allClients) {
-                    if (data.sender != client.accData.id && data.conversation != client.accData.id) continue
-
-                    client.emit('chatMessage', message)
+                    if (data.conversation == message.id && message.participants.includes(client.accData.id)) {
+                        client.emit('chatMessage', message.message)
+                    }
                 }
             })
 
