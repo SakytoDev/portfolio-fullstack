@@ -12,7 +12,7 @@ import OnlineText from './components/online/onlinetext';
 import editIcon from './assets/images/edit.png';
 
 export default function ProfileMenu({ socket }) {
-  const { userId } = useParams()
+  const { userID } = useParams()
 
   const [account, setAccount] = useState(null)
   const [updateLoading, setUpdateLoad] = useState(false)
@@ -44,7 +44,7 @@ export default function ProfileMenu({ socket }) {
   function getAccount() {
     setUpdateLoad(true)
 
-    axios.get('/api', { params: { type: 'getAccInfo', id: userId } })
+    axios.get('/api', { params: { type: 'getAccInfo', id: userID } })
     .then(res => {
       const result = res.data
       if (result.code == 'success') setAccount(result.account)
@@ -55,23 +55,23 @@ export default function ProfileMenu({ socket }) {
 
   useEffect(() => {
     getAccount()
-  }, [userId])
+  }, [userID])
 
   return (
     !updateLoading ?
     <div className='bg-[#2d3034] grid grid-rows-[auto,1fr]'>
       <div className='grid grid-rows-[1fr,1fr] p-12'>
         <div className='relative rounded-t-2xl border-2 border-b-[1px] border-white bg-gradient-to-tl from-violet-900 from-40% to-indigo-900 to-90%'>
-          { selfAccount?.id == userId ?
+          { selfAccount?.id == userID ?
           <button className='absolute left-1/2 top-[100%] -translate-x-1/2 -translate-y-1/2 z-[1]' onClick={() => avatarFile.current.click()}>
-            <Avatar className='w-40 h-40 border-[3px] border-white' id={userId}/>
+            <Avatar className='w-40 h-40 border-[3px] border-white' id={userID}/>
             <input ref={avatarFile} onChange={handleAvatarChange} type='file' accept='image/*' className='hidden'></input>
             <div className='bg-black group bg-opacity-0 rounded-full flex items-center justify-center absolute left-0 right-0 top-0 bottom-0 transition ease-in-out duration-300 hover:bg-opacity-80'>
               <img className='w-16 h-16 transition ease-in-out duration-300 opacity-0 group-hover:opacity-100' src={editIcon}/>
             </div>
           </button> 
           :
-          <Avatar className='w-40 h-40 border-[3px] border-white absolute left-1/2 top-[100%] -translate-x-1/2 -translate-y-1/2 z-[1]' id={userId}/> }
+          <Avatar className='w-40 h-40 border-[3px] border-white absolute left-1/2 top-[100%] -translate-x-1/2 -translate-y-1/2 z-[1]' id={userID}/> }
         </div>
         <div className='bg-slate-700 rounded-b-2xl border-2 border-t-[1px] border-white'>
           <div className='flex flex-col items-start gap-3 p-5'>

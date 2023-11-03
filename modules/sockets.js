@@ -36,8 +36,22 @@ module.exports =
                 const allClients = await server.io.fetchSockets()
 
                 for (const client of allClients) {
-                    if (data.conversation == message.id && message.participants.includes(client.accData.id)) {
+                    if (data.conversationID == message.conversationID && message.participants.includes(client.accData.id)) {
                         client.emit('chatMessage', message.message)
+                    }
+                }
+            })
+
+            socket.on('deleteMessage', async (data) => {
+                const result = await Conversation.DeleteMessage(data)
+
+                if (result) {
+                    const allClients = await server.io.fetchSockets()
+                    
+                    for (const client of allClients) {
+                        if (data.conversationID == result.conversationID && result.participants.includes(client.accData.id)) {
+                            client.emit('deleteMessage', data.messageID)
+                        }
                     }
                 }
             })

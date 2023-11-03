@@ -5,26 +5,37 @@ import { DateTime } from 'luxon';
 
 import axios from 'axios';
 
+import deleteIcon from './assets/images/delete.png';
 import sendIcon from './assets/images/send.png';
 
 import Avatar from './components/avatar/avatar';
 import OnlineText from './components/online/onlinetext';
 
-function MessageObj({ message }) {
+function MessageObj({ socket, message, chatID }) {
+  const account = useSelector((state) => state.auth.account)
+
+  function deleteMessage() {
+    socket.emit('deleteMessage', { conversationID: chatID, messageID: message.id })
+  }
+
   return (
-    <div className='border-b px-2 py-2 flex items-center gap-2'>
+    <div className='border-b p-2 flex items-center gap-2'>
       <Avatar className='w-16 h-16' source={message.avatar}/>
       <div>
-        <p className='font-bold'>{message.sender}</p>
+        <p className='font-bold'>{message.sender[0]}</p>
         <p>{message.message}</p>
         <p className='text-gray-500'>{DateTime.fromISO(message.sendDate).toFormat('MMM dd, HH:mm')}</p>
       </div>
+      { account.id == message.sender[1] 
+      ? <button className='ml-auto m-2 self-start transition ease-in-out hover:scale-110' onClick={() => deleteMessage()}><img className='w-5 h-5' src={deleteIcon}/></button>
+      : null 
+      }
     </div>
   )
 }
 
 export default function MessengerMenu({ socket }) {
-  const { chatId } = useParams()
+  const { chatID } = useParams()
 
   const [conversation, setConversation] = useState({})
   const [messageInput, setMessageInput] = useState('')
@@ -32,7 +43,7 @@ export default function MessengerMenu({ socket }) {
   const account = useSelector((state) => state.auth.account)
 
   function getConversation() {
-    axios.get('/api', { params: { type: 'getConversation', id: chatId } })
+    axios.get('/api', { params: { type: 'getConversation', id: chatID } })
     .then(res => { 
       const result = res.data
       if (result.code == 'success') setConversation(result.conversation)
@@ -42,7 +53,7 @@ export default function MessengerMenu({ socket }) {
 
   function sendMessage() {
     if (messageInput != '') {
-      const message = { sender: account.id, conversation: conversation._id, message: messageInput }
+      const message = { sender: account.id, conversationID: conversation._id, message: messageInput }
       socket.emit('chatMessage', message)
 
       setMessageInput('')
@@ -51,7 +62,7 @@ export default function MessengerMenu({ socket }) {
 
   useEffect(() => {
     getConversation()
-  }, [chatId])
+  }, [chatID])
 
   useEffect(() => {
     socket.on('chatMessage', (data) => {
@@ -61,7 +72,21 @@ export default function MessengerMenu({ socket }) {
       setConversation(newConversation)
     })
 
-    return () => { socket.off('chatMessage') }
+    socket.on('deleteMessage', (data) => {
+      const newConversation = { ...conversation }
+
+      let index = newConversation.messages.findIndex(x => x._id == data)
+
+      if (index !== -1) {
+        newConversation.messages.splice(index, 1)
+        setConversation(newConversation)
+      }
+    })
+
+    return () => { 
+      socket.off('chatMessage')
+      socket.off('deleteMessage')
+    }
   }, [conversation])
 
   return (
@@ -81,12 +106,13 @@ export default function MessengerMenu({ socket }) {
         </div>
         { conversation.messages?.map((message, index) => {
           const newMessage = {
+            id: message._id,
             avatar: conversation.participants.find(x => x._id == message.sender)?.avatar,
-            sender: conversation.participants.find(x => x._id == message.sender)?.nickname,
+            sender: [conversation.participants.find(x => x._id == message.sender)?.nickname, message.sender],
             message: message.message,
             sendDate: message.sendDate
           }
-          return <MessageObj key={index} message={newMessage}/>
+          return <MessageObj key={index} socket={socket} message={newMessage} chatID={conversation._id}/>
         })}
       </div>
       <div className='border-t-2 border-gray-500 p-4 grid grid-cols-[1fr,auto]'>

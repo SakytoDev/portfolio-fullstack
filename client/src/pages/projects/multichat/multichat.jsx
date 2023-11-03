@@ -50,9 +50,9 @@ function MainMenu({ socket }) {
         </div>
       </div>
       <Routes>
-        <Route path='profile/:userId' element={<ProfileMenu socket={socket}/>}/>
+        <Route path='profile/:userID' element={<ProfileMenu socket={socket}/>}/>
         <Route path='chat' element={<ChatMenu/>}/>
-        <Route path='chat/:chatId' element={<MessengerMenu socket={socket}/>}/>
+        <Route path='chat/:chatID' element={<MessengerMenu socket={socket}/>}/>
       </Routes>
     </div>
   )

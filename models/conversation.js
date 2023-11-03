@@ -63,15 +63,28 @@ module.exports = class Conversation
 
     static async AddMessage(data)
     {
-        const message = { sender: data.sender, message: data.message, sendDate: DateTime.local().toISO() }
+        const message = { _id: new ObjectId(), sender: data.sender, message: data.message, sendDate: DateTime.local().toISO() }
 
         const db = database.getDatabase()
-        const conversation = await db.collection('conversations').findOne({ _id: new ObjectId(data.conversation), participants: { $in: [data.sender] } })
+        const conversation = await db.collection('conversations').findOne({ _id: new ObjectId(data.conversationID), participants: { $in: [message.sender] } })
 
         if (conversation) {
-            await db.collection('conversations').updateOne({ _id: new ObjectId(data.conversation) }, { $push: { messages: message } })
-            return { id: conversation._id, participants: conversation.participants, message: message }
+            await db.collection('conversations').updateOne({ _id: new ObjectId(data.conversationID) }, { $push: { messages: message } })
+            return { conversationID: conversation._id, participants: conversation.participants, message: message }
         } 
         else return null
+    }
+
+    static async DeleteMessage(data) 
+    {
+        const db = database.getDatabase()
+        const conversation = await db.collection('conversations').findOne({ _id: new ObjectId(data.conversationID) })
+
+        if (conversation) {
+            await db.collection('conversations').updateOne({ _id: new ObjectId(data.conversationID) }, { $pull: { messages: { _id: new ObjectId(data.messageID) } } })
+            return { conversationID: conversation._id, participants: conversation.participants }
+        } else {
+            return null
+        }
     }
 }
