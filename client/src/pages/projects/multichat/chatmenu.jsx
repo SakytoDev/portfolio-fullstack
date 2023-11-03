@@ -1,21 +1,22 @@
 import { useState, useEffect } from 'react';
 import { useSelector } from 'react-redux';
 import { Link } from 'react-router-dom';
+import { motion } from 'framer-motion';
 
 import axios from 'axios';
 
 import Avatar from './components/avatar/avatar';
 
-function PeopleCard({ data }) {
+function PeopleCard({ data, delay }) {
   return (
-    <div className='p-3 border-2 rounded-lg flex flex-col items-stretch justify-center gap-2'>
+    <motion.div transition={{ ease: 'easeInOut', duration: 0.5, delay: delay }} initial={{ y: 50, opacity: 0 }} animate={{ y: 0, opacity: 1 }} className='p-3 border-2 rounded-lg flex flex-col items-stretch justify-center flex-shrink-0 gap-2'>
       <Avatar className='mx-8 w-24 h-24' source={data.avatar}/>
       <p className='text-2xl text-center font-bold'>{data.nickname}</p>
       <div className='flex flex-col gap-1'>
         <Link className='border-2 p-1 border-indigo-400 rounded-lg text-lg text-center font-medium transition ease-in-out hover:bg-indigo-600' to={`../profile/${data._id}`}>Profile</Link>
         <Link className='border-2 p-1 border-blue-400 rounded-lg text-lg text-center font-medium transition ease-in-out hover:bg-blue-600' to={`../chat/${data._id}`}>Chat</Link>
       </div>
-    </div>
+    </motion.div>
   )
 }
 
@@ -81,7 +82,7 @@ export default function ChatMenu() {
       <div className='py-10 flex flex-col gap-2'>
         <div className='bg-[#212529] rounded-2xl mx-12 p-3'>
           <p className='py-2 text-4xl text-center font-black'>Friends:</p>
-          <div className={`mt-4 flex overflow-auto ${peopleList[1].length > 0 ? 'justify-start' : 'justify-center'}`}>
+          <div className={`mt-4 flex overflow-x-auto overflow-y-hidden ${peopleList[1].length > 0 ? 'justify-start' : 'justify-center'}`}>
             { peopleList[1].length > 0 
               ? peopleList.map((people, index) => { return <PeopleCard key={index} data={people}/> })
               : <p className='mb-4 text-3xl font-medium'>Hmm. No one.</p> 
@@ -90,9 +91,9 @@ export default function ChatMenu() {
         </div>
         <div className='bg-[#212529] rounded-2xl mx-12 p-3'>
           <p className='py-2 text-4xl text-center font-black'>Find People:</p>
-          <div className='mt-4 flex overflow-auto gap-2'>
+          <div className='mt-4 flex overflow-x-auto overflow-y-hidden gap-2'>
             { peopleList[0].map((people, index) => {
-              return <PeopleCard key={index} data={people}/>
+              return <PeopleCard key={index} data={people} delay={index * 0.2}/>
             })}
           </div>
         </div>
