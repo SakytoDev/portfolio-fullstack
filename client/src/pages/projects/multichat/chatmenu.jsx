@@ -48,7 +48,6 @@ export default function ChatMenu() {
     axios.get('/api', { params: { type: 'getContacts', id: account.id } })
     .then(res => {
       const result = res.data
-      console.log(result.people)
       if (result.code == 'success') setPeopleList(result.people)
     })
     .catch(err => console.log(err))
