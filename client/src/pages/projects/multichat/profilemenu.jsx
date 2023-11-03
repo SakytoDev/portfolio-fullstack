@@ -9,6 +9,8 @@ import Avatar from './components/avatar/avatar';
 import OnlineIcon from './components/online/onlineicon';
 import OnlineText from './components/online/onlinetext';
 
+import editIcon from './assets/images/edit.png';
+
 export default function ProfileMenu({ socket }) {
   const { userId } = useParams()
 
@@ -64,6 +66,9 @@ export default function ProfileMenu({ socket }) {
           <button className='absolute left-1/2 top-[100%] -translate-x-1/2 -translate-y-1/2 z-[1]' onClick={() => avatarFile.current.click()}>
             <Avatar className='w-40 h-40 border-[3px] border-white' id={userId}/>
             <input ref={avatarFile} onChange={handleAvatarChange} type='file' accept='image/*' className='hidden'></input>
+            <div className='bg-black group bg-opacity-0 rounded-full flex items-center justify-center absolute left-0 right-0 top-0 bottom-0 transition ease-in-out duration-300 hover:bg-opacity-80'>
+              <img className='w-16 h-16 transition ease-in-out duration-300 opacity-0 group-hover:opacity-100' src={editIcon}/>
+            </div>
           </button> 
           :
           <Avatar className='w-40 h-40 border-[3px] border-white absolute left-1/2 top-[100%] -translate-x-1/2 -translate-y-1/2 z-[1]' id={userId}/> }
