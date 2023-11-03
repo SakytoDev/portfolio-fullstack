@@ -101,7 +101,7 @@ export default function MessengerMenu({ socket }) {
       </div>
       <div className='min-h-0 overflow-x-hidden overflow-y-auto'>
         <div className='border-b px-2 py-4 flex flex-col items-center justify-center gap-1'>
-          <Avatar className='w-20 h-20' source={conversation.participants?.find(x => x._id != account.id).avatar}/>
+          <Avatar className='w-28 h-28' source={conversation.participants?.find(x => x._id != account.id).avatar}/>
           <p className='text-4xl font-bold'>{conversation.participants?.find(x => x._id != account.id).nickname}</p>
           <p className='text-xl font-medium text-gray-500'>This is the start of conversation, sir.</p>
         </div>
