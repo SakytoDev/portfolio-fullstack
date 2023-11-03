@@ -1,6 +1,7 @@
 import { useEffect, useState } from 'react';
 import { useSelector } from 'react-redux';
 import { useParams } from 'react-router-dom';
+import { motion } from 'framer-motion';
 import { DateTime } from 'luxon';
 
 import axios from 'axios';
@@ -19,7 +20,7 @@ function MessageObj({ socket, message, chatID }) {
   }
 
   return (
-    <div className='border-b p-2 flex items-center gap-2'>
+    <motion.div transition={{ ease: 'easeInOut', duration: 0.5 }} initial={{ x: 200, opacity: 0 }} animate={{ x: 0, opacity: 1 }} className='border-b p-2 flex items-center gap-2'>
       <Avatar className='w-16 h-16' source={message.avatar}/>
       <div>
         <p className='font-bold'>{message.sender[0]}</p>
@@ -30,7 +31,7 @@ function MessageObj({ socket, message, chatID }) {
       ? <button className='ml-auto m-2 self-start transition ease-in-out hover:scale-110' onClick={() => deleteMessage()}><img className='w-5 h-5' src={deleteIcon}/></button>
       : null 
       }
-    </div>
+    </motion.div>
   )
 }
 
@@ -98,7 +99,7 @@ export default function MessengerMenu({ socket }) {
           <OnlineText className='font-medium' id={conversation.participants?.find(x => x._id != account.id)._id} socket={socket} onlineText='Online' onlineStyle='text-green-500' offlineText='Offline' offlineStyle='text-gray-500'/>
         </div>
       </div>
-      <div className='min-h-0 overflow-auto'>
+      <div className='min-h-0 overflow-x-hidden overflow-y-auto'>
         <div className='border-b px-2 py-4 flex flex-col items-center justify-center gap-1'>
           <Avatar className='w-20 h-20' source={conversation.participants?.find(x => x._id != account.id).avatar}/>
           <p className='text-4xl font-bold'>{conversation.participants?.find(x => x._id != account.id).nickname}</p>
