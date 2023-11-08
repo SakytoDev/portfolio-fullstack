@@ -1,5 +1,5 @@
 const fs = require('fs')
-const path = require('path')
+//const path = require('path')
 
 const Account = require('../models/account.js')
 const Conversation = require('../models/conversation.js')
@@ -131,8 +131,8 @@ module.exports =
             res.download(file)
         })
 
-        server.app.get('/*', (req, res) => {
+        /* server.app.get('/*', (req, res) => {
             res.sendFile(path.join(__dirname, '../client/dist/index.html'))
-        })
+        }) */
     }
 }
