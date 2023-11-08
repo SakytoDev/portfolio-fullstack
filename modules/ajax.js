@@ -106,6 +106,10 @@ module.exports =
             }
         })
         
+        server.app.get('/', (req, res) => {
+            res.send({ code: 'success' })
+        })
+
         server.app.get('/version/windows', (req, res) => {
             const version = fs.readFileSync('./packages/windows/version.json')
             res.send(version)
