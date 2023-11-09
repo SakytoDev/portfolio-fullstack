@@ -3,6 +3,7 @@ const http = require('http');
 const express = require('express');
 
 const app = express();
+const cors = require('cors');
 const server = http.createServer(app);
 
 const { Server } = require('socket.io');
@@ -17,8 +18,8 @@ module.exports =
 {
     Setup : async function() {
         app.set('view engine', 'html')
-        app.use(express.static(path.join(__dirname, '../client/dist')))
-        
+
+        app.use(cors())
         app.use(cookieParser())
         app.use(session({
             secret: config.sessionSecret,
