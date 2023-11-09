@@ -7,7 +7,7 @@ const cors = require('cors');
 const server = http.createServer(app);
 
 const { Server } = require('socket.io');
-const io = new Server(server);
+const io = new Server(server, { cors: { origin: 'https://sakytodev.vercel.app', methods: ['GET', 'POST'] } });
 
 const session = require('cookie-session');
 const cookieParser = require('cookie-parser');
