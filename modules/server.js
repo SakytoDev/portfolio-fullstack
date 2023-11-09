@@ -25,7 +25,7 @@ module.exports =
             secret: config.sessionSecret,
             saveUninitialized: true,
             resave: true,
-            cookie: { httpOnly: false, sameSite: 'none', secure: true }
+            cookie: { httpOnly: false, sameSite: 'none', secure: true, maxAge: 0 }
         }))
     
         if (config.isDev) {
