@@ -1,13 +1,13 @@
-const path = require('path');
 const http = require('http');
+
 const express = require('express');
+const cors = require('cors');
 
 const app = express();
-const cors = require('cors');
 const server = http.createServer(app);
 
 const { Server } = require('socket.io');
-const io = new Server(server, { cors: { origin: 'https://sakytodev.vercel.app', methods: ['GET', 'POST'] } });
+const io = new Server(server, { cors: { origin: 'https://sakytodev.vercel.app' } });
 
 const session = require('cookie-session');
 const cookieParser = require('cookie-parser');
