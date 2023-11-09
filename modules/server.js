@@ -19,7 +19,7 @@ module.exports =
     Setup : async function() {
         app.set('view engine', 'html')
 
-        app.use(cors())
+        app.use(cors({ origin: 'https://sakytodev.vercel.app' }))
         app.use(cookieParser())
         app.use(session({
             secret: config.sessionSecret,
