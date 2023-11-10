@@ -1,9 +1,9 @@
-const fs = require('fs')
-const path = require('path')
+const fs = require('fs');
+const path = require('path');
 
-const Account = require('../models/account.js')
-const Conversation = require('../models/conversation.js')
-const server = require('./server.js')
+const Account = require('../models/account.js');
+const Conversation = require('../models/conversation.js');
+const server = require('./server.js');
 
 module.exports = 
 {
