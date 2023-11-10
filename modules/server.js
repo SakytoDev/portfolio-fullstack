@@ -18,6 +18,7 @@ module.exports =
 {
     Setup : async function() {
         app.set('view engine', 'html')
+        app.use(express.static(path.join(__dirname, '../client/dist')))
 
         app.use(cors())
         app.use(cookieParser())
