@@ -105,10 +105,6 @@ module.exports =
                 res.send({ code: 'success', image: avatar })
             }
         })
-        
-        server.app.get('/', (req, res) => {
-            res.send({ code: 'success' })
-        })
 
         server.app.get('/version/windows', (req, res) => {
             const version = fs.readFileSync('./packages/windows/version.json')
