@@ -9,7 +9,7 @@ const app = express();
 const server = http.createServer(app);
 
 const { Server } = require('socket.io');
-const io = new Server(server, { cors: { origin: config.isDev ? 'http://localhost:5173' : 'https://sakytodev.vercel.app' } });
+const io = new Server(server);
 
 const session = require('cookie-session');
 const cookieParser = require('cookie-parser');
@@ -19,7 +19,7 @@ module.exports =
     Setup : async function() {
         app.set('view engine', 'html')
 
-        app.use(cors({ origin: config.isDev ? 'http://localhost:5173' : 'https://sakytodev.vercel.app' }))
+        app.use(cors())
         app.use(cookieParser())
         app.use(session({
             secret: config.sessionSecret,
