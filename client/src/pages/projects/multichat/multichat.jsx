@@ -32,7 +32,7 @@ function MainMenu({ socket }) {
     <div className='bg-black text-white grid grid-cols-[1fr,4fr] grid-rows-[100vh] gap-x-[1px]'>
       <div className='grid grid-rows-[auto,1fr]'>
         <div className='bg-[#212529] flex items-center p-2'>
-          <Avatar className='w-14 h-14' id={account?.id}/>
+          <Avatar className='w-14 h-14' id={account?.id} socket={socket}/>
           <div className='flex flex-col items-start mx-2 gap-1 max-w-[75%]'>
             <p className='text-xl font-semibold truncate break-words w-full'>{account?.nickname}</p>
             <Link className='border border-blue-500 rounded transition ease-in-out hover:bg-blue-600 px-2' to={`profile/${account?.id}`}>Profile</Link>

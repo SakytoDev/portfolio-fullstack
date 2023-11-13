@@ -7,10 +7,10 @@ import axios from 'axios';
 
 import Avatar from './components/avatar/avatar';
 
-function PeopleCard({ data, delay }) {
+function PeopleCard({ data, delay, socket }) {
   return (
     <motion.div transition={{ ease: 'easeInOut', duration: 0.5, delay: delay }} initial={{ y: 50, opacity: 0 }} animate={{ y: 0, opacity: 1 }} className='p-3 border-2 rounded-lg flex flex-col items-stretch justify-center flex-shrink-0 gap-2'>
-      <Avatar className='mx-8 w-24 h-24' source={data.avatar}/>
+      <Avatar className='mx-8 w-24 h-24' source={data.avatar} socket={socket}/>
       <p className='text-2xl text-center font-bold'>{data.nickname}</p>
       <div className='flex flex-col gap-1'>
         <Link className='border-2 p-1 border-indigo-400 rounded-lg text-lg text-center font-medium transition ease-in-out hover:bg-indigo-600' to={`../profile/${data._id}`}>Profile</Link>
@@ -20,13 +20,13 @@ function PeopleCard({ data, delay }) {
   )
 }
 
-function ConversationCard({ data }) {
+function ConversationCard({ data, socket }) {
   const account = useSelector((state) => state.auth.account)
 
   return (
     <div className='border-2 flex flex-col rounded-lg'>
       <div className='p-3 border-b-2 flex items-center gap-3'>
-        <Avatar className='w-24 h-24' source={data.participants.find(x => x._id != account.id)?.avatar}/>
+        <Avatar className='w-24 h-24' source={data.participants.find(x => x._id != account.id)?.avatar} socket={socket}/>
         <div className='flex flex-col gap-1'>
           <p className='text-4xl font-bold'>{data.participants.find(x => x._id != account.id)?.nickname}'s chat</p>
           <p className='text-xl'>Participants Count: {data.participants.length}</p>
@@ -46,6 +46,8 @@ export default function ChatMenu() {
   const account = useSelector((state) => state.auth.account)
 
   function getContacts() {
+    if (!account) return
+
     axios.get('/api', { params: { type: 'getContacts', id: account.id } })
     .then(res => {
       const result = res.data
@@ -55,6 +57,8 @@ export default function ChatMenu() {
   }
 
   function getConversations() {
+    if (!account) return
+
     axios.get('/api', { params: { type: 'getConversations', id: account.id } })
     .then(res => {
       const result = res.data
@@ -69,7 +73,7 @@ export default function ChatMenu() {
     } else if (tabIndex == 1) {
       getConversations()
     }
-  }, [tabIndex])
+  }, [account, tabIndex])
 
   return (
     <div className='bg-[#2d3034] grid grid-rows-[auto,1fr]'>

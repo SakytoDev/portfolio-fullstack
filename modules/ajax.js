@@ -102,7 +102,8 @@ module.exports =
             if (requestType == 'updateAvatar') {
                 const avatar = await Account.updateAvatar(req.query.id, req.query.image)
 
-                res.send({ code: 'success', image: avatar })
+                server.io.emit('avatarUpdate', { id: req.query.id, image: avatar })
+                res.send({ code: 'success' })
             }
         })
 

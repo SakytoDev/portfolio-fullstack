@@ -21,7 +21,7 @@ function MessageObj({ socket, message, chatID }) {
 
   return (
     <motion.div transition={{ ease: 'easeInOut', duration: 0.5 }} initial={{ x: 200, opacity: 0 }} animate={{ x: 0, opacity: 1 }} className='border-b p-2 flex items-center gap-2'>
-      <Avatar className='w-16 h-16' source={message.avatar}/>
+      <Avatar className='w-16 h-16' source={message.avatar} socket={socket}/>
       <div>
         <p className='font-bold'>{message.sender[0]}</p>
         <p>{message.message}</p>
@@ -93,7 +93,7 @@ export default function MessengerMenu({ socket }) {
   return (
     <div className='bg-[#2d3034] grid grid-rows-[auto,1fr,auto]'>
       <div className='bg-[#212529] border-b-2 border-gray-500 p-2 flex items-center gap-2'>
-        <Avatar className='w-14 h-14' source={conversation.participants?.find(x => x._id != account.id).avatar}/>
+        <Avatar className='w-14 h-14' source={conversation.participants?.find(x => x._id != account.id).avatar} socket={socket}/>
         <div>
           <p className='font-bold'>{conversation.participants?.find(x => x._id != account.id).nickname}</p>
           <OnlineText className='font-medium' id={conversation.participants?.find(x => x._id != account.id)._id} socket={socket} onlineText='Online' onlineStyle='text-green-500' offlineText='Offline' offlineStyle='text-gray-500'/>
