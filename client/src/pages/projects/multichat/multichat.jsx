@@ -15,7 +15,7 @@ import Avatar from './components/avatar/avatar';
 import { io } from 'socket.io-client';
 const socket = io({ autoConnect: false });
 
-function MainMenu({ socket }) {
+function MainMenu() {
   const account = useSelector((state) => state.auth.account)
   const dispatch = useDispatch()
 
@@ -89,15 +89,21 @@ export default function MultiChat() {
   }, [])
 
   useEffect(() => {
-    if (account) {
-      socket.connect()
+    socket.on('connect', () => {
       socket.emit('authUpdate', account.id)
-      
       if (location.pathname == '/multichat/auth') navigate('../multichat')
-    }
-    else {
-      socket.disconnect()
+    })
+
+    socket.on('disconnect', () => {
       navigate('auth')
+    })
+
+    if (account) socket.connect()
+    else socket.disconnect()
+
+    return () => { 
+      socket.off('connect')
+      socket.off('disconnect')
     }
   }, [account])
 
@@ -105,8 +111,8 @@ export default function MultiChat() {
     <>
       <title>MultiChat</title>
       <Routes>
-        <Route path='auth' element={<AuthMenu/>}/>
-        <Route path='/*' element={<MainMenu socket={socket}/>}/>
+        <Route index path='auth' element={<AuthMenu/>}/>
+        <Route path='/*' element={<MainMenu/>}/>
       </Routes>
     </>
   )
