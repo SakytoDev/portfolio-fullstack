@@ -88,17 +88,18 @@ export default function ChatMenu() {
           <p className='py-2 text-4xl text-center font-black'>Friends:</p>
           <div className={`mt-4 flex overflow-x-auto overflow-y-hidden ${peopleList[1].length > 0 ? 'justify-start' : 'justify-center'}`}>
             { peopleList[1].length > 0 
-              ? peopleList.map((people, index) => { return <PeopleCard key={index} data={people}/> })
+              ? peopleList[1].map((people, index) => { return <PeopleCard key={index} data={people}/> })
               : <p className='mb-4 text-3xl font-medium'>Hmm. No one.</p> 
             }
           </div>
         </div>
         <div className='bg-[#212529] rounded-2xl mx-12 p-3'>
           <p className='py-2 text-4xl text-center font-black'>Find People:</p>
-          <div className='mt-4 flex overflow-x-auto overflow-y-hidden gap-2'>
-            { peopleList[0].map((people, index) => {
-              return <PeopleCard key={index} data={people} delay={index * 0.2}/>
-            })}
+          <div className={`mt-4 flex overflow-x-auto overflow-y-hidden gap-2 ${peopleList[0].length > 0 ? 'justify-start' : 'justify-center'}`}>
+            { peopleList[0].length > 0 
+              ? peopleList[0].map((people, index) => { return <PeopleCard key={index} data={people}/> })
+              : <p className='mb-4 text-3xl font-medium'>Hmm. No one.</p> 
+            }
           </div>
         </div>
       </div>
