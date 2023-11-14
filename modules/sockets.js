@@ -57,6 +57,7 @@ module.exports =
             })
 
             socket.on('disconnect', () => {
+                socket.emit('isOnline', { id: socket.accData.id, isOnline: false })
                 Account.updateLastLogin(socket.accData.id)
             })
         })
