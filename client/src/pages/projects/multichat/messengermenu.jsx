@@ -13,10 +13,13 @@ import Avatar from './components/avatar/avatar';
 import OnlineText from './components/online/onlinetext';
 
 function MessageObj({ socket, message, chatID }) {
+  const [isDeleting, setDeleting] = useState(false)
+
   const account = useSelector((state) => state.auth.account)
 
   function deleteMessage() {
     socket.emit('deleteMessage', { conversationID: chatID, messageID: message.id })
+    setDeleting(true)
   }
 
   return (
@@ -27,7 +30,7 @@ function MessageObj({ socket, message, chatID }) {
         <p>{message.message}</p>
         <p className='text-gray-500'>{DateTime.fromISO(message.sendDate).toFormat('MMM dd, HH:mm')}</p>
       </div>
-      { account.id == message.sender[1] 
+      { account.id == message.sender[1] && !isDeleting
         ? <button className='ml-auto m-2 self-start transition ease-in-out hover:scale-110' onClick={() => deleteMessage()}><img className='w-5 h-5' src={deleteIcon}/></button>
         : null 
       }
