@@ -101,6 +101,8 @@ export default function MultiChat() {
     if (account) socket.connect()
     else socket.disconnect()
 
+    if (!account && !socket.connected) navigate('auth')
+
     return () => { 
       socket.off('connect')
       socket.off('disconnect')
