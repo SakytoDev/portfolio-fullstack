@@ -28,8 +28,8 @@ function MessageObj({ socket, message, chatID }) {
         <p className='text-gray-500'>{DateTime.fromISO(message.sendDate).toFormat('MMM dd, HH:mm')}</p>
       </div>
       { account.id == message.sender[1] 
-      ? <button className='ml-auto m-2 self-start transition ease-in-out hover:scale-110' onClick={() => deleteMessage()}><img className='w-5 h-5' src={deleteIcon}/></button>
-      : null 
+        ? <button className='ml-auto m-2 self-start transition ease-in-out hover:scale-110' onClick={() => deleteMessage()}><img className='w-5 h-5' src={deleteIcon}/></button>
+        : null 
       }
     </motion.div>
   )
@@ -91,25 +91,26 @@ export default function MessengerMenu({ socket }) {
   }, [conversation])
 
   return (
+    conversation.participants && account ?
     <div className='bg-[#2d3034] grid grid-rows-[auto,1fr,auto]'>
       <div className='bg-[#212529] border-b-2 border-gray-500 p-2 flex items-center gap-2'>
-        <Avatar className='w-14 h-14' source={conversation.participants?.find(x => x._id != account.id).avatar} socket={socket}/>
+        <Avatar className='w-14 h-14' source={conversation.participants.find(x => x._id != account.id).avatar} socket={socket}/>
         <div>
-          <p className='font-bold'>{conversation.participants?.find(x => x._id != account.id).nickname}</p>
-          <OnlineText className='font-medium' id={conversation.participants?.find(x => x._id != account.id)._id} socket={socket} onlineText='Online' onlineStyle='text-green-500' offlineText='Offline' offlineStyle='text-gray-500'/>
+          <p className='font-bold'>{conversation.participants.find(x => x._id != account.id).nickname}</p>
+          <OnlineText className='font-medium' id={conversation.participants.find(x => x._id != account.id)._id} socket={socket} onlineText='Online' onlineStyle='text-green-500' offlineText='Offline' offlineStyle='text-gray-500'/>
         </div>
       </div>
       <div className='min-h-0 overflow-x-hidden overflow-y-auto'>
         <div className='border-b px-2 py-4 flex flex-col items-center justify-center gap-1'>
-          <Avatar className='w-28 h-28' source={conversation.participants?.find(x => x._id != account.id).avatar}/>
-          <p className='text-4xl font-bold'>{conversation.participants?.find(x => x._id != account.id).nickname}</p>
+          <Avatar className='w-28 h-28' source={conversation.participants.find(x => x._id != account.id).avatar}/>
+          <p className='text-4xl font-bold'>{conversation.participants.find(x => x._id != account.id).nickname}</p>
           <p className='text-xl font-medium text-gray-500'>This is the start of conversation, sir.</p>
         </div>
         { conversation.messages?.map((message, index) => {
           const newMessage = {
             id: message._id,
-            avatar: conversation.participants.find(x => x._id == message.sender)?.avatar,
-            sender: [conversation.participants.find(x => x._id == message.sender)?.nickname, message.sender],
+            avatar: conversation.participants.find(x => x._id == message.sender).avatar,
+            sender: [conversation.participants.find(x => x._id == message.sender).nickname, message.sender],
             message: message.message,
             sendDate: message.sendDate
           }
@@ -121,5 +122,6 @@ export default function MessengerMenu({ socket }) {
         <button className='border-e-2 border-t-2 border-b-2 border-l rounded-e-lg px-2 text-lg'><img className='h-8' src={sendIcon} onClick={() => sendMessage()}/></button>
       </div>
     </div>
+    : null
   )
 }

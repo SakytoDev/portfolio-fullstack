@@ -58,10 +58,10 @@ export default function ProfileMenu({ socket }) {
   }, [userID])
 
   return (
-    !updateLoading ?
+    !updateLoading && selfAccount && account ?
     <div className='bg-[#2d3034] py-6 grid grid-rows-[200px,1fr] grid-cols-[800px] justify-center'>
       <div className='relative border-2 rounded-t-xl bg-gradient-to-tl from-violet-700 from-10% to-indigo-700 to-100%'>
-        { selfAccount?.id == userID ?
+        { selfAccount.id == userID ?
         <button className='absolute left-1/2 top-[100%] -translate-x-1/2 -translate-y-1/2 z-[1]' onClick={() => avatarFile.current.click()}>
           <Avatar className='w-40 h-40 border-[3px] border-white' id={userID} socket={socket}/>
           <input ref={avatarFile} onChange={handleAvatarChange} type='file' accept='image/*' className='hidden'></input>
@@ -75,11 +75,11 @@ export default function ProfileMenu({ socket }) {
       <div className='border-t-0 border-2 rounded-b-xl'>
         <div className='px-12 pt-24 flex flex-col items-stretch justify-center [&>*:first-child]:rounded-t-lg [&>*:last-child]:rounded-b-lg'>
           <div className='bg-zinc-800 border-zinc-500 border-2'>
-            <p className='p-2 font-black text-5xl text-center truncate break-words'>{account?.nickname}</p>
-            <OnlineText className='pb-1 text-center text-lg' id={account?._id} socket={socket} onlineText='Online' onlineStyle='text-green-500' offlineText={`Was online: ${ account?.lastLogin ? DateTime.local().toUTC().plus({ days: -DateTime.local().toUTC().diff(DateTime.fromISO(account.lastLogin), 'days').days}).toRelativeCalendar() : ''}`} offlineStyle='text-gray-500'/>
+            <p className='p-2 font-black text-5xl text-center truncate break-words'>{account.nickname}</p>
+            <OnlineText className='pb-1 text-center text-lg' id={account._id} socket={socket} onlineText='Online' onlineStyle='text-green-500' offlineText={`Was online: ${ DateTime.local().toUTC().plus({ days: -DateTime.local().toUTC().diff(DateTime.fromISO(account.lastLogin), 'days').days}).toRelativeCalendar() }`} offlineStyle='text-gray-500'/>
           </div>
           <div className='bg-zinc-800 border-zinc-500 border-2 border-t-0'>
-            <p className='py-1 font-medium text-center'>Started the journey: { account?.dateCreated ? DateTime.fromISO(account.dateCreated).toFormat('MMM dd') : '' }</p>
+            <p className='py-1 font-medium text-center'>Started the journey: { account.dateCreated ? DateTime.fromISO(account.dateCreated).toFormat('MMM dd') : '' }</p>
           </div>
         </div>
       </div>
