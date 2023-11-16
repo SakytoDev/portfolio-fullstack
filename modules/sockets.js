@@ -13,6 +13,7 @@ module.exports =
 
             socket.on('authUpdate', (data) => {
                 socket.accData = { id: data }
+                server.io.emit('isOnline', { id: socket.accData.id, isOnline: true })
             })
 
             socket.on('isOnline', async (data) => {
@@ -57,7 +58,7 @@ module.exports =
             })
 
             socket.on('disconnect', () => {
-                socket.emit('isOnline', { id: socket.accData.id, isOnline: false })
+                server.io.emit('isOnline', { id: socket.accData.id, isOnline: false })
                 Account.updateLastLogin(socket.accData.id)
             })
         })
