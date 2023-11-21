@@ -5,14 +5,11 @@ const server = require('./modules/server.js');
 const ajax = require('./modules/ajax.js');
 const sockets = require('./modules/sockets.js');
 
-// Подключение к базе данных
-database.Setup()
+async function StartServer() {
+    await database.Setup() // Подключение к базе данных
+    await server.Setup() // Запуск сервера
+    ajax.Setup() // Настройка AJAX
+    sockets.Setup() // Настройка веб-сокетов
+}
 
-// Запуск сервера
-server.Setup()
-
-// Настройка AJAX
-ajax.Setup()
-
- // Настройка веб-сокетов
-sockets.Setup()
+StartServer()
