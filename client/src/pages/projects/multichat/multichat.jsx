@@ -29,7 +29,7 @@ function MainMenu() {
   }
 
   return (
-    <div className='bg-black text-white grid grid-cols-[1fr,4fr] grid-rows-[100vh] gap-x-[1px]'>
+    <div className='bg-[#212529] text-white grid grid-cols-[1fr,4fr] grid-rows-[100vh] gap-x-[1px]'>
       <div className='grid grid-rows-[auto,1fr]'>
         <div className='bg-[#212529] flex items-center p-2'>
           <Avatar className='w-14 h-14' id={account?.id} socket={socket}/>
