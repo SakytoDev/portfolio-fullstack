@@ -13,7 +13,7 @@ module.exports =
             database = client.db()
             console.log("MongoDB подключен")
         })
-        .catch()
+        .catch(err => console.log(err))
     },
     getClient : () => client,
     getDatabase : () => database
