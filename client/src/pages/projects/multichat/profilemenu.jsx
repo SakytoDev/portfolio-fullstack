@@ -7,6 +7,7 @@ import { DateTime } from 'luxon';
 
 import Avatar from './components/avatar/avatar';
 import OnlineText from './components/online/onlinetext';
+import Spinner from './components/spinner/spinner';
 
 import editIcon from './assets/images/edit.png';
 
@@ -85,6 +86,6 @@ export default function ProfileMenu({ socket }) {
       </div>
     </div>
     : 
-    null
+    <Spinner className='w-12 h-12'/>
   )
 }

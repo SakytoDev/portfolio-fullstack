@@ -10,9 +10,9 @@ export default {
       miratrix: ['Miratrix']
     },
     extend: {
-      rotate: {
-        '720': '720deg',
-      }
+      keyframes: { spinner: { '0%': { transform: 'rotate(180deg)' }, '100%': { transform: 'rotate(-180deg)' } } },
+      animation: { spinner: 'spinner 0.5s linear infinite' },
+      rotate: { '720': '720deg' }
     },
   },
   plugins: [],
