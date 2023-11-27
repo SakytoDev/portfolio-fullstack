@@ -6,20 +6,28 @@ const { DateTime } = require('luxon');
 const { ObjectId } = require('mongodb');
 
 module.exports = class Account {
-    static async getAccount(id) 
+    static async getAccount(id, requester) 
     {
         if (id == null || id == 0) { return { code: 'failure' } }
 
         const db = database.getDatabase()
         const account = await db.collection('accounts').findOne({ _id: new ObjectId(id) }, { projection: { email: 0, password: 0 }})
 
+        if (id != requester) {
+            account.friends = account.friends.filter(x => !x.isPending)
+        }
+
         return account
     }
 
-    static async getAccounts(id) 
+    static async getAccounts(id, requester) 
     {
         const db = database.getDatabase()
         const accounts = await db.collection('accounts').find({ _id: { $ne: new ObjectId(id) } }, { projection: { _id: 1, avatar: 1, nickname: 1 }}).toArray()
+
+        accounts.forEach((item, index) => {
+            if (id != requester) accounts[index].friends = accounts[index].friends.filter(x => !x.isPending)
+        })
 
         return accounts
     }
@@ -147,8 +155,8 @@ module.exports = class Account {
 
         const db = database.getDatabase()
         db.collection('accounts').updateOne(
-            { _id : new ObjectId(id) }, 
-            { $set : { lastLogin : currentDate } }
+            { _id: new ObjectId(id) }, 
+            { $set: { lastLogin: currentDate } }
         )
     }
 
@@ -156,10 +164,47 @@ module.exports = class Account {
     {
         const db = database.getDatabase()
         await db.collection('accounts').updateOne(
-            { _id : new ObjectId(id) }, 
-            { $set : { avatar : image } }
+            { _id: new ObjectId(id) }, 
+            { $set: { avatar: image } }
         )
 
         return image
+    }
+
+    static async addFriend(id, userID) 
+    {
+        const db = database.getDatabase()
+        
+        const account = await this.getAccount(id)
+
+        await db.collection('accounts').updateOne(
+            { _id: new ObjectId(id), "friends._id": new ObjectId(userID) }, 
+            { $set: { "friends.$.pending": false } }
+        )
+        await db.collection('accounts').updateOne(
+            { _id: new ObjectId(userID) }, 
+            { $push: { friends: { _id: new ObjectId(id), pending: account.friends.findIndex(x => x._id.toString() === userID) == -1 } } }
+        )
+
+        const userAccount = await this.getAccount(userID)
+
+        return userAccount.friends
+    }
+
+    static async removeFriend(id, userID) 
+    {
+        const db = database.getDatabase()
+        await db.collection('accounts').updateOne(
+            { _id: new ObjectId(id) }, 
+            { $pull: { friends: { _id: new ObjectId(userID) } } }
+        )
+        await db.collection('accounts').updateOne(
+            { _id: new ObjectId(userID) }, 
+            { $pull: { friends: { _id: new ObjectId(id) } } }
+        )
+
+        const account = await this.getAccount(userID)
+
+        return account.friends
     }
 }

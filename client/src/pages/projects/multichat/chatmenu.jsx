@@ -104,7 +104,7 @@ export default function ChatMenu() {
         </div>
       </div>
       :
-      <div className='my-12 bg-[#212529] grid grid-rows-[auto,1fr] min-h-0 rounded-2xl mx-12 p-3'>
+      <div className='my-12 min-h-0 bg-[#212529] grid grid-rows-[auto,1fr] rounded-2xl mx-12 p-3'>
         <p className='py-2 text-4xl text-center font-black'>Recent Conversations:</p>
         <div className={`mt-4 flex flex-col ${conversationList.length > 0 ? 'items-stretch justify-start' : 'items-center justify-center'} overflow-auto gap-3`}>
           { conversationList.length > 0 

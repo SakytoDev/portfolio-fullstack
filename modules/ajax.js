@@ -21,7 +21,7 @@ module.exports =
             }
 
             if (requestType == 'getAccInfo') {
-                const account = await Account.getAccount(req.query.id)
+                const account = await Account.getAccount(req.query.id, req.session.account.id)
 
                 if (account) {
                     res.send( { code: 'success', account: account } )
@@ -37,7 +37,7 @@ module.exports =
             }
 
             if (requestType == 'getContacts') {
-                const accounts = await Account.getAccounts(req.query.id)
+                const accounts = await Account.getAccounts(req.query.id, req.session.account.id)
                 const friends = await Account.getFriends(req.query.id)
 
                 res.send( { code: 'success', people: [accounts, friends] } )
@@ -104,6 +104,18 @@ module.exports =
 
                 server.io.emit('avatarUpdate', { id: req.query.id, image: avatar })
                 res.send({ code: 'success' })
+            }
+
+            if (requestType == 'addFriend') {
+                const friends = await Account.addFriend(req.session.account.id, req.query.id)
+
+                res.send({ code: 'success', friends: friends })
+            }
+
+            if (requestType == 'removeFriend') {
+                const friends = await Account.removeFriend(req.session.account.id, req.query.id)
+
+                res.send({ code: 'success', friends: friends })
             }
         })
 
