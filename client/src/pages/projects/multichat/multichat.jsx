@@ -9,6 +9,7 @@ import AuthMenu from './authmenu';
 import ProfileMenu from './profilemenu';
 import ChatMenu from './chatmenu';
 import MessengerMenu from './messengermenu';
+import PostsMenu from './postsmenu';
 
 import Avatar from './components/avatar/avatar';
 
@@ -41,7 +42,7 @@ function MainMenu() {
         <div className='bg-[#2d3034] min-h-0 grid grid-rows-[1fr,auto]'>
           <div className='flex flex-col overflow-auto gap-2 p-2'>
             <Link className='border border-zinc-500 rounded p-2 text-lg text-center transition-all ease-in-out' to='chat'>Chat</Link>
-            <button className='border border-zinc-500 rounded p-2 text-lg transition-all ease-in-out'>Posts</button>
+            <Link className='border border-zinc-500 rounded p-2 text-lg text-center transition-all ease-in-out' to='posts'>Posts</Link>
             <button className='border border-zinc-500 rounded p-2 text-lg transition-all ease-in-out'>Music</button>
           </div>
           <div className='flex flex-col border-t-2 border-[#8f8f8f]'>
@@ -53,6 +54,7 @@ function MainMenu() {
         <Route path='profile/:userID' element={<ProfileMenu socket={socket}/>}/>
         <Route path='chat' element={<ChatMenu/>}/>
         <Route path='chat/:chatID' element={<MessengerMenu socket={socket}/>}/>
+        <Route path='posts' element={<PostsMenu socket={socket}/>}/>
       </Routes>
       {/* <div className='p-5 flex flex-col items-center justify-center gap-2 absolute right-0 bottom-0'>
         <div className='max-w-[30rem] rounded-lg flex flex-col justify-end'>

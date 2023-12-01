@@ -2,6 +2,7 @@ const server = require('./server.js');
 
 const Account = require('../models/account.js');
 const Conversation = require('../models/conversation.js');
+const Post = require('../models/post.js');
 
 module.exports = 
 {
@@ -55,6 +56,18 @@ module.exports =
                         }
                     }
                 }
+            })
+
+            socket.on('createPost', async (data) => {
+                const post = await Post.CreatePost(data)
+                
+                server.io.emit('createPost', post)
+            })
+
+            socket.on('reactPost', async (data) => {
+                const reactions = await Post.ReactToPost(data)
+
+                server.io.emit('reactPost', reactions)
             })
 
             socket.on('disconnect', () => {

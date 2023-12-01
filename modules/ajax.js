@@ -3,6 +3,7 @@ const path = require('path');
 
 const Account = require('../models/account.js');
 const Conversation = require('../models/conversation.js');
+const Post = require('../models/post.js');
 const server = require('./server.js');
 
 module.exports = 
@@ -116,6 +117,12 @@ module.exports =
                 const friends = await Account.removeFriend(req.session.account.id, req.query.id)
 
                 res.send({ code: 'success', friends: friends })
+            }
+
+            if (requestType == 'getPosts') {
+                const posts = await Post.GetPosts(req.session.account.id)
+
+                res.send({ code: 'success', posts: posts })
             }
         })
 
