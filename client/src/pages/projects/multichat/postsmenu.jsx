@@ -26,7 +26,7 @@ function PostObj({ post, socket }) {
         </div>
       </div>
       <div className='p-2 border-b-2 border-gray-500'>
-        <p className='text-xl'>{post.post}</p>
+        <p className='text-xl whitespace-pre-line'>{post.post}</p>
       </div>
       <div className='p-2'>
         <div className='flex items-center'>
