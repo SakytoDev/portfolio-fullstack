@@ -24,7 +24,7 @@ export default function Typewriter({ className, text, startDelay = 0, delay = 20
   function AnimateText(text, delay, infinite) {
     return new Promise(async(resolve) => {
       for (let i = 0; i < text.length; i++) {
-        setTypewriter(current => current + text[i])
+        setTypewriter(prev => prev + text[i])
         await Delay(delay)
       }
   
@@ -32,7 +32,7 @@ export default function Typewriter({ className, text, startDelay = 0, delay = 20
         await Delay(1000)
     
         for (let i = 0; i < text.length; i++) {
-          setTypewriter(current => current.slice(0, -1))
+          setTypewriter(prev => prev.slice(0, -1))
           await Delay(delay)
         }
   
