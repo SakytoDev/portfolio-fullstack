@@ -44,6 +44,20 @@ module.exports =
                 }
             })
 
+            socket.on('editMessage', async (data) => {
+                const result = await Conversation.EditMessage(data)
+
+                if (result) {
+                    const allClients = await server.io.fetchSockets()
+                    
+                    for (const client of allClients) {
+                        if (data.conversationID == result.conversationID && result.participants.includes(client.accData.id)) {
+                            client.emit('editMessage', result.message)
+                        }
+                    }
+                }
+            })
+
             socket.on('deleteMessage', async (data) => {
                 const result = await Conversation.DeleteMessage(data)
 

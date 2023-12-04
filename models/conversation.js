@@ -63,7 +63,7 @@ module.exports = class Conversation
 
     static async AddMessage(data)
     {
-        const message = { _id: new ObjectId(), sender: data.sender, message: data.message, sendDate: DateTime.local().toISO() }
+        const message = { _id: new ObjectId(), sender: data.sender, message: data.message, edited: [false, null], sendDate: DateTime.local().toISO() }
 
         const db = database.getDatabase()
         const conversation = await db.collection('conversations').findOne({ _id: new ObjectId(data.conversationID), participants: { $in: [message.sender] } })
@@ -73,6 +73,31 @@ module.exports = class Conversation
             return { conversationID: conversation._id, participants: conversation.participants, message: message }
         } 
         else return null
+    }
+
+    static async EditMessage(data) 
+    {
+        const db = database.getDatabase()
+        await db.collection('conversations').updateOne({ _id: new ObjectId(data.conversationID), 'messages._id': new ObjectId(data.messageID) }, { $set: { 'messages.$.message': data.edit, 'messages.$.edited': [true, DateTime.local().toISO()] } })
+
+        const updatedMsg = await db.collection('conversations')
+        .aggregate([ 
+            { $match: { _id: new ObjectId(data.conversationID), 'messages._id': new ObjectId(data.messageID) } },
+            { $project: {
+                participants: 1,
+                result: { $filter: { input: '$messages', as: 'msg', cond: { $eq: [ '$$msg._id', new ObjectId(data.messageID) ] } } }
+            }},
+            { $project: { participants: 1, result: { $first: '$result' } } },
+            { $project: {
+                _id: 0,
+                conversationID: '$_id',
+                participants: 1,
+                message: { _id: '$result._id', message: '$result.message', edited: '$result.edited' }
+            }}
+        ])
+        .toArray()
+
+        return updatedMsg[0]
     }
 
     static async DeleteMessage(data) 
