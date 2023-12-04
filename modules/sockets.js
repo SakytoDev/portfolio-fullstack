@@ -64,6 +64,18 @@ module.exports =
                 server.io.emit('createPost', post)
             })
 
+            socket.on('editPost', async (data) => {
+                const post = await Post.EditPost(data)
+
+                server.io.emit('editPost', post)
+            })
+
+            socket.on('deletePost', async (data) => {
+                await Post.DeletePost(data)
+
+                server.io.emit('deletePost', { _id: data.postId })
+            })
+
             socket.on('reactPost', async (data) => {
                 const reactions = await Post.ReactToPost(data)
 

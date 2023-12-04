@@ -13,7 +13,8 @@ module.exports = class Post
             { $lookup: { 'from': 'accounts', 'localField': 'poster', 'foreignField': '_id', 'as': 'nickname' } }, 
             { $project: { 
                 poster: ['$poster', { $first: '$nickname.nickname' }], 
-                post: 1, 
+                post: 1,
+                edited: 1,
                 reactions: { 
                     likes: [{ $size: '$reactions.likes' }, { $in: [requester, '$reactions.likes'] }], 
                     dislikes: [{ $size: '$reactions.dislikes' }, { $in: [requester, '$reactions.dislikes'] }] 
@@ -36,6 +37,7 @@ module.exports = class Post
             _id: new ObjectId(),
             poster: new ObjectId(post.requester),
             post: post.post,
+            edited: [false, null],
             reactions: { likes: [], dislikes: [] },
             dateCreated: currentDate
         }
@@ -49,6 +51,7 @@ module.exports = class Post
             { $project: { 
                 poster: ['$poster', { $first: '$nickname.nickname' }], 
                 post: 1,
+                edited: 1,
                 reactions: { 
                     likes: [{ $size: '$reactions.likes' }, false],
                     dislikes: [{ $size: '$reactions.dislikes' }, false] 
@@ -59,6 +62,21 @@ module.exports = class Post
         .toArray()
 
         return createdPost[0]
+    }
+
+    static async EditPost(data) 
+    {
+        const db = database.getDatabase()
+        await db.collection('posts').updateOne({ _id: new ObjectId(data.postId) }, { $set: { post: data.edit, edited: [true, DateTime.local().toISO()] } })
+
+        const updatedPost = await db.collection('posts').findOne({ _id: new ObjectId(data.postId) }, { post: 1, edited: 1 })
+        return updatedPost
+    }
+
+    static async DeletePost(data) 
+    {
+        const db = database.getDatabase()
+        await db.collection('posts').deleteOne({ _id: new ObjectId(data.postId) })
     }
 
     static async ReactToPost(data) 
