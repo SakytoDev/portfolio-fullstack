@@ -125,7 +125,6 @@ export default function PostsMenu({ socket }) {
     })
 
     socket.on('editPost', (data) => {
-      console.log(data)
       const newInfo = postList.map((item, index) => {
         if (item._id == data._id) { 
           item.post = data.post
