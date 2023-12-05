@@ -39,7 +39,7 @@ module.exports =
 
             if (requestType == 'getContacts') {
                 const accounts = await Account.getAccounts(req.query.id, req.session.account.id)
-                const friends = await Account.getFriends(req.query.id)
+                const friends = await Account.getFriends(req.session.account.id)
 
                 res.send( { code: 'success', people: [accounts, friends] } )
             }
@@ -55,7 +55,7 @@ module.exports =
             }
 
             if (requestType == 'getConversations') {
-                const conversations = await Conversation.GetConversations(req.query.id)
+                const conversations = await Conversation.GetConversations(req.session.account.id)
 
                 if (conversations) {
                     res.send( { code: 'success', conversations: conversations } )
@@ -101,9 +101,9 @@ module.exports =
             }
 
             if (requestType == 'updateAvatar') {
-                const avatar = await Account.updateAvatar(req.query.id, req.query.image)
+                const avatar = await Account.updateAvatar(req.session.account.id, req.query.image)
 
-                server.io.emit('avatarUpdate', { id: req.query.id, image: avatar })
+                server.io.emit('avatarUpdate', { id: req.session.account.id, image: avatar })
                 res.send({ code: 'success' })
             }
 

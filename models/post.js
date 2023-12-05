@@ -67,7 +67,7 @@ module.exports = class Post
     static async EditPost(data) 
     {
         const db = database.getDatabase()
-        await db.collection('posts').updateOne({ _id: new ObjectId(data.postId) }, { $set: { post: data.edit, edited: [true, DateTime.local().toISO()] } })
+        await db.collection('posts').updateOne({ _id: new ObjectId(data.postId), poster: new ObjectId(data.requester) }, { $set: { post: data.edit, edited: [true, DateTime.local().toISO()] } })
 
         const updatedPost = await db.collection('posts').findOne({ _id: new ObjectId(data.postId) }, { post: 1, edited: 1 })
         return updatedPost
@@ -76,7 +76,7 @@ module.exports = class Post
     static async DeletePost(data) 
     {
         const db = database.getDatabase()
-        await db.collection('posts').deleteOne({ _id: new ObjectId(data.postId) })
+        await db.collection('posts').deleteOne({ _id: new ObjectId(data.postId), poster: new ObjectId(data.requester) })
     }
 
     static async ReactToPost(data) 

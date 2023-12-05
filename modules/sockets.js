@@ -32,6 +32,8 @@ module.exports =
             })
 
             socket.on('chatMessage', async (data) => {
+                data.sender = socket.accData.id
+
                 const message = await Conversation.AddMessage(data)
                 if (!message) return 
 
@@ -45,6 +47,7 @@ module.exports =
             })
 
             socket.on('editMessage', async (data) => {
+                data.requester = socket.accData.id
                 const result = await Conversation.EditMessage(data)
 
                 if (result) {
@@ -59,6 +62,7 @@ module.exports =
             })
 
             socket.on('deleteMessage', async (data) => {
+                data.requester = socket.accData.id
                 const result = await Conversation.DeleteMessage(data)
 
                 if (result) {
@@ -73,24 +77,28 @@ module.exports =
             })
 
             socket.on('createPost', async (data) => {
+                data.requester = socket.accData.id
                 const post = await Post.CreatePost(data)
                 
                 server.io.emit('createPost', post)
             })
 
             socket.on('editPost', async (data) => {
+                data.requester = socket.accData.id
                 const post = await Post.EditPost(data)
 
                 server.io.emit('editPost', post)
             })
 
             socket.on('deletePost', async (data) => {
+                data.requester = socket.accData.id
                 await Post.DeletePost(data)
 
                 server.io.emit('deletePost', { _id: data.postId })
             })
 
             socket.on('reactPost', async (data) => {
+                data.requester = socket.accData.id
                 const reactions = await Post.ReactToPost(data)
 
                 server.io.emit('reactPost', reactions)

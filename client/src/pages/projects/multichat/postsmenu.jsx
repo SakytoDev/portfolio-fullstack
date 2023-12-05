@@ -21,15 +21,15 @@ function PostObj({ post, socket }) {
     setEditMode(false)
     if (editInput == post.post) return
 
-    socket.emit('editPost', { requester: account.id, postId: post._id, edit: editInput })
+    socket.emit('editPost', { postId: post._id, edit: editInput })
   }
 
   function deletePost() {
-    socket.emit('deletePost', { requester: account.id, postId: post._id })
+    socket.emit('deletePost', { postId: post._id })
   }
 
   function reactToPost(type) {
-    socket.emit('reactPost', { requester: account.id, postId: post._id, react: type })
+    socket.emit('reactPost', { postId: post._id, react: type })
   }
 
   return (
@@ -88,8 +88,6 @@ export default function PostsMenu({ socket }) {
   const [postList, setPostList] = useState([])
   const [postInput, setPostInput] = useState('')
 
-  const account = useSelector((state) => state.auth.account)
-
   function getPosts() {
     axios.get('/api', { params: { type: 'getPosts' } })
     .then(res => { 
@@ -100,7 +98,7 @@ export default function PostsMenu({ socket }) {
   }
 
   function createPost() {
-    socket.emit('createPost', { requester: account.id, post: postInput })
+    socket.emit('createPost', { post: postInput })
     setPostInput('')
   }
 

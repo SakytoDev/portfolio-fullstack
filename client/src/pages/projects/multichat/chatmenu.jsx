@@ -59,7 +59,7 @@ export default function ChatMenu() {
   function getConversations() {
     if (!account) return
 
-    axios.get('/api', { params: { type: 'getConversations', id: account.id } })
+    axios.get('/api', { params: { type: 'getConversations' } })
     .then(res => {
       const result = res.data
       if (result.code == 'success') setConversationList(result.conversations)

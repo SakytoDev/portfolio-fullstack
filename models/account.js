@@ -35,7 +35,7 @@ module.exports = class Account {
     static async getAvatar(id) 
     {
         const db = database.getDatabase()
-        const result = await db.collection('accounts').findOne({ _id: new ObjectId(id) }, { projection: { _id: 0, avatar: 1 }})
+        const result = await db.collection('accounts').findOne({ _id: new ObjectId(id) }, { projection: { _id: 0, avatar: 1 } })
 
         return result?.avatar
     }
@@ -43,18 +43,28 @@ module.exports = class Account {
     static async getAccountInfo(id)
     {
         const db = database.getDatabase()
-        const info = await db.collection('accounts').findOne({ _id: new ObjectId(id) }, { projection: { nickname: 1 }})
+        const info = await db.collection('accounts').findOne({ _id: new ObjectId(id) }, { projection: { nickname: 1 } })
 
         return Object.values(info)
     }
 
     static async getFriends(id) 
     {
-        if (id == null || id == 0) { return { code: 'failure' } }
-
         const db = database.getDatabase()
-        const getFriends = await db.collection('accounts').findOne({ _id: new ObjectId(id) }, { projection: { _id: 0, friends: 1 }})
-        const friends = await db.collection('accounts').find({ _id: { $in: getFriends.friends } }, { projection: { _id: 1, avatar: 1, nickname: 1 }}).toArray()
+
+        const friends = await db.collection('accounts').aggregate([
+            { $match: { _id: new ObjectId(id) } },
+            { $lookup: { 
+                'from': 'accounts', 
+                'foreignField': '_id', 
+                'localField': 'friends._id', 
+                'as': 'friends' 
+            }},
+            { $project: { 
+                _id: 0, 
+                friends: { _id: 1, avatar: 1, nickname: 1 } 
+            }}
+        ])
 
         return friends
     }

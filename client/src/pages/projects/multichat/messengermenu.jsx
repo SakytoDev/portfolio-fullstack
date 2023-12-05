@@ -89,7 +89,7 @@ export default function MessengerMenu({ socket }) {
 
   function sendMessage() {
     if (messageInput != '') {
-      const message = { sender: account.id, conversationID: conversation._id, message: messageInput }
+      const message = { conversationID: conversation._id, message: messageInput }
       socket.emit('chatMessage', message)
 
       setMessageInput('')

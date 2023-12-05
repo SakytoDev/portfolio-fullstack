@@ -56,7 +56,11 @@ module.exports = class Conversation
     static async GetParticipantData(ids)
     {
         const db = database.getDatabase()
-        const userData = await db.collection('accounts').find({ _id: { $in: ids.map((id) => new ObjectId(id)) } }, { projection: { _id: 1, avatar: 1, nickname: 1 }}).toArray()
+        const userData = await db.collection('accounts').find(
+            { _id: { $in: ids.map((id) => new ObjectId(id)) }}, 
+            { projection: { _id: 1, avatar: 1, nickname: 1 }}
+        )
+        .toArray()
 
         return userData
     }
@@ -66,19 +70,26 @@ module.exports = class Conversation
         const message = { _id: new ObjectId(), sender: data.sender, message: data.message, edited: [false, null], sendDate: DateTime.local().toISO() }
 
         const db = database.getDatabase()
-        const conversation = await db.collection('conversations').findOne({ _id: new ObjectId(data.conversationID), participants: { $in: [message.sender] } })
+        const conversation = await db.collection('conversations').findOne({ 
+            _id: new ObjectId(data.conversationID), 
+            participants: { $in: [message.sender] } 
+        })
+        .then(async (result) => {
+            if (result) {
+                await db.collection('conversations').updateOne({ _id: new ObjectId(data.conversationID) }, { $push: { messages: message } })
+                return { conversationID: result._id, participants: result.participants, message: message }
+            } else {
+                return null
+            }
+        })
 
-        if (conversation) {
-            await db.collection('conversations').updateOne({ _id: new ObjectId(data.conversationID) }, { $push: { messages: message } })
-            return { conversationID: conversation._id, participants: conversation.participants, message: message }
-        } 
-        else return null
+        return conversation
     }
 
     static async EditMessage(data) 
     {
         const db = database.getDatabase()
-        await db.collection('conversations').updateOne({ _id: new ObjectId(data.conversationID), 'messages._id': new ObjectId(data.messageID) }, { $set: { 'messages.$.message': data.edit, 'messages.$.edited': [true, DateTime.local().toISO()] } })
+        await db.collection('conversations').updateOne({ _id: new ObjectId(data.conversationID), 'messages._id': new ObjectId(data.messageID), 'messages.sender': data.requester }, { $set: { 'messages.$.message': data.edit, 'messages.$.edited': [true, DateTime.local().toISO()] } })
 
         const updatedMsg = await db.collection('conversations')
         .aggregate([ 
@@ -103,13 +114,21 @@ module.exports = class Conversation
     static async DeleteMessage(data) 
     {
         const db = database.getDatabase()
-        const conversation = await db.collection('conversations').findOne({ _id: new ObjectId(data.conversationID) })
 
-        if (conversation) {
-            await db.collection('conversations').updateOne({ _id: new ObjectId(data.conversationID) }, { $pull: { messages: { _id: new ObjectId(data.messageID) } } })
-            return { conversationID: conversation._id, participants: conversation.participants }
-        } else {
-            return null
-        }
+        const conversation = await db.collection('conversations').findOne({ 
+            _id: new ObjectId(data.conversationID), 
+            'messages._id': new ObjectId(data.messageID), 
+            'messages.sender': data.requester 
+        })
+        .then(async (result) => {
+            if (result) {
+                await db.collection('conversations').updateOne({ _id: new ObjectId(data.conversationID) }, { $pull: { messages: { _id: new ObjectId(data.messageID) } } })
+                return { conversationID: result._id, participants: result.participants }
+            } else {
+                return null
+            }
+        })
+
+        return conversation
     }
 }
