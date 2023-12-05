@@ -116,7 +116,7 @@ export default function PostsMenu({ socket }) {
 
   useEffect(() => {
     socket.on('reactPost', (data) => {
-      const newInfo = postList.map((item, index) => {
+      const newInfo = [...postList].map((item, index) => {
         if (item._id == data._id) { item.reactions = data.reactions }
         return item
       })
@@ -125,7 +125,7 @@ export default function PostsMenu({ socket }) {
     })
 
     socket.on('editPost', (data) => {
-      const newInfo = postList.map((item, index) => {
+      const newInfo = [...postList].map((item, index) => {
         if (item._id == data._id) { 
           item.post = data.post
           item.edited = data.edited
