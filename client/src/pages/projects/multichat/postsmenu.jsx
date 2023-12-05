@@ -62,7 +62,7 @@ function PostObj({ post, socket }) {
         <div className='grid gap-2'>
           <textarea className='p-2 bg-transparent border border-gray-500 rounded-md outline-none' value={editInput} onChange={e => setEditInput(e.target.value)}/>
           <div className='grid grid-cols-2 gap-1'>
-            <button className='p-1 border-2 border-indigo-500 rounded-l-lg font-medium transition-all ease-in-out hover:bg-indigo-600' onClick={() => editPost()}>Save</button>
+            <button className='p-1 border-2 disabled:border-gray-600 border-indigo-500 rounded-l-lg font-medium transition-all ease-in-out enabled:hover:bg-indigo-600' disabled={editInput.length < 20} onClick={() => editPost()}>{ editInput.length >= 20 ? 'Save' : 'Minimum 20 characters' }</button>
             <button className='p-1 border-2 border-red-500 rounded-r-lg font-medium transition-all ease-in-out hover:bg-red-600' onClick={() => setEditMode(false)}>Discard</button>
           </div>
         </div>
