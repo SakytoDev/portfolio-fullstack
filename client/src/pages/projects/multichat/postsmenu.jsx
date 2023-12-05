@@ -99,7 +99,7 @@ export default function PostsMenu({ socket }) {
     .catch(err => console.log(err))
   }
 
-  function sendPost() {
+  function createPost() {
     socket.emit('createPost', { requester: account.id, post: postInput })
     setPostInput('')
   }
@@ -159,7 +159,7 @@ export default function PostsMenu({ socket }) {
       <div className='p-2 border-2 border-gray-500 rounded-xl grid gap-2'>
         <p className='font-bold text-xl'>Describe today's day:</p>
         <textarea className='p-2 bg-transparent border border-gray-500 rounded-md outline-none' value={postInput} onChange={e => setPostInput(e.target.value)}/>
-        <button className='py-1 border-2 disabled:border-zinc-600 enabled:border-indigo-500 rounded-md font-medium disabled:text-lg enabled:text-xl transition-all ease-in-out enabled:hover:bg-indigo-600' disabled={postInput.length < 20} onClick={() => sendPost()}>{ postInput.length >= 20 ? 'Create Post' : 'Minimum 20 characters' }</button>
+        <button className='py-1 border-2 disabled:border-zinc-600 enabled:border-indigo-500 rounded-md font-medium disabled:text-lg enabled:text-xl transition-all ease-in-out enabled:hover:bg-indigo-600' disabled={postInput.length < 20} onClick={() => createPost()}>{ postInput.length >= 20 ? 'Create Post' : 'Minimum 20 characters' }</button>
       </div>
       <div className='flex flex-col gap-4 overflow-auto'>
         { [...postList].reverse().map((item, index) => {
