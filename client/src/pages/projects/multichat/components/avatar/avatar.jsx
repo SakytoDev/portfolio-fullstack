@@ -1,5 +1,4 @@
 import { useState, useEffect } from 'react';
-import { useSelector } from 'react-redux';
 
 import axios from 'axios';
 
@@ -7,8 +6,6 @@ import accIcon from '../../assets/images/defaultAcc.png';
 
 export default function Avatar({ className, id = null, source = null, socket }) {
   const [avatar, setAvatar] = useState(null)
-
-  const account = useSelector((state) => state.auth.account)
 
   function getAvatar() {
     axios.get('/api', { params: { type: 'getAvatar', id: id } })
@@ -28,7 +25,7 @@ export default function Avatar({ className, id = null, source = null, socket }) 
     if (!socket) return
 
     socket.on('avatarUpdate', (data) => {
-      if (account.id == data.id) setAvatar(data.image)
+      if (id == data.id) setAvatar(data.image)
     })
 
     return () => { socket.off('avatarUpdate') }

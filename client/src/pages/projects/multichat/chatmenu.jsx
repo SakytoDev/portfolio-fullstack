@@ -21,14 +21,12 @@ function PeopleCard({ data, delay, socket }) {
 }
 
 function ConversationCard({ data, socket }) {
-  const account = useSelector((state) => state.auth.account)
-
   return (
     <div className='border-2 flex flex-col rounded-lg'>
       <div className='p-3 border-b-2 flex items-center gap-3'>
-        <Avatar className='w-24 h-24' source={data.participants.find(x => x._id != account.id)?.avatar} socket={socket}/>
+        <Avatar className='w-24 h-24' source={data.participants[data.index].avatar} socket={socket}/>
         <div className='flex flex-col gap-1'>
-          <p className='text-4xl font-bold'>{data.participants.find(x => x._id != account.id)?.nickname}'s chat</p>
+          <p className='text-4xl font-bold'>{data.participants[data.index].nickname}'s chat</p>
           <p className='text-xl'>Participants Count: {data.participants.length}</p>
         </div>
       </div>

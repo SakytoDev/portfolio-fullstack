@@ -4,6 +4,8 @@ const Account = require('../models/account.js');
 const Conversation = require('../models/conversation.js');
 const Post = require('../models/post.js');
 
+const { ObjectId } = require('mongodb');
+
 module.exports = 
 {
     Setup: function () 
@@ -33,15 +35,16 @@ module.exports =
 
             socket.on('chatMessage', async (data) => {
                 data.sender = socket.accData.id
+                const result = await Conversation.AddMessage(data)
 
-                const message = await Conversation.AddMessage(data)
-                if (!message) return 
+                if (!result) return 
 
                 const allClients = await server.io.fetchSockets()
 
                 for (const client of allClients) {
-                    if (data.conversationID == message.conversationID && message.participants.includes(client.accData.id)) {
-                        client.emit('chatMessage', message.message)
+                    if (result.participants.findIndex(x => x.toString() == client.accData.id) != -1) {
+                        result.message.owner = socket.accData.id == client.accData.id
+                        client.emit('chatMessage', result.message)
                     }
                 }
             })
@@ -54,7 +57,7 @@ module.exports =
                     const allClients = await server.io.fetchSockets()
                     
                     for (const client of allClients) {
-                        if (data.conversationID == result.conversationID && result.participants.includes(client.accData.id)) {
+                        if (result.participants.findIndex(x => x.toString() == client.accData.id) != -1) {
                             client.emit('editMessage', result.message)
                         }
                     }
@@ -69,7 +72,7 @@ module.exports =
                     const allClients = await server.io.fetchSockets()
                     
                     for (const client of allClients) {
-                        if (data.conversationID == result.conversationID && result.participants.includes(client.accData.id)) {
+                        if (result.participants.findIndex(x => x.toString() == client.accData.id) != -1) {
                             client.emit('deleteMessage', data.messageID)
                         }
                     }

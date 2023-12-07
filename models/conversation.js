@@ -7,72 +7,81 @@ module.exports = class Conversation
 {
     static async GetConversation(id, requester) 
     {
-        let conversation
+        let conversationId = new ObjectId(id)
 
         const db = database.getDatabase()
-        let isUser = await db.collection('accounts').findOne({ _id: new ObjectId(id) })
+        const isUser = await db.collection('accounts').findOne({ _id: new ObjectId(id) })
 
         if (isUser) {
-            const privateConversation = await db.collection('conversations').findOne({ participants: { $all: [id, requester], $size: 2 } })
-
-            if (!privateConversation) {
-                const currentDate = DateTime.local().toISO()
-                const conversationObj = { participants: [id, requester], messages: [], dateCreated: currentDate }
-
-                await db.collection('conversations').insertOne(conversationObj)
-
-                conversation = conversationObj
-            } else {
-                conversation = privateConversation
-            }
-        } 
-        else {
-            conversation = await db.collection('conversations').findOne({ _id: new ObjectId(id), participants: { $in: [requester] } })
-
-            if (!conversation) {
-                return null
-            }
+            await db.collection('conversations').findOne({ 
+                participants: { $all: [new ObjectId(id), new ObjectId(requester)], $size: 2 } 
+            })
+            .then(async (result) => {
+                if (!result) {
+                    await db.collection('conversations').insertOne({ participants: [new ObjectId(id), new ObjectId(requester)], messages: [], dateCreated: DateTime.local().toISO() })
+                    .then(result => { conversationId = result.insertedId })
+                } else {
+                    conversationId = result._id
+                }
+            })
         }
 
-        const participants = await this.GetParticipantData(conversation.participants)
-        conversation.participants = participants
+        const conversation = await db.collection('conversations').aggregate([
+            { $match: { _id: conversationId, participants: { $in: [new ObjectId(requester)] } } },
+            { $lookup: { from: 'accounts', foreignField: '_id', localField: 'participants', as: 'participants' } },
+            { $project: { 
+                _id: 1, 
+                participants: { _id: 1, avatar: 1, nickname: 1 }, 
+                messages: { _id: 1, sender: 1, message: 1, edited: 1, sendDate: 1 },
+                index: { $indexOfArray: [ { $map: { input: '$participants', in: { $ne: [ '$$this._id', new ObjectId(requester) ] } } }, true ] }
+            }}
+        ])
+        .toArray()
 
-        return conversation
+        conversation[0].messages.forEach((item) => {
+            item.owner = item.sender == requester
+        })
+
+        return conversation[0]
     }
 
     static async GetConversations(id) 
     {
         const db = database.getDatabase()
-        const conversations = await db.collection('conversations').find({ participants: { $in: [id] } }).toArray()
 
-        for (let i = 0; i < conversations.length; i++) {
-            const participants = await this.GetParticipantData(conversations[i].participants)
-            conversations[i].participants = participants
-        }
+        const conversations = await db.collection('conversations').aggregate([
+            { $match: { 'participants': new ObjectId(id) } },
+            { $lookup: { 
+                from: 'accounts', 
+                foreignField: '_id', 
+                localField: 'participants', 
+                as: 'participants' 
+            }},
+            { $project: { 
+                _id: 1, 
+                participants: { avatar: 1, nickname: 1 },
+                index: { $indexOfArray: [ { $map: { input: '$participants', in: { $ne: [ '$$this._id', new ObjectId(id) ] } } }, true ] }
+            }}
+        ])
+        .toArray()
 
         return conversations
     }
 
-    static async GetParticipantData(ids)
-    {
-        const db = database.getDatabase()
-        const userData = await db.collection('accounts').find(
-            { _id: { $in: ids.map((id) => new ObjectId(id)) }}, 
-            { projection: { _id: 1, avatar: 1, nickname: 1 }}
-        )
-        .toArray()
-
-        return userData
-    }
-
     static async AddMessage(data)
     {
-        const message = { _id: new ObjectId(), sender: data.sender, message: data.message, edited: [false, null], sendDate: DateTime.local().toISO() }
+        const message = { 
+            _id: new ObjectId(), 
+            sender: new ObjectId(data.sender), 
+            message: data.message, 
+            edited: [false, null], 
+            sendDate: DateTime.local().toISO() 
+        }
 
         const db = database.getDatabase()
         const conversation = await db.collection('conversations').findOne({ 
             _id: new ObjectId(data.conversationID), 
-            participants: { $in: [message.sender] } 
+            participants: { $in: [new ObjectId(message.sender)] } 
         })
         .then(async (result) => {
             if (result) {
@@ -89,7 +98,15 @@ module.exports = class Conversation
     static async EditMessage(data) 
     {
         const db = database.getDatabase()
-        await db.collection('conversations').updateOne({ _id: new ObjectId(data.conversationID), 'messages._id': new ObjectId(data.messageID), 'messages.sender': data.requester }, { $set: { 'messages.$.message': data.edit, 'messages.$.edited': [true, DateTime.local().toISO()] } })
+        await db.collection('conversations').updateOne({ 
+            _id: new ObjectId(data.conversationID), 
+            'messages._id': new ObjectId(data.messageID), 
+            'messages.sender': new ObjectId(data.requester) }, 
+            { $set: { 
+                'messages.$.message': data.edit, 
+                'messages.$.edited': [true, DateTime.local().toISO()] 
+            } 
+        })
 
         const updatedMsg = await db.collection('conversations')
         .aggregate([ 
@@ -98,7 +115,10 @@ module.exports = class Conversation
                 participants: 1,
                 result: { $filter: { input: '$messages', as: 'msg', cond: { $eq: [ '$$msg._id', new ObjectId(data.messageID) ] } } }
             }},
-            { $project: { participants: 1, result: { $first: '$result' } } },
+            { $project: { 
+                participants: 1, 
+                result: { $first: '$result' } 
+            }},
             { $project: {
                 _id: 0,
                 conversationID: '$_id',
@@ -118,7 +138,7 @@ module.exports = class Conversation
         const conversation = await db.collection('conversations').findOne({ 
             _id: new ObjectId(data.conversationID), 
             'messages._id': new ObjectId(data.messageID), 
-            'messages.sender': data.requester 
+            'messages.sender': new ObjectId(data.requester)
         })
         .then(async (result) => {
             if (result) {

@@ -1,5 +1,4 @@
 import { useEffect, useState } from 'react';
-import { useSelector } from 'react-redux';
 import { useParams } from 'react-router-dom';
 import { motion } from 'framer-motion';
 import { DateTime } from 'luxon';
@@ -19,26 +18,24 @@ function MessageObj({ socket, message, chatID }) {
 
   const [isDeleting, setDeleting] = useState(false)
 
-  const account = useSelector((state) => state.auth.account)
-
   function editMessage() {
     setEditMode(false)
     if (editInput == message.message) return
 
-    socket.emit('editMessage', { conversationID: chatID, messageID: message.id, edit: editInput })
+    socket.emit('editMessage', { conversationID: chatID, messageID: message._id, edit: editInput })
   }
 
   function deleteMessage() {
     setDeleting(true)
 
-    socket.emit('deleteMessage', { conversationID: chatID, messageID: message.id })
+    socket.emit('deleteMessage', { conversationID: chatID, messageID: message._id })
   }
 
   return (
     <motion.div transition={{ ease: 'easeInOut', duration: 0.5 }} initial={{ x: 200, opacity: 0 }} animate={{ x: 0, opacity: 1 }} className='border-b p-2 flex items-center gap-2'>
       <Avatar className='w-16 h-16' source={message.avatar} socket={socket}/>
       <div>
-        <p className='font-bold'>{message.sender[0]}</p>
+        <p className='font-bold'>{message.sender}</p>
         { isEdit 
           ? 
           <div>
@@ -55,7 +52,7 @@ function MessageObj({ socket, message, chatID }) {
           { message.edited[0] ? <p className='text-gray-500 italic'>(Edited)</p> : '' }
         </div>
       </div>
-      { account.id == message.sender[1] && !isDeleting && !isEdit
+      { message.owner && !isDeleting && !isEdit
       ?
       <div className='m-2 grid grid-cols-2 gap-2 ml-auto self-start'>
         <button className='transition ease-in-out hover:scale-110' onClick={() => setEditMode(true)}>
@@ -75,8 +72,6 @@ export default function MessengerMenu({ socket }) {
 
   const [conversation, setConversation] = useState({})
   const [messageInput, setMessageInput] = useState('')
-
-  const account = useSelector((state) => state.auth.account)
 
   function getConversation() {
     axios.get('/api', { params: { type: 'getConversation', id: chatID } })
@@ -141,30 +136,25 @@ export default function MessengerMenu({ socket }) {
   }, [conversation])
 
   return (
-    conversation.participants && account ?
+    conversation.participants ?
     <div className='bg-[#2d3034] grid grid-rows-[auto,1fr,auto]'>
       <div className='bg-[#212529] border-b-2 border-gray-500 p-2 flex items-center gap-2'>
-        <Avatar className='w-14 h-14' source={conversation.participants.find(x => x._id != account.id).avatar} socket={socket}/>
+        <Avatar className='w-14 h-14' source={conversation.participants[conversation.index].avatar} socket={socket}/>
         <div>
-          <p className='font-bold'>{conversation.participants.find(x => x._id != account.id).nickname}</p>
-          <OnlineText className='font-medium' id={conversation.participants.find(x => x._id != account.id)._id} socket={socket} onlineText='Online' onlineStyle='text-green-500' offlineText='Offline' offlineStyle='text-gray-500'/>
+          <p className='font-bold'>{conversation.participants[conversation.index].nickname}</p>
+          <OnlineText className='font-medium' id={conversation.participants[conversation.index]._id} socket={socket} onlineText='Online' onlineStyle='text-green-500' offlineText='Offline' offlineStyle='text-gray-500'/>
         </div>
       </div>
       <div className='min-h-0 overflow-x-hidden overflow-y-auto'>
         <div className='border-b px-2 py-4 flex flex-col items-center justify-center gap-1'>
-          <Avatar className='w-28 h-28' source={conversation.participants.find(x => x._id != account.id).avatar}/>
-          <p className='text-4xl font-bold'>{conversation.participants.find(x => x._id != account.id).nickname}</p>
+          <Avatar className='w-28 h-28' source={conversation.participants[conversation.index].avatar}/>
+          <p className='text-4xl font-bold'>{conversation.participants[conversation.index].nickname}</p>
           <p className='text-xl font-medium text-gray-500'>This is the start of conversation, sir.</p>
         </div>
-        { conversation.messages?.map((message, index) => {
-          const newMessage = {
-            id: message._id,
-            avatar: conversation.participants.find(x => x._id == message.sender).avatar,
-            sender: [conversation.participants.find(x => x._id == message.sender).nickname, message.sender],
-            message: message.message,
-            edited: message.edited,
-            sendDate: message.sendDate
-          }
+        { conversation.messages.map((message, index) => {
+          let newMessage = {...message}
+          newMessage.avatar = conversation.participants.find(x => x._id == message.sender).avatar
+          newMessage.sender = conversation.participants.find(x => x._id == message.sender).nickname
           return <MessageObj key={index} socket={socket} message={newMessage} chatID={conversation._id}/>
         })}
       </div>
