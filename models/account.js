@@ -80,8 +80,12 @@ module.exports = class Account {
             if (status) {
                 const logoutToken = await Account.getLogoutToken(accData._id.toString(), sessionID)
 
-                return { id: accData._id, nickname: nickname, logoutToken: logoutToken }
+                return { code: 'success', account: { id: accData._id, nickname: nickname, logoutToken: logoutToken } }
+            } else {
+                return { code: 'failure', reason: 'Incorrect details' }
             }
+        } else {
+            return { code: 'failure', reason: 'Account does not exist' }
         }
     }
 
@@ -102,13 +106,13 @@ module.exports = class Account {
         const db = database.getDatabase()
         const accExists = await db.collection('accounts').findOne({ $or: [ { email: email }, { nickname: nickname } ] })
 
-        if (accExists == null) {
+        if (!accExists) {
             await db.collection('accounts').insertOne(accountObj)
             
             return { code: 'success' }
         }
         else {
-            return { code: 'failure', reason: 'Почта или никнейм заняты' }
+            return { code: 'failure', reason: 'Email or nickname already exists' }
         }
     }
 

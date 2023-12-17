@@ -120,7 +120,7 @@ function FriendsTab({ account, setAccountRef }) {
   )
 }
 
-export default function ProfileMenu({ socket }) {
+export default function ProfileMenu({ socket, addNotification }) {
   const { userID } = useParams()
 
   const [account, setAccount] = useState(null)

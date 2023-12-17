@@ -1,5 +1,4 @@
 import { useState, useEffect } from 'react';
-import { useSelector } from 'react-redux';
 import { DateTime } from 'luxon';
 
 import axios from 'axios';
@@ -14,8 +13,6 @@ import deleteIcon from './assets/images/delete.png';
 function PostObj({ post, socket }) {
   const [isEdit, setEditMode] = useState(false)
   const [editInput, setEditInput] = useState(post.post)
-
-  const account = useSelector((state) => state.auth.account)
 
   function editPost() {
     setEditMode(false)
@@ -40,7 +37,7 @@ function PostObj({ post, socket }) {
           <p className='font-bold text-2xl'>{post.poster[1]}</p>
           <p className='font-medium text-gray-500'>{DateTime.fromISO(post.dateCreated).toFormat('MMM dd, HH:mm')}</p>
         </div>
-        { !isEdit && account.id == post.poster[0] ?
+        { !isEdit && post.owner ?
         <div className='flex ml-auto'>
           <button className='border-2 border-r-0 border-gray-500 rounded-l-lg transition-all ease-in-out hover:bg-yellow-500' onClick={() => setEditMode(true)}>
             <img className='p-1 w-8 h-8' src={editIcon}/>
@@ -84,7 +81,7 @@ function PostObj({ post, socket }) {
   )
 }
 
-export default function PostsMenu({ socket }) {
+export default function PostsMenu({ socket, addNotification }) {
   const [postList, setPostList] = useState([])
   const [postInput, setPostInput] = useState('')
 
@@ -107,6 +104,8 @@ export default function PostsMenu({ socket }) {
 
     socket.on('createPost', (data) => {
       setPostList(current => [...current, data])
+
+      if (data.owner) addNotification({ type: 'success', message: 'Post successfully created' })
     })
 
     return () => { socket.off('createPost') }
@@ -132,6 +131,8 @@ export default function PostsMenu({ socket }) {
       })
 
       setPostList(newInfo)
+
+      if (data.owner) addNotification({ type: 'success', message: 'Post successfully edited' })
     })
 
     socket.on('deletePost', (data) => {
@@ -142,6 +143,8 @@ export default function PostsMenu({ socket }) {
       if (index !== -1) {
         newInfo.splice(index, 1)
         setPostList(newInfo)
+
+        if (data.owner) addNotification({ type: 'success', message: 'Post successfully deleted' })
       }
     })
 
@@ -157,7 +160,7 @@ export default function PostsMenu({ socket }) {
       <div className='p-2 border-2 border-gray-500 rounded-xl grid gap-2'>
         <p className='font-bold text-xl'>Describe today's day:</p>
         <textarea className='p-2 bg-transparent border border-gray-500 rounded-md outline-none' value={postInput} onChange={e => setPostInput(e.target.value)}/>
-        <button className='py-1 border-2 disabled:border-zinc-600 enabled:border-indigo-500 rounded-md font-medium disabled:text-lg enabled:text-xl transition-all ease-in-out enabled:hover:bg-indigo-600' disabled={postInput.length < 20} onClick={() => createPost()}>{ postInput.length >= 20 ? 'Create Post' : 'Minimum 20 characters' }</button>
+        <button className='py-1 border-2 disabled:border-zinc-600 enabled:border-indigo-500 rounded-md font-medium disabled:text-lg enabled:text-xl transition-all ease-in-out enabled:hover:bg-indigo-600' disabled={postInput.length < 20} onClick={() => createPost()}>{ postInput.length >= 20 ? 'Create Post' : `${20 - postInput.length} characters left` }</button>
       </div>
       <div className='flex flex-col gap-4 overflow-auto'>
         { [...postList].reverse().map((item, index) => {

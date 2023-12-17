@@ -24,6 +24,10 @@ module.exports = class Post
         ])
         .toArray()
 
+        posts.forEach((item) => {
+            item.owner = item.poster[0] == requester
+        })
+
         return posts
     }
 
@@ -69,7 +73,7 @@ module.exports = class Post
         const db = database.getDatabase()
         await db.collection('posts').updateOne({ _id: new ObjectId(data.postId), poster: new ObjectId(data.requester) }, { $set: { post: data.edit, edited: [true, DateTime.local().toISO()] } })
 
-        const updatedPost = await db.collection('posts').findOne({ _id: new ObjectId(data.postId) }, { post: 1, edited: 1 })
+        const updatedPost = await db.collection('posts').findOne({ _id: new ObjectId(data.postId) }, { poster: 1, post: 1, edited: 1 })
         return updatedPost
     }
 

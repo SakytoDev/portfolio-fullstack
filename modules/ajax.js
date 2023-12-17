@@ -66,13 +66,13 @@ module.exports =
     
             if (requestType == 'accLogin') {
                 const getForm = req.query.form
-                const account = await Account.login(getForm.nickname, getForm.password, req.session.id)
+                const result = await Account.login(getForm.nickname, getForm.password, req.session.id)
     
-                if (account) {
-                    req.session.account = account
-                    res.send( { code: 'success', account: account } )
+                if (result.code == 'success') {
+                    req.session.account = result.account
+                    res.send( { code: 'success', account: result.account } )
                 } else {
-                    res.send( { code: 'failure' } )
+                    res.send( { code: 'failure', reason: result.reason } )
                 }
             }
     
@@ -83,8 +83,8 @@ module.exports =
                 if (regResult.code == 'success') {
                     const loginResult = await Account.login(form.nickname, form.password, req.session.id)
     
-                    req.session.account = loginResult
-                    res.send( { code: 'success', account: loginResult } )
+                    req.session.account = loginResult.account
+                    res.send( { code: 'success', account: loginResult.account } )
                 } else if (regResult.code == 'failure') {
                     res.send( { code: 'failure', reason: regResult.reason } )
                 }

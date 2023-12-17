@@ -83,21 +83,35 @@ module.exports =
                 data.requester = socket.accData.id
                 const post = await Post.CreatePost(data)
                 
-                server.io.emit('createPost', post)
+                const allClients = await server.io.fetchSockets()
+                    
+                for (const client of allClients) {
+                    post.owner = post.poster[0] == client.accData.id
+                    client.emit('createPost', post)
+                }
             })
 
             socket.on('editPost', async (data) => {
                 data.requester = socket.accData.id
                 const post = await Post.EditPost(data)
 
-                server.io.emit('editPost', post)
+                const allClients = await server.io.fetchSockets()
+                    
+                for (const client of allClients) {
+                    post.owner = post.poster == client.accData.id
+                    client.emit('editPost', post)
+                }
             })
 
             socket.on('deletePost', async (data) => {
                 data.requester = socket.accData.id
                 await Post.DeletePost(data)
 
-                server.io.emit('deletePost', { _id: data.postId })
+                const allClients = await server.io.fetchSockets()
+                    
+                for (const client of allClients) {
+                    client.emit('deletePost', { _id: data.postId, owner: socket.accData.id == client.accData.id })
+                }
             })
 
             socket.on('reactPost', async (data) => {
