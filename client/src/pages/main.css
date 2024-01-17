@@ -6,3 +6,49 @@ html {
     background-repeat: no-repeat;
 	background-attachment: fixed;
 }
+
+.musicSlider {
+    -webkit-appearance: none;
+    background-color: rgb(20 20 20);
+    height: 10px;
+    border-radius: 20px;
+}
+
+.musicSlider::-webkit-slider-thumb {
+    -webkit-appearance: none;
+    background-color: rgb(79 70 229);
+    width: 12px;
+    height: 12px;
+    border-radius: 50%;
+
+    transition-property: all;
+    transition-timing-function: cubic-bezier(0.4, 0, 0.2, 1);
+    transition-duration: 150ms;
+}
+
+.musicSlider::-webkit-slider-thumb:hover {
+    background-color: rgb(255 255 255);
+}
+
+.volumeSlider {
+    -webkit-appearance: none;
+    background-color: rgb(20 20 20);
+    height: 10px;
+    border-radius: 20px;
+}
+
+.volumeSlider::-webkit-slider-thumb {
+    -webkit-appearance: none;
+    background-color: rgb(79 70 229);
+    width: 12px;
+    height: 12px;
+    border-radius: 50%;
+
+    transition-property: all;
+    transition-timing-function: cubic-bezier(0.4, 0, 0.2, 1);
+    transition-duration: 150ms;
+}
+
+.volumeSlider::-webkit-slider-thumb:enabled:hover {
+    background-color: rgb(255 255 255);
+}

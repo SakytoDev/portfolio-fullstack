@@ -15,6 +15,7 @@ dist-ssr
 # Editor directories and files
 .vscode/*
 mongo-db/
+uploads/
 !.vscode/extensions.json
 .idea
 .DS_Store

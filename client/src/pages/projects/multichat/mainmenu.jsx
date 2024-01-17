@@ -8,6 +8,7 @@ import ProfileMenu from './profilemenu';
 import ChatMenu from './chatmenu';
 import MessengerMenu from './messengermenu';
 import PostsMenu from './postsmenu';
+import MusicMenu from './musicmenu';
 
 import Avatar from './components/avatar/avatar';
 
@@ -41,7 +42,7 @@ export default function MainMenu({ socket, addNotification }) {
           <div className='flex flex-col overflow-auto gap-2 p-2'>
             <Link className='border border-zinc-500 rounded p-2 text-lg text-center transition-all ease-in-out' to='chat'>Chat</Link>
             <Link className='border border-zinc-500 rounded p-2 text-lg text-center transition-all ease-in-out' to='posts'>Posts</Link>
-            <button className='border border-zinc-500 rounded p-2 text-lg transition-all ease-in-out'>Music</button>
+            <Link className='border border-zinc-500 rounded p-2 text-lg text-center transition-all ease-in-out' to='music'>Music</Link>
           </div>
           <div className='flex flex-col border-t-2 border-[#8f8f8f]'>
             <button className='border border-red-500 rounded p-2 m-2 text-lg transition ease-in-out hover:bg-red-800' onClick={() => logoutAccount()}>Logout</button>
@@ -53,6 +54,7 @@ export default function MainMenu({ socket, addNotification }) {
         <Route path='chat' element={<ChatMenu/>}/>
         <Route path='chat/:chatID' element={<MessengerMenu socket={socket}/>}/>
         <Route path='posts' element={<PostsMenu socket={socket} addNotification={addNotification}/>}/>
+        <Route path='music' element={<MusicMenu addNotification={addNotification}/>}/>
       </Routes>
     </div>
   )
