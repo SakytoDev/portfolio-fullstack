@@ -18,7 +18,7 @@
     "cookie-session": "^2.0.0",
     "cors": "^2.8.5",
     "dotenv": "^16.3.1",
-    "express": "^4.19.2",
+    "express": "^4.21.0",
     "jsmediatags": "^3.9.7",
     "luxon": "^3.4.4",
     "mongodb": "^6.3.0",
